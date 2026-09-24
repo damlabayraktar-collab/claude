@@ -1,0 +1,1547 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>POL3612 — International Migration</title>
+<style>
+:root {
+  /* Same "Simple Light" palette as the POL3315 site, so the course sites read
+     as one family: white background, near-black text, a gold/mustard accent
+     ramp and the deepened folHlink teal. Dark golds carry text; bright golds
+     are washes only. One extra hue (--wine) marks the diaspora lens so the
+     course's three lenses can be told apart at a glance. */
+  --bg: #ffffff;
+  --bg-soft: #fbf8ef;
+  --card: #ffffff;
+  --border: #e7ddc0;
+  --text: #1a1a1a;
+  --muted: #666666;
+  --accent: #7f6000;
+  --accent-warm: #f1c232;
+  --accent-soft: rgba(241, 194, 50, 0.16);
+  --debate: #00838f;
+  --debate-soft: rgba(0, 151, 167, 0.10);
+  --wine: #8e3b46;
+  --wine-soft: rgba(142, 59, 70, 0.09);
+  --radius: 14px;
+  font-size: 16px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent); }
+
+/* Sticky tab bar: one tab per section, so students see one thing at a time. */
+.site-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 20px 0;
+}
+
+.site-title {
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.74rem;
+  margin-bottom: 6px;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar { display: none; }
+
+.tab {
+  flex: 0 0 auto;
+  background: none;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  padding: 8px 12px 9px;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.tab:hover { color: var(--text); }
+
+.tab[aria-selected="true"] {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+
+.tab:focus-visible,
+.chip:focus-visible,
+.search:focus-visible {
+  outline: 2px solid var(--debate);
+  outline-offset: 2px;
+}
+
+.tab-panel { padding-bottom: 20px; }
+
+.panel-head {
+  padding: 22px 20px 6px;
+  max-width: 900px;
+}
+
+.kicker {
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.76rem;
+  margin-bottom: 6px;
+}
+
+.panel-head h1 {
+  font-size: clamp(1.4rem, 3.4vw, 2rem);
+  margin: 0 0 10px;
+  line-height: 1.2;
+}
+
+.panel-head h2 {
+  font-size: clamp(1.2rem, 2.6vw, 1.6rem);
+  margin: 0 0 8px;
+  line-height: 1.25;
+}
+
+.panel-head p {
+  color: var(--muted);
+  margin: 0 0 6px;
+  font-size: 0.96rem;
+  line-height: 1.55;
+  max-width: 780px;
+}
+
+.section-heading {
+  padding: 22px 20px 0;
+  max-width: 900px;
+}
+
+.section-heading h3 {
+  font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+  margin: 0 0 4px;
+}
+
+.section-heading p {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 780px;
+}
+
+/* ---------- Shared card language ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+  padding: 16px 20px 8px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 18px 16px 16px;
+  box-shadow: 0 1px 3px rgba(20, 15, 0, 0.05), 0 4px 14px rgba(20, 15, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+}
+
+.card.lens-refugees { border-top-color: var(--debate); }
+.card.lens-diasporas { border-top-color: var(--wine); }
+.card.lens-foundations { border-top-color: var(--muted); }
+
+.card.debate {
+  border-top-color: var(--debate);
+  background: linear-gradient(180deg, var(--debate-soft), var(--card) 45%);
+}
+
+.card .eyebrow {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.78rem;
+  margin-bottom: 6px;
+}
+
+.card.lens-refugees .eyebrow, .card.debate .eyebrow { color: var(--debate); }
+.card.lens-diasporas .eyebrow { color: var(--wine); }
+.card.lens-foundations .eyebrow { color: var(--muted); }
+
+.card h4 {
+  margin: 0 0 8px;
+  font-size: 1.02rem;
+  line-height: 1.3;
+}
+
+.card p {
+  margin: 0 0 10px;
+  font-size: 0.86rem;
+  line-height: 1.55;
+}
+
+.card .muted { color: var(--muted); }
+
+.card .label { font-weight: 700; }
+
+.card ul {
+  margin: 0 0 10px;
+  padding-left: 18px;
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.card .spacer { flex: 1; }
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.pill {
+  display: inline-block;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid rgba(241, 194, 50, 0.55);
+  border-radius: 20px;
+  padding: 2px 10px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.pill.refugees { background: var(--debate-soft); color: var(--debate); border-color: rgba(0, 131, 143, 0.35); }
+.pill.diasporas { background: var(--wine-soft); color: var(--wine); border-color: rgba(142, 59, 70, 0.3); }
+.pill.foundations { background: #f3f3f3; color: #555; border-color: #ddd; }
+.pill.milestone { background: rgba(241, 194, 50, 0.35); color: #5c4400; border-color: var(--accent-warm); }
+
+.debate-q {
+  margin-top: 4px;
+  padding: 10px 12px;
+  border-left: 3px solid var(--debate);
+  background: var(--debate-soft);
+  border-radius: 0 8px 8px 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.debate-q b { color: var(--debate); }
+
+a.more {
+  display: inline-flex;
+  gap: 4px;
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+a.more:hover { text-decoration: underline; }
+
+.source {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ---------- Start Here ---------- */
+.lens-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  padding: 16px 20px 8px;
+}
+
+.lens-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 18px;
+  background: linear-gradient(180deg, var(--accent-soft), var(--card) 55%);
+  border-top: 4px solid var(--accent);
+}
+
+.lens-card.refugees { background: linear-gradient(180deg, var(--debate-soft), var(--card) 55%); border-top-color: var(--debate); }
+.lens-card.diasporas { background: linear-gradient(180deg, var(--wine-soft), var(--card) 55%); border-top-color: var(--wine); }
+
+.lens-card .num {
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.lens-card h3 { margin: 4px 0 8px; font-size: 1.25rem; }
+.lens-card p { margin: 0 0 10px; font-size: 0.88rem; line-height: 1.55; }
+.lens-card .q { font-style: italic; color: var(--text); }
+.lens-card .weeks { font-size: 0.78rem; color: var(--muted); font-weight: 600; }
+
+.info-strip {
+  margin: 16px 20px 0;
+  padding: 16px 18px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.info-strip div { font-size: 0.84rem; line-height: 1.45; }
+.info-strip b {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 3px;
+}
+
+.clo-list {
+  margin: 12px 20px 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+  max-width: 900px;
+}
+
+.clo-list li {
+  padding: 10px 14px;
+  border-left: 3px solid var(--accent-warm);
+  background: var(--card);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.clo-list li b { color: var(--accent); margin-right: 6px; }
+
+/* ---------- Weekly syllabus (horizontal scroller, as on POL3315) ---------- */
+.scroller-wrap { position: relative; padding: 4px 0 20px; }
+
+.scroller {
+  display: flex;
+  align-items: flex-start;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 10px 20px 20px;
+  scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
+  scroll-padding-left: 20px;
+}
+
+.scroller::-webkit-scrollbar { height: 10px; }
+.scroller::-webkit-scrollbar-track { background: var(--bg-soft); }
+.scroller::-webkit-scrollbar-thumb { background: var(--border); border-radius: 6px; }
+
+.syl-card {
+  flex: 0 0 auto;
+  width: 260px;
+  margin-right: 18px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 16px 15px 14px;
+  margin-top: 12px;
+  scroll-snap-align: start;
+  box-shadow: 0 1px 3px rgba(20, 15, 0, 0.05), 0 4px 14px rgba(20, 15, 0, 0.04);
+}
+
+.syl-card.lens-refugees { border-top-color: var(--debate); }
+.syl-card.lens-diasporas { border-top-color: var(--wine); }
+.syl-card.lens-foundations { border-top-color: var(--muted); }
+.syl-card.milestone {
+  border-top-color: var(--accent-warm);
+  background: linear-gradient(180deg, var(--accent-soft), var(--card) 45%);
+}
+
+.syl-week {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.8rem;
+  margin-bottom: 6px;
+}
+
+.syl-date { color: var(--muted); font-weight: 500; font-size: 0.7rem; }
+.syl-card h3 { margin: 0 0 8px; font-size: 0.98rem; line-height: 1.3; }
+.syl-activity { font-size: 0.8rem; line-height: 1.5; margin: 0 0 8px; }
+.syl-reading { font-size: 0.76rem; line-height: 1.45; color: var(--muted); margin: 0 0 10px; }
+.syl-label { font-weight: 700; color: var(--text); }
+
+.syl-watch {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+}
+
+.syl-watch a {
+  display: block;
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.76rem;
+  line-height: 1.4;
+  font-weight: 600;
+  margin-top: 5px;
+}
+
+.syl-watch a:hover { text-decoration: underline; }
+
+.no-class {
+  flex: 0 0 auto;
+  width: 90px;
+  align-self: stretch;
+  margin: 12px 18px 0 0;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.74rem;
+  line-height: 1.4;
+  padding: 10px;
+}
+
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--border);
+  color: var(--text);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(20, 15, 0, 0.12);
+}
+
+.nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+.nav-btn.left { left: 8px; }
+.nav-btn.right { right: 8px; }
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+/* ---------- Key terms: filter chips + search ---------- */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  padding: 12px 20px 0;
+}
+
+.chip {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.chip:hover { color: var(--text); }
+.chip[aria-pressed="true"] { background: var(--text); border-color: var(--text); color: #fff; }
+
+.search {
+  flex: 1 1 200px;
+  max-width: 320px;
+  margin-left: auto;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 7px 14px;
+  font: inherit;
+  font-size: 0.86rem;
+  background: var(--card);
+  color: var(--text);
+}
+
+.count { padding: 8px 20px 0; font-size: 0.78rem; color: var(--muted); }
+.empty { padding: 20px; color: var(--muted); font-size: 0.9rem; }
+
+/* ---------- Big questions ---------- */
+.question-block { margin-top: 8px; }
+.question-block + .question-block { border-top: 1px solid var(--border); margin-top: 18px; }
+
+.big-q {
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  padding: 22px 20px 0;
+  max-width: 900px;
+}
+
+.big-q .qnum {
+  flex: 0 0 auto;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--accent-warm);
+  line-height: 1;
+}
+
+.big-q h3 { margin: 0 0 4px; font-size: clamp(1.1rem, 2.4vw, 1.35rem); }
+.big-q p { margin: 0; color: var(--muted); font-size: 0.9rem; line-height: 1.5; }
+
+/* ---------- Assignments ---------- */
+.weights {
+  display: flex;
+  height: 38px;
+  margin: 16px 20px 6px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  max-width: 900px;
+}
+
+.weights div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 0 6px;
+}
+
+.w-podcast { background: #f1c232; }
+.w-midterm { background: #f6d77a; }
+.w-pk { background: #fbe9b5; }
+.w-final { background: #e7ddc0; }
+
+.roadmap {
+  list-style: none;
+  margin: 14px 20px 0;
+  padding: 0;
+  max-width: 900px;
+  counter-reset: step;
+}
+
+.roadmap li {
+  position: relative;
+  padding: 0 0 18px 46px;
+}
+
+.roadmap li::before {
+  counter-increment: step;
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  border: 2px solid var(--accent-warm);
+  color: var(--accent);
+  font-weight: 800;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.roadmap li::after {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 32px;
+  bottom: 2px;
+  width: 2px;
+  background: var(--border);
+}
+
+.roadmap li:last-child::after { display: none; }
+
+.roadmap .step-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.roadmap .step-head b { font-size: 0.98rem; }
+.roadmap .when { font-size: 0.76rem; color: var(--muted); font-weight: 600; }
+.roadmap p { margin: 0; font-size: 0.86rem; line-height: 1.55; color: var(--text); max-width: 720px; }
+
+.note {
+  margin: 14px 20px 0;
+  padding: 12px 14px;
+  max-width: 900px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+footer.foot {
+  padding: 18px 20px 40px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  max-width: 780px;
+  line-height: 1.6;
+  border-top: 1px solid var(--border);
+  margin-top: 20px;
+}
+
+@media (max-width: 900px) {
+  .lens-grid { grid-template-columns: 1fr; }
+  .info-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 640px) {
+  .site-bar { padding: 10px 16px 0; }
+  .tab { padding: 8px 9px 9px; font-size: 0.86rem; }
+  .panel-head, .section-heading, .big-q { padding-left: 16px; padding-right: 16px; }
+  .grid, .lens-grid { padding-left: 16px; padding-right: 16px; }
+  .filters, .count { padding-left: 16px; padding-right: 16px; }
+  .info-strip, .clo-list, .roadmap, .note, .weights { margin-left: 16px; margin-right: 16px; }
+  .info-strip { grid-template-columns: 1fr; }
+  .scroller { padding-left: 16px; padding-right: 16px; }
+  .syl-card { width: 230px; }
+  .nav-btn { display: none; }
+  .search { margin-left: 0; max-width: none; }
+}
+</style>
+</head>
+<body>
+  <div class="site-bar">
+    <div class="site-title">POL3612 · International Migration</div>
+    <nav class="tabs" role="tablist" aria-label="Page sections">
+      <button class="tab" role="tab" id="tab-start" aria-controls="panel-start" aria-selected="true" data-hash="start">Start Here</button>
+      <button class="tab" role="tab" id="tab-syllabus" aria-controls="panel-syllabus" aria-selected="false" tabindex="-1" data-hash="syllabus">Weekly Syllabus</button>
+      <button class="tab" role="tab" id="tab-questions" aria-controls="panel-questions" aria-selected="false" tabindex="-1" data-hash="questions">Big Questions</button>
+      <button class="tab" role="tab" id="tab-terms" aria-controls="panel-terms" aria-selected="false" tabindex="-1" data-hash="terms">Key Terms</button>
+      <button class="tab" role="tab" id="tab-turkiye" aria-controls="panel-turkiye" aria-selected="false" tabindex="-1" data-hash="turkiye">Türkiye in Focus</button>
+      <button class="tab" role="tab" id="tab-assignments" aria-controls="panel-assignments" aria-selected="false" tabindex="-1" data-hash="assignments">Assignments</button>
+      <button class="tab" role="tab" id="tab-data" aria-controls="panel-data" aria-selected="false" tabindex="-1" data-hash="data">Data &amp; Sources</button>
+    </nav>
+  </div>
+
+  <!-- START HERE -->
+  <section class="tab-panel" role="tabpanel" id="panel-start" aria-labelledby="tab-start">
+    <div class="panel-head">
+      <div class="kicker">Fall 2026–2027 · Bahçeşehir University</div>
+      <h1>International Migration</h1>
+      <p>Aristide Zolberg argued that international migration is a <em>political</em> phenomenon: every crossing brings sovereign states into contact with each other and with individuals. This course looks at those politics (the theories, the institutions and the current debates) through three lenses: <b>migrants</b>, <b>refugees</b> and <b>diasporas</b>.</p>
+      <p>You don't have to read this site in order. Use the <b>Weekly Syllabus</b> to see what's due, and the other tabs as a toolkit you can come back to at any point in the term.</p>
+    </div>
+
+    <div class="lens-grid" id="lensGrid"></div>
+
+    <div class="info-strip">
+      <div><b>Class</b>Thursdays 15:30–18:20<br>D502, D Block, Beşiktaş</div>
+      <div><b>Instructor</b>Assoc. Prof. Damla Aksel<br><a href="mailto:damla.aksel@bau.edu.tr">damla.aksel@bau.edu.tr</a></div>
+      <div><b>Office hours</b>Thursday 13:00–15:00<br>A Block, 2nd floor, 310 (by appointment)</div>
+      <div><b>Where things live</b>Readings, announcements, uploads and rubrics are all on MS Teams</div>
+    </div>
+
+    <div class="section-heading">
+      <h3>By the end of the course you'll be able to…</h3>
+    </div>
+    <ul class="clo-list">
+      <li><b>CLO1</b>Explain the major theories, concepts and legal framework of international migration.</li>
+      <li><b>CLO2</b>Interpret the political and social dynamics concerning migrants, refugees and diasporas through contemporary examples.</li>
+      <li><b>CLO3</b>Analyze the impact of migration policies on the state, citizenship, borders and transnational relations.</li>
+      <li><b>CLO4</b>Evaluate Türkiye's migration policies and migration governance in relation to global developments, through a critical lens.</li>
+    </ul>
+
+    <div class="section-heading">
+      <h3>How to use this site</h3>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="eyebrow">Before class</div><h4>Weekly Syllabus</h4><p>Each week's topic, the readings to finish beforehand, and anything due.</p></div>
+      <div class="card debate"><div class="eyebrow">While reading</div><h4>Big Questions</h4><p>The course's theories, grouped by the question each one tries to answer rather than by date. Use this to place a reading within the wider debate.</p></div>
+      <div class="card lens-foundations"><div class="eyebrow">Anytime</div><h4>Key Terms</h4><p>A searchable glossary. "Refugee", "asylum seeker" and "migrant" are not interchangeable, and the differences matter legally and politically.</p></div>
+      <div class="card lens-diasporas"><div class="eyebrow">For your podcast</div><h4>Türkiye in Focus &amp; Data</h4><p>Türkiye's different roles in migration, plus the data sources you'll need for the podcast's data-analysis step.</p></div>
+    </div>
+  </section>
+
+  <!-- WEEKLY SYLLABUS -->
+  <section class="tab-panel" role="tabpanel" id="panel-syllabus" aria-labelledby="tab-syllabus" hidden>
+    <div class="panel-head">
+      <div class="kicker">Fall 2026–2027</div>
+      <h2>Weekly Syllabus</h2>
+      <p>What we cover each week. Each card gives the topic, the in-class activity, the reading due before class and any deadline. The full reading pack is on MS Teams.</p>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#666;"></span> Foundations</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#7f6000;"></span> Migrants</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#00838f;"></span> Refugees</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#8e3b46;"></span> Diasporas</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#f1c232; border-radius:3px;"></span> Deadline week</span>
+      </div>
+    </div>
+    <div class="scroller-wrap">
+      <button class="nav-btn left" id="syllabusNavLeft" aria-label="Scroll syllabus left">‹</button>
+      <button class="nav-btn right" id="syllabusNavRight" aria-label="Scroll syllabus right">›</button>
+      <div class="scroller" id="syllabusScroller"></div>
+    </div>
+    <div class="note"><b>Recommended textbook:</b> Castles, S. et al. (2014). <em>The Age of Migration: International Population Movements in the Modern World</em> (5th ed.). Basingstoke: Macmillan. A Turkish translation is also available. Additional suggested readings for each week are posted in the course content section on Teams.</div>
+  </section>
+
+  <!-- BIG QUESTIONS -->
+  <section class="tab-panel" role="tabpanel" id="panel-questions" aria-labelledby="tab-questions" hidden>
+    <div class="panel-head">
+      <div class="kicker">Theories, organized by the question they answer</div>
+      <h2>Big Questions</h2>
+      <p>Migration theories are easiest to understand as competing answers to a small number of questions. Each card names the idea, the key authors and the week where it comes up. The teal box on each card is a question to take into class discussion.</p>
+    </div>
+    <div id="questionBlocks"></div>
+  </section>
+
+  <!-- KEY TERMS -->
+  <section class="tab-panel" role="tabpanel" id="panel-terms" aria-labelledby="tab-terms" hidden>
+    <div class="panel-head">
+      <div class="kicker">Glossary</div>
+      <h2>Key Terms</h2>
+      <p>The vocabulary of migration is contested: the choice between "irregular" and "illegal", or between "refugee" and "migrant", is itself political. Definitions here are written in plain language and follow IOM and UNHCR usage where one exists. Filter by lens or search.</p>
+    </div>
+    <div class="filters" id="termFilters">
+      <button class="chip" data-lens="all" aria-pressed="true">All</button>
+      <button class="chip" data-lens="foundations" aria-pressed="false">Foundations</button>
+      <button class="chip" data-lens="migrants" aria-pressed="false">Migrants</button>
+      <button class="chip" data-lens="refugees" aria-pressed="false">Refugees</button>
+      <button class="chip" data-lens="diasporas" aria-pressed="false">Diasporas</button>
+      <input class="search" id="termSearch" type="search" placeholder="Search terms…" aria-label="Search key terms" />
+    </div>
+    <div class="count" id="termCount" aria-live="polite"></div>
+    <div class="grid" id="termGrid"></div>
+  </section>
+
+  <!-- TÜRKİYE IN FOCUS -->
+  <section class="tab-panel" role="tabpanel" id="panel-turkiye" aria-labelledby="tab-turkiye" hidden>
+    <div class="panel-head">
+      <div class="kicker">One country, many roles</div>
+      <h2>Türkiye in Focus</h2>
+      <p>Türkiye is often described as a country that moved "from emigration to immigration" (Kirişci 2007). It is more accurate to say it plays all of the roles below at the same time. Each card sets out one role, the policies and institutions attached to it, and a question for debate.</p>
+    </div>
+    <div class="grid" id="turkiyeGrid"></div>
+  </section>
+
+  <!-- ASSIGNMENTS -->
+  <section class="tab-panel" role="tabpanel" id="panel-assignments" aria-labelledby="tab-assignments" hidden>
+    <div class="panel-head">
+      <div class="kicker">Assessment</div>
+      <h2>Assignments</h2>
+      <p>How the final grade is made up. Rubrics for the Pecha Kucha and for each podcast sub-task are shared on MS Teams, and each task's instructions say what level of AI use is allowed.</p>
+    </div>
+
+    <div class="weights" role="img" aria-label="Grade weights: Podcast 30%, Midterm 20%, Pecha Kucha 10%, Final exam 40%">
+      <div class="w-podcast" style="flex:30">Podcast 30%</div>
+      <div class="w-midterm" style="flex:20">Midterm 20%</div>
+      <div class="w-pk" style="flex:10">PK 10%</div>
+      <div class="w-final" style="flex:40">Final exam 40%</div>
+    </div>
+
+    <div class="grid" id="assessmentGrid"></div>
+
+    <div class="section-heading">
+      <h3>The BAU Migration Story Podcast: step by step</h3>
+      <p>The podcast is built up over the term. Each step is a piece of individual work that feeds into your group's final episode, so choose your theme early and keep to each deadline.</p>
+    </div>
+    <ol class="roadmap" id="podcastRoadmap"></ol>
+
+    <div class="note"><b>Interview ethics.</b> When you interview someone for the podcast, protect their privacy and dignity. Get their consent before you record, and remember that recordings may be used only for course assessment. They may not be shared without the interviewee's consent.</div>
+    <div class="note"><b>AI declaration.</b> If a task permits AI use, submit the Student AI Declaration Form with it (tool used, purpose, and a statement that you reviewed the output and take responsibility for it), and cite the tool in APA 7th style. AI is not permitted in the final exam.</div>
+  </section>
+
+  <!-- DATA & SOURCES -->
+  <section class="tab-panel" role="tabpanel" id="panel-data" aria-labelledby="tab-data" hidden>
+    <div class="panel-head">
+      <div class="kicker">Evidence toolkit</div>
+      <h2>Data &amp; Sources</h2>
+      <p>Where to find reliable numbers and primary documents. Each card suggests one thing to try with the source, which is a good way into the podcast's data-analysis step (due Week 8).</p>
+    </div>
+    <div class="grid" id="dataGrid"></div>
+    <div class="note"><b>Before you quote a number,</b> check three things: <em>who</em> counted it (a government, UNHCR, IOM or an NGO), <em>what</em> it counts (stocks or flows, people or applications, registered or estimated) and <em>when</em> it was counted. Most disagreements between migration statistics come down to one of these three.</div>
+  </section>
+
+  <footer class="foot">
+    Built for POL3612 – International Migration, Bahçeşehir University. Card texts are written summaries, not quotations. Syllabus details follow the official course syllabus (prepared 14.09.2026); if anything here conflicts with Teams or the syllabus, those take precedence. External links are for further exploration, not required reading.
+  </footer>
+
+<script>
+/* POL3612 — International Migration
+   All content lives in the data arrays below; the render functions at the
+   bottom turn them into cards. To add a week's video, push
+   { title, source, url } into that week's `videos` array. */
+
+const LENSES = [
+  {
+    id: "migrants",
+    num: "LENS 01",
+    title: "Migrants",
+    text: "Why people move, and how states decide who may enter, stay and belong. Covers theories of migration, citizenship and integration, borders, and the securitization of migration.",
+    q: "Is controlling who crosses the border the heart of sovereignty, or a myth states keep performing?",
+    weeks: "Weeks 2–5",
+  },
+  {
+    id: "refugees",
+    num: "LENS 02",
+    title: "Refugees",
+    text: "Forced migration and the international refugee regime: the 1951 Convention, non-refoulement, UNHCR, and why a 1950s legal framework is under strain today.",
+    q: "Who owes protection to whom, and who decides?",
+    weeks: "Week 6",
+  },
+  {
+    id: "diasporas",
+    num: "LENS 03",
+    title: "Diasporas",
+    text: "Migration seen from the country of origin: transnational lives, diaspora politics, emigration and the highly skilled, and the institutions sending states build to reach citizens abroad.",
+    q: "Can you belong politically to two places at once?",
+    weeks: "Weeks 8–11",
+  },
+];
+
+const SYLLABUS = [
+  {
+    week: "Week 1", date: "Sept 24", lens: "foundations", clo: "CLO1",
+    topic: "Introduction",
+    activity: "Lecture; course introduction.",
+    reading: "IOM, Key Migration Terms; IOM, World Migration Report; UN 1951 Refugee Convention; Migrant Integration Policy Index (MIPEX).",
+  },
+  {
+    week: "Week 2", date: "Oct 1", lens: "foundations", clo: "CLO1",
+    topic: "Trends and Theories in Migration and the Emergence of Migration States",
+    activity: "Lecture; presentation of the assignments; distribution of Pecha Kucha presentation dates.",
+    reading: "De Haas et al. (2019), \"International migration: Trends, determinants, and policy effects\"; Massey et al. (1993), \"Theories of international migration\"; Hollifield (2004), \"The Emerging Migration State\"; Torpey (1998), \"Coming and Going\".",
+  },
+  {
+    week: "Week 3", date: "Oct 8", lens: "migrants", clo: "CLO3",
+    topic: "Citizenship, Rights and Identities",
+    activity: "Lecture; primary text discussion.",
+    reading: "Bloemraad & Sheares (2017), \"Understanding membership in a world of global migration\"; Ager & Strang (2008), \"Understanding integration\"; T. H. Marshall (1950), Citizenship and Social Class.",
+    assessment: "Podcast: group members & theme due",
+    milestone: true,
+  },
+  {
+    week: "Week 4", date: "Oct 15", lens: "migrants", clo: "CLO3",
+    topic: "Borders and Border Politics",
+    activity: "Lecture; case discussion.",
+    reading: "D. Fassin (2011), \"Policing Borders, Producing Boundaries\"; Frontex (frontex.europa.eu); W. Walters (2015), \"Migration, vehicles and politics\".",
+  },
+  {
+    week: "Week 5", date: "Oct 22", lens: "migrants", clo: "CLO2",
+    topic: "Irregular Migration, Securitization and Politicization of Migration",
+    activity: "Lecture; discussion of contemporary cases.",
+    reading: "D. Bigo (2002), \"Security and Immigration\"; M. Collyer (2006), \"Migrants, Migration and the Security Paradigm\".",
+    assessment: "Podcast: reaction to an academic article (5 pts, P/F)",
+    milestone: true,
+  },
+  { noClass: "No class Oct 29<br>(Republic Day)" },
+  {
+    week: "Week 6", date: "Nov 5", lens: "refugees", clo: "CLO1",
+    topic: "National and International Refugee Regime",
+    activity: "Lecture; discussion of primary documents.",
+    reading: "S. Martin (2010), \"Forced Migration, the Refugee Regime and the Responsibility to Protect\"; Convention and Protocol Relating to the Status of Refugees; UN General Assembly, New York Declaration for Refugees and Migrants; Aleinikoff (2017), \"Toward a Global System of Human Mobility\".",
+  },
+  {
+    week: "Week 7", date: "Nov 12", lens: "foundations", clo: "CLO1, CLO3",
+    topic: "Revision of First Part & Take-home Midterm Exam",
+    activity: "Take-home midterm exam; guidelines are shared during class time.",
+    reading: "No new reading. Review Weeks 1–6.",
+    assessment: "Take-home Midterm Exam (20 pts)",
+    milestone: true,
+  },
+  {
+    week: "Week 8", date: "Nov 19", lens: "diasporas", clo: "CLO2",
+    topic: "The Rise of Diasporas and Transnational Identity Politics",
+    activity: "Lecture; primary text discussion.",
+    reading: "Bauböck & Faist (2010), \"Diaspora and transnationalism: Concepts, theories and methods\"; Østergaard-Nielsen (2003), \"The politics of migrants' transnational political practices\"; Basch, Glick Schiller & Szanton Blanc (1994), Nations Unbound.",
+    assessment: "Podcast: data analysis (5 pts, P/F)",
+    milestone: true,
+  },
+  {
+    week: "Week 9", date: "Nov 26", lens: "diasporas", clo: "CLO3",
+    topic: "Emigration and Migration of the Highly Skilled",
+    activity: "Lecture; comparative case discussion.",
+    reading: "Gamlen (2014), \"Diaspora Institutions and Diaspora Governance\"; Délano & Gamlen (2014), \"Comparing and theorizing state–diaspora relations\"; Tsourapas (2020), \"Theorizing state–diaspora relations in the Middle East\".",
+  },
+  {
+    week: "Week 10", date: "Nov 28", lens: "migrants", clo: "CLO4",
+    topic: "Turkey as a Country of Migration",
+    activity: "Lecture; case discussion.",
+    reading: "İçduygu & Aksel (2013), \"Turkish migration policies: A critical historical retrospective\"; Directorate General for Migration Management (goc.gov.tr); Kirişci (2007), \"Turkey: A Country of Transition from Emigration to Immigration\".",
+    assessment: "Podcast: interview notes & analysis (10 pts, P/F)",
+    milestone: true,
+  },
+  {
+    week: "Week 11", date: "Dec 3", lens: "diasporas", clo: "CLO4",
+    topic: "Turkey and its Citizens Living Abroad",
+    activity: "Lecture; primary text discussion.",
+    reading: "Adamson (2019), \"Sending States and the Making of Intra-Diasporic Politics: Turkey and Its Diaspora(s)\"; Aksel (2014), \"Kins, distant workers, diasporas: constructing Turkey's transnational members abroad\"; Presidency for Turks Abroad and Related Communities (ytb.gov.tr).",
+  },
+  {
+    week: "Week 12", date: "Dec 10", lens: "foundations", clo: "CLO1–4",
+    topic: "Student Presentations and Course Review",
+    activity: "BAU Migration Story Podcast group presentations (10 min per group); course review and closing discussion.",
+    reading: "No reading.",
+    assessment: "Podcast: recorded episode + in-class presentation (10 pts)",
+    milestone: true,
+  },
+];
+
+const QUESTIONS = [
+  {
+    q: "Why do people move?",
+    blurb: "Explanations work at different levels: the individual, the household, networks, and the global economy. Most researchers now combine several rather than choosing one.",
+    cards: [
+      {
+        eyebrow: "Macro & micro · Week 2",
+        title: "Neoclassical economics",
+        text: "People move from low-wage to high-wage places, and individuals weigh the expected costs and benefits of moving. Migration should slow as wage gaps close.",
+        authors: "Harris & Todaro (1970); reviewed in Massey et al. (1993)",
+        debate: "If wage gaps drive migration, why do the very poorest rarely migrate internationally?",
+      },
+      {
+        eyebrow: "Household · Week 2",
+        title: "New economics of labour migration",
+        text: "The decision to migrate is made by households as well as individuals. Sending one member abroad spreads risk and brings in remittances where credit and insurance markets are weak.",
+        authors: "Stark & Bloom (1985)",
+        debate: "What changes if we treat remittances, rather than the migrant, as the point of migration?",
+      },
+      {
+        eyebrow: "Structural · Week 2",
+        title: "Dual labour market theory",
+        text: "Migration is pulled by demand. Wealthy economies build in a secondary sector of insecure, low-status jobs that native workers avoid, and employers (and sometimes states) recruit abroad to fill them.",
+        authors: "Piore (1979)",
+        debate: "Postwar European guest-worker programmes were designed around this demand. What did they fail to anticipate?",
+      },
+      {
+        eyebrow: "Global · Week 2",
+        title: "World systems theory",
+        text: "Capitalist expansion into the periphery uproots people from land and traditional livelihoods. Migration then follows the channels of former colonial, trade and investment ties back toward the core.",
+        authors: "Wallerstein; Sassen",
+        debate: "Why do so many migrants go to their former colonial power rather than the nearest wealthy country?",
+      },
+      {
+        eyebrow: "Meso · Week 2",
+        title: "Networks & cumulative causation",
+        text: "Each migrant lowers the cost and risk of moving for friends and relatives who follow. Over time migration sustains itself, partly independently of the conditions that started it.",
+        authors: "Massey (1990); Massey et al. (1993)",
+        debate: "If networks make migration self-sustaining, how much can policy really \"turn off\" a flow?",
+      },
+      {
+        eyebrow: "Integrated · Week 2",
+        title: "Aspirations & capabilities",
+        text: "Migration depends on both the wish to move and the ability to do so. Development often increases emigration at first, because it raises people's capabilities before it reduces their aspirations. Immobility, or being unable to leave, is part of the picture too.",
+        authors: "Zelinsky (1971); de Haas et al. (2019)",
+        debate: "Is aid designed to \"address the root causes of migration\" built on a mistaken theory?",
+      },
+    ],
+  },
+  {
+    q: "How do states respond, and why?",
+    blurb: "Once people move, states sort them, count them and control them. These ideas explain why migration has become central to what modern states do.",
+    cards: [
+      {
+        eyebrow: "The state · Week 2",
+        title: "The migration state",
+        text: "Managing migration has become a core function of the modern state, alongside security and trade. States face a <b>liberal paradox</b>: markets and rights push toward openness, while the politics of national membership push toward closure.",
+        authors: "Hollifield (2004)",
+        debate: "Which side of the liberal paradox is winning today, and does the answer differ between the EU and the Gulf?",
+      },
+      {
+        eyebrow: "The state · Week 2",
+        title: "Monopolizing movement",
+        text: "Just as states monopolized legitimate violence, they came to monopolize the \"legitimate means of movement\". Passports, visas and identity documents are how states \"embrace\" and sort populations.",
+        authors: "Torpey (1998)",
+        debate: "What does it mean that your passport, not your abilities, largely decides where you can go?",
+        tone: "lens-foundations",
+      },
+      {
+        eyebrow: "Borders · Week 4",
+        title: "Borders & boundaries",
+        text: "States police two things: territorial <em>borders</em>, and the social <em>boundaries</em> that separate insiders from outsiders within society. Border control is now carried out far from the frontier, in consulates, databases, workplaces and hospitals.",
+        authors: "Fassin (2011)",
+        debate: "Where is the \"border\" for an undocumented worker in Istanbul?",
+      },
+      {
+        eyebrow: "Borders · Week 4",
+        title: "Viapolitics",
+        text: "The politics of migration often plays out around vehicles, such as boats, trucks, planes and deportation charters. Looking at <em>how</em> people travel reveals how control actually works.",
+        authors: "Walters (2015)",
+        debate: "Why did the rubber dinghy become a symbol of European border politics?",
+      },
+      {
+        eyebrow: "Security · Week 5",
+        title: "Securitization as speech act",
+        text: "An issue becomes a security issue when political actors successfully present it as an existential threat, which justifies exceptional measures that would otherwise be unacceptable.",
+        authors: "Copenhagen School: Buzan, Wæver & de Wilde (1998)",
+        debate: "Who has the power to declare migration a \"threat\", and who can contest it?",
+      },
+      {
+        eyebrow: "Security · Week 5",
+        title: "Securitization as routine practice",
+        text: "Migration is securitized less through dramatic speeches than through the everyday routines of security professionals: risk profiling, databases and policing. Bigo calls the result a \"governmentality of unease\".",
+        authors: "Paris School: Bigo (2002); see also Collyer (2006)",
+        debate: "Can migration be de-securitized once the technology and agencies already exist?",
+      },
+    ],
+  },
+  {
+    q: "Who belongs, and where?",
+    blurb: "Membership, rights and identity after migration, both in the country of settlement and back toward the country of origin.",
+    cards: [
+      {
+        eyebrow: "Citizenship · Week 3",
+        title: "Citizenship as rights",
+        text: "Marshall described citizenship in England as expanding over time from civil rights to political rights and then social rights. Migration raises the question of what happens to people who hold some of these rights but not all of them.",
+        authors: "Marshall (1950)",
+        debate: "Should long-term residents who aren't citizens vote in local elections?",
+      },
+      {
+        eyebrow: "Citizenship · Week 3",
+        title: "Membership in four dimensions",
+        text: "Being a \"member\" involves legal status, rights, participation and a sense of belonging, and these don't always go together. A citizen can feel excluded, and a non-citizen can be deeply involved in local life.",
+        authors: "Bloemraad & Sheares (2017)",
+        debate: "Which of the four dimensions matters most, and to whom?",
+      },
+      {
+        eyebrow: "Integration · Week 3",
+        title: "Domains of integration",
+        text: "A widely used framework with ten domains in four groups: <b>markers & means</b> (work, housing, education, health), <b>social connections</b> (bonds, bridges, links), <b>facilitators</b> (language, safety) and a <b>foundation</b> of rights and citizenship.",
+        authors: "Ager & Strang (2008)",
+        debate: "Is integration a two-way process in practice, or does the burden fall only on newcomers?",
+      },
+      {
+        eyebrow: "Transnationalism · Week 8",
+        title: "Transnational lives",
+        text: "Many migrants build and maintain social, economic and political ties that link their society of origin and their society of settlement. They live across borders rather than simply leaving one place for another.",
+        authors: "Basch, Glick Schiller & Szanton Blanc (1994)",
+        debate: "Does transnational engagement slow integration, or support it?",
+        tone: "lens-diasporas",
+      },
+      {
+        eyebrow: "Diaspora politics · Week 8",
+        title: "Homeland & immigrant politics",
+        text: "Migrants' political activity can face the homeland (supporting parties, lobbying and voting from abroad) or the host society (claiming rights and recognition). Conflicts back home can also be carried over into the diaspora.",
+        authors: "Østergaard-Nielsen (2003); Bauböck & Faist (2010)",
+        debate: "When a homeland conflict is carried into a diaspora in Germany, whose politics is it?",
+        tone: "lens-diasporas",
+      },
+      {
+        eyebrow: "Sending states · Week 9",
+        title: "Diaspora institutions",
+        text: "More and more states set up ministries and agencies for citizens abroad. Explanations include <b>tapping</b> diaspora resources, <b>embracing</b> them as part of the nation, and responding to global norms of diaspora <b>governance</b>. Authoritarian states may also use these institutions to monitor and control.",
+        authors: "Gamlen (2014); Délano & Gamlen (2014); Tsourapas (2020)",
+        debate: "Is diaspora outreach mainly about rights, resources or control?",
+        tone: "lens-diasporas",
+      },
+    ],
+  },
+  {
+    q: "Who is owed protection?",
+    blurb: "The refugee regime is the part of migration governance with the strongest basis in international law, and it has been under strain for decades.",
+    cards: [
+      {
+        eyebrow: "Regime · Week 6",
+        title: "The 1951 Convention & 1967 Protocol",
+        text: "The core of the international refugee regime. It defines who counts as a refugee, sets out their rights, and prohibits sending them back to persecution (non-refoulement). The 1967 Protocol removed the Convention's original time and geographic limits.",
+        authors: "UN (1951, 1967); UNHCR",
+        debate: "Should people fleeing climate disasters or generalized violence be covered?",
+        tone: "lens-refugees",
+        link: { label: "Refugee Convention on Wikipedia →", url: "https://en.wikipedia.org/wiki/Convention_Relating_to_the_Status_of_Refugees" },
+      },
+      {
+        eyebrow: "Regime · Week 6",
+        title: "Responsibility to protect & forced migration",
+        text: "The protection of displaced people overlaps with wider debates about state sovereignty and the international community's responsibility when states fail to protect their own populations.",
+        authors: "Martin (2010)",
+        debate: "Does preventing displacement protect people, or keep them from reaching safety?",
+        tone: "lens-refugees",
+      },
+      {
+        eyebrow: "Regime · Week 6",
+        title: "From the New York Declaration to the Global Compacts",
+        text: "In 2016 the UN General Assembly adopted the New York Declaration, which led in 2018 to two non-binding Global Compacts: one on refugees and one for safe, orderly and regular migration. The central unresolved question is how responsibility should be shared among states.",
+        authors: "UNGA (2016); Aleinikoff (2017)",
+        debate: "Can non-binding compacts change the behaviour of states?",
+        tone: "lens-refugees",
+      },
+    ],
+  },
+];
+
+const TERMS = [
+  // Foundations
+  { lens: "foundations", term: "Migrant", def: "An umbrella term, not defined in international law. IOM uses it for anyone who moves away from their usual place of residence, within a country or across a border, temporarily or permanently, and for any reason." },
+  { lens: "foundations", term: "International migrant (statistical)", def: "For counting purposes, a person living in a country other than their country of birth or citizenship. The UN treats someone who changes their country of usual residence for at least a year as a long-term migrant." },
+  { lens: "foundations", term: "Stock vs. flow", def: "A migrant stock is the number of migrants living somewhere at a given moment. A flow is the number who arrive or leave during a period. Mixing the two up is one of the most common errors in public debate." },
+  { lens: "foundations", term: "Emigration / immigration", def: "The same move described from two sides: leaving a country (emigration) and entering one (immigration). Most countries are both at the same time." },
+  { lens: "foundations", term: "Remittances", def: "Money (and sometimes goods or ideas, called \"social remittances\") that migrants send to their country of origin. For many lower-income countries they exceed foreign aid." },
+  { lens: "foundations", term: "Migration governance", def: "The laws, institutions and practices, national and international, that shape who moves, how, and with what rights." },
+  // Migrants
+  { lens: "migrants", term: "Irregular migration", def: "Movement or stay that takes place outside the laws of the countries involved. IOM and the UN prefer \"irregular\" or \"undocumented\" to \"illegal\", because a person cannot be illegal." },
+  { lens: "migrants", term: "Transit migration", def: "Movement through one or more countries on the way to another destination. Transit can last for years, and \"transit countries\" such as Türkiye or Morocco are often destinations in practice." },
+  { lens: "migrants", term: "Circular migration", def: "Repeated movement back and forth between origin and destination, often for seasonal or temporary work." },
+  { lens: "migrants", term: "Integration", def: "The process by which newcomers and the receiving society come to share social, economic and political life. It is usually described as two-way, although policy often places most of the burden on migrants." },
+  { lens: "migrants", term: "Assimilation vs. multiculturalism", def: "Two ideal types of integration policy. Assimilation expects newcomers to adopt the majority culture, while multiculturalism recognizes and supports group differences within a shared political community." },
+  { lens: "migrants", term: "Naturalization", def: "The legal process through which a foreign national becomes a citizen. Requirements such as residence, language and income vary widely between countries." },
+  { lens: "migrants", term: "Jus soli / jus sanguinis", def: "Two principles of citizenship. Under jus soli, citizenship comes from birth on the territory. Under jus sanguinis, it comes through descent from a citizen parent. Most states mix the two." },
+  { lens: "migrants", term: "Denizen", def: "A long-term legal resident who has most social and civil rights but not citizenship, and usually not the vote. The term was coined by Tomas Hammar." },
+  { lens: "migrants", term: "Securitization", def: "Presenting an issue such as migration as a security threat, which justifies exceptional measures. It can happen through political speech or through routine security practice." },
+  { lens: "migrants", term: "Border externalization", def: "Moving border control beyond a state's own territory, for example through agreements with neighbouring countries, visa regimes, carrier sanctions or offshore processing." },
+  { lens: "migrants", term: "Smuggling vs. trafficking", def: "Smuggling means facilitating someone's irregular border crossing for profit, with the person's consent. Trafficking means exploiting a person through force, fraud or coercion, and it does not require crossing a border." },
+  // Refugees
+  { lens: "refugees", term: "Refugee", def: "Under the 1951 Convention, a person outside their country of nationality who is unable or unwilling to return because of a well-founded fear of persecution on grounds of race, religion, nationality, membership of a particular social group or political opinion." },
+  { lens: "refugees", term: "Asylum seeker", def: "A person who has applied for international protection and is waiting for a decision. Not every asylum seeker will be recognized as a refugee, but every recognized refugee was first an asylum seeker." },
+  { lens: "refugees", term: "Non-refoulement", def: "The rule that no one may be returned to a place where they would face persecution or serious harm (Article 33 of the 1951 Convention). It is widely regarded as part of customary international law.", link: "https://en.wikipedia.org/wiki/Non-refoulement" },
+  { lens: "refugees", term: "Internally displaced person (IDP)", def: "Someone forced to flee their home who has not crossed an international border. IDPs are not covered by the 1951 Convention and remain under their own state's responsibility." },
+  { lens: "refugees", term: "Stateless person", def: "Someone who is not considered a national by any state under its law (1954 Convention). Statelessness can result from migration, discriminatory laws or the break-up of states." },
+  { lens: "refugees", term: "Temporary protection", def: "Group-based, time-limited protection during a mass influx, used when assessing claims individually is impractical. Türkiye's regime for Syrians, set up in 2014, is a major example." },
+  { lens: "refugees", term: "Geographical limitation", def: "An option in the 1951 Convention to recognize as refugees only people displaced by events in Europe. Türkiye is one of very few states that still applies it." },
+  { lens: "refugees", term: "Durable solutions", def: "UNHCR's three long-term outcomes for refugees: voluntary repatriation, local integration in the host country, and resettlement to a third country." },
+  { lens: "refugees", term: "Burden / responsibility sharing", def: "The principle that the costs of protecting refugees should be shared among states rather than falling mainly on neighbouring countries. It is widely endorsed but weakly enforced." },
+  { lens: "refugees", term: "Mixed migration", def: "Movements in which refugees, asylum seekers and other migrants travel together along the same routes, often using the same smugglers, which makes it hard to sort people into legal categories." },
+  // Diasporas
+  { lens: "diasporas", term: "Diaspora", def: "Originally used for scattered peoples such as the Jewish, Armenian and Greek diasporas. It now broadly refers to dispersed populations that keep a connection to a homeland and a group identity. Brubaker highlights dispersion, homeland orientation and boundary maintenance." },
+  { lens: "diasporas", term: "Transnationalism", def: "The ties (social, economic, political and religious) that migrants maintain across the borders of their origin and settlement countries." },
+  { lens: "diasporas", term: "Long-distance nationalism", def: "Benedict Anderson's term for nationalist politics practised by people who live outside the nation-state they identify with." },
+  { lens: "diasporas", term: "Diaspora institutions", def: "Ministries, agencies and programmes that states create to engage citizens and co-ethnics abroad, such as Türkiye's YTB." },
+  { lens: "diasporas", term: "External voting", def: "Allowing citizens who live abroad to vote in homeland elections. It is now common worldwide and often contested." },
+  { lens: "diasporas", term: "Dual citizenship", def: "Holding the citizenship of two states at once. It was once discouraged, but many states now tolerate or encourage it, partly to keep ties with their diasporas." },
+  { lens: "diasporas", term: "Brain drain / gain / circulation", def: "Debates over the emigration of the highly skilled. It can mean a loss for the origin country (drain), a gain through remittances, return and networks (gain), or ongoing movement in both directions (circulation)." },
+  { lens: "diasporas", term: "Return migration", def: "Migrants going back to their country of origin, whether voluntarily, under pressure or through deportation. It is often less final than it looks." },
+  { lens: "diasporas", term: "Emigration state", def: "A state whose policies are shaped by large-scale emigration, managing, encouraging or controlling departure and its citizens abroad (see Tsourapas)." },
+];
+
+const TURKIYE = [
+  {
+    eyebrow: "Role 1 · Weeks 10–11",
+    title: "A country of emigration",
+    lens: "lens-diasporas",
+    points: [
+      "1961: bilateral labour recruitment agreement with West Germany, followed by agreements with other European countries and Australia during the 1960s.",
+      "Guest workers who were expected to rotate home settled permanently, followed by family reunification.",
+      "Later waves included political exiles after 1980, asylum seekers, and more recently students and highly skilled professionals.",
+    ],
+    debate: "Is today's emigration of young professionals a \"brain drain\" or a new form of transnational mobility?",
+  },
+  {
+    eyebrow: "Role 2 · Week 10",
+    title: "A country of immigration",
+    lens: "",
+    points: [
+      "The 1934 Settlement Law favoured immigrants of \"Turkish descent and culture\", shaping who could settle. It was replaced by a new Settlement Law in 2006.",
+      "Large movements came from the Balkans, including more than 300,000 Turks from Bulgaria in 1989.",
+      "Today the country also receives labour migrants, students, retirees and people on investment-based residence or citizenship.",
+    ],
+    debate: "How has the idea of who counts as a \"desirable\" immigrant changed, and what has stayed the same?",
+  },
+  {
+    eyebrow: "Role 3 · Weeks 4–5",
+    title: "A country of transit",
+    lens: "",
+    points: [
+      "It is a major route toward the EU, across the Aegean and the land border with Greece.",
+      "The EU–Türkiye readmission agreement was signed in 2013, alongside a visa-liberalization dialogue.",
+      "The EU–Türkiye Statement of March 2016 set up returns from the Greek islands and a one-for-one Syrian resettlement mechanism, backed by EU funding.",
+    ],
+    debate: "Is Türkiye the EU's \"gatekeeper\", or does it use migration as leverage in \"migration diplomacy\"?",
+  },
+  {
+    eyebrow: "Role 4 · Weeks 6 & 10",
+    title: "A country of asylum",
+    lens: "lens-refugees",
+    points: [
+      "Türkiye keeps the 1951 Convention's geographical limitation, so full refugee status is reserved for people fleeing events in Europe.",
+      "The Law on Foreigners and International Protection (No. 6458, 2013) created a civilian migration authority, now the Presidency of Migration Management (goc.gov.tr).",
+      "The 2014 Temporary Protection Regulation covers Syrians. For most of the past decade, Türkiye has hosted the world's largest refugee population.",
+    ],
+    debate: "After more than a decade, how \"temporary\" is temporary protection, and what does harmonization (uyum) mean in practice?",
+    link: { label: "Presidency of Migration Management →", url: "https://www.goc.gov.tr/" },
+  },
+  {
+    eyebrow: "Role 5 · Week 11",
+    title: "A diaspora state",
+    lens: "lens-diasporas",
+    points: [
+      "Dual citizenship has been allowed since 1981. The Blue Card lets former citizens keep most of their rights.",
+      "The Presidency for Turks Abroad and Related Communities (YTB) was set up in 2010.",
+      "Since 2014, citizens abroad can vote at polling stations in their country of residence.",
+      "The state's language has shifted from \"workers abroad\" to \"diaspora\" (Aksel 2014), and state outreach can reshape divisions within the diaspora (Adamson 2019).",
+    ],
+    debate: "Who counts as part of \"the diaspora\", and who gets to decide?",
+    link: { label: "YTB →", url: "https://www.ytb.gov.tr/" },
+  },
+  {
+    eyebrow: "Cross-cutting · Weeks 10–11",
+    title: "Reading the policy history",
+    lens: "lens-foundations",
+    points: [
+      "Migration policy has long been tied to nation-building: deciding who belongs to the nation, and who may settle or leave (İçduygu & Aksel 2013).",
+      "From the 2000s, EU accession, regional conflicts and economic growth pushed migration up the political agenda.",
+      "Migration is now also a question of foreign policy and domestic electoral politics.",
+    ],
+    debate: "Is Türkiye's migration governance best explained by domestic politics, by EU pressure, or by its regional position?",
+    tone: "debate",
+  },
+];
+
+const ASSESSMENTS = [
+  {
+    eyebrow: "30% · CLO2, CLO3",
+    title: "BAU Migration Story Podcast",
+    text: "A group podcast episode on a migration story, built up through individual sub-tasks during the term (see the roadmap below).",
+    ai: "AI: limited and conditional use",
+  },
+  {
+    eyebrow: "20% · CLO1, CLO3 · Week 7",
+    title: "Take-home Midterm Exam",
+    text: "Covers the first part of the course (Weeks 1–6). Guidelines are shared in class on Nov 12.",
+    ai: "AI: limited and conditional use",
+  },
+  {
+    eyebrow: "10% (Pass/Fail) · CLO2",
+    title: "Pecha Kucha Migration News",
+    text: "A short, fast-paced presentation on a current migration news story, using the Pecha Kucha format of timed, auto-advancing slides with images rather than text. Presentation dates are assigned in Week 2, and the exact format is in the rubric on Teams.",
+    ai: "AI: limited and conditional use",
+  },
+  {
+    eyebrow: "40% · CLO1–4",
+    title: "Final Exam",
+    text: "Covers the whole course: all three lenses and Türkiye's migration governance.",
+    ai: "AI: not permitted",
+  },
+];
+
+const PODCAST_STEPS = [
+  { title: "Form your group & pick a theme", when: "Week 3 · Oct 8", pts: "", text: "Submit group members and your theme. Pick a story you can actually reach through an interview, for example a migrant, refugee or diaspora member, or someone who works with them." },
+  { title: "React to an academic article", when: "Week 5 · Oct 22", pts: "5 pts · P/F", text: "Read one scholarly article related to your theme and write a reaction. This gives your episode its analytical frame and ties the story to the course's Big Questions." },
+  { title: "Analyze the data", when: "Week 8 · Nov 19", pts: "5 pts · P/F", text: "Put your story in numbers: how big is this movement, and how has it changed? The Data & Sources tab lists where to look." },
+  { title: "Interview notes & analysis", when: "Week 10 · Nov 28", pts: "10 pts · P/F", text: "Conduct your interview with informed consent, then submit your notes and an analysis linking what you heard to the concepts from class." },
+  { title: "Record, publish & present", when: "Week 12 · Dec 10", pts: "10 pts", text: "Submit the recorded episode and present it in class (10 minutes per group)." },
+];
+
+const DATA_SOURCES = [
+  {
+    eyebrow: "Concepts",
+    title: "IOM — Key Migration Terms",
+    text: "The International Organization for Migration's glossary, and the starting point for Week 1.",
+    tryThis: "Compare IOM's definition of \"migrant\" with the 1951 Convention's definition of \"refugee\". What does each one include or leave out?",
+    url: "https://www.iom.int/key-migration-terms",
+  },
+  {
+    eyebrow: "Trends",
+    title: "IOM — World Migration Report",
+    text: "IOM's flagship report, with global and regional overviews and chapters on current issues.",
+    tryThis: "Find the regional chapter covering Türkiye's region and note the three largest movements it describes.",
+    url: "https://worldmigrationreport.iom.int/",
+  },
+  {
+    eyebrow: "Data",
+    title: "Migration Data Portal",
+    text: "IOM's portal bringing together migration statistics from many sources, with country profiles and explainers on data quality.",
+    tryThis: "Open a country profile for your podcast theme and record the migrant stock and the latest remittance figure, with their sources.",
+    url: "https://www.migrationdataportal.org/",
+  },
+  {
+    eyebrow: "Data",
+    title: "UNHCR — Refugee Data Finder",
+    text: "Official statistics on refugees, asylum seekers, IDPs and stateless people, by country of origin and asylum.",
+    tryThis: "Find the top five refugee-hosting countries this year. Where do most refugees live: near their origin, or far away?",
+    url: "https://www.unhcr.org/refugee-statistics/",
+    lens: "lens-refugees",
+  },
+  {
+    eyebrow: "Policy index",
+    title: "MIPEX — Migrant Integration Policy Index",
+    text: "Scores integration policies across many countries in areas such as labour market access, family reunion, education, political participation and access to nationality.",
+    tryThis: "Compare Türkiye with one EU country of your choice. Which policy area shows the biggest gap?",
+    url: "https://www.mipex.eu/",
+  },
+  {
+    eyebrow: "Türkiye",
+    title: "Presidency of Migration Management",
+    text: "Türkiye's migration authority. It publishes statistics on residence permits, international and temporary protection, and irregular migration.",
+    tryThis: "Find the current number of Syrians under temporary protection and note how it has changed over the past three years.",
+    url: "https://www.goc.gov.tr/",
+  },
+  {
+    eyebrow: "Türkiye · Diaspora",
+    title: "YTB — Presidency for Turks Abroad",
+    text: "The state agency for citizens abroad, kin communities and international students.",
+    tryThis: "Look at how YTB describes its mission. Which of Gamlen's motives (tapping, embracing, governing) does its language suggest?",
+    url: "https://www.ytb.gov.tr/",
+    lens: "lens-diasporas",
+  },
+  {
+    eyebrow: "Borders",
+    title: "Frontex",
+    text: "The European Border and Coast Guard Agency, which publishes risk analyses and detection data on irregular border crossings.",
+    tryThis: "Frontex counts detections of crossings, not people. Why could the same person be counted more than once?",
+    url: "https://www.frontex.europa.eu/",
+  },
+];
+
+/* ---------------- Rendering ---------------- */
+
+function esc(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+// Card texts in QUESTIONS may carry a little trusted inline markup (<b>, <em>).
+function rich(s) {
+  return esc(s)
+    .replace(/&lt;(\/?)(b|em)&gt;/g, "<$1$2>");
+}
+
+const LENS_LABEL = { foundations: "Foundations", migrants: "Migrants", refugees: "Refugees", diasporas: "Diasporas" };
+
+function renderLenses() {
+  document.getElementById("lensGrid").innerHTML = LENSES.map((l) => `
+    <div class="lens-card ${l.id}">
+      <div class="num">${esc(l.num)}</div>
+      <h3>${esc(l.title)}</h3>
+      <p>${esc(l.text)}</p>
+      <p class="q">${esc(l.q)}</p>
+      <div class="weeks">${esc(l.weeks)}</div>
+    </div>
+  `).join("");
+}
+
+function renderSyllabus() {
+  const scroller = document.getElementById("syllabusScroller");
+  scroller.innerHTML = SYLLABUS.map((w) => {
+    if (w.noClass) return `<div class="no-class">${w.noClass}</div>`;
+    const cls = w.milestone ? " milestone" : ` lens-${w.lens}`;
+    return `
+      <div class="syl-card${cls}">
+        <div class="syl-week">${esc(w.week)}<span class="syl-date">${esc(w.date)}</span></div>
+        <h3>${esc(w.topic)}</h3>
+        <div class="tags">
+          <span class="pill ${w.lens}">${esc(LENS_LABEL[w.lens])}</span>
+          <span class="pill foundations">${esc(w.clo)}</span>
+        </div>
+        <p class="syl-activity">${esc(w.activity)}</p>
+        <p class="syl-reading"><span class="syl-label">Before class:</span> ${esc(w.reading)}</p>
+        ${w.assessment ? `<div class="tags"><span class="pill milestone">${esc(w.assessment)}</span></div>` : ""}
+        ${w.videos && w.videos.length ? `
+          <div class="syl-watch">
+            <span class="syl-label">▶ Watch</span>
+            ${w.videos.map((v) => `<a href="${esc(v.url)}" target="_blank" rel="noopener">${esc(v.title)} <span class="source">${esc(v.source)}</span></a>`).join("")}
+          </div>` : ""}
+      </div>
+    `;
+  }).join("");
+
+  const left = document.getElementById("syllabusNavLeft");
+  const right = document.getElementById("syllabusNavRight");
+  const step = () => Math.min(600, scroller.clientWidth * 0.8);
+  left.addEventListener("click", () => scroller.scrollBy({ left: -step(), behavior: "smooth" }));
+  right.addEventListener("click", () => scroller.scrollBy({ left: step(), behavior: "smooth" }));
+  scroller.setAttribute("tabindex", "0");
+  scroller.addEventListener("keydown", (ev) => {
+    if (ev.key === "ArrowRight") { ev.preventDefault(); scroller.scrollBy({ left: step(), behavior: "smooth" }); }
+    if (ev.key === "ArrowLeft") { ev.preventDefault(); scroller.scrollBy({ left: -step(), behavior: "smooth" }); }
+  });
+}
+
+function renderQuestions() {
+  document.getElementById("questionBlocks").innerHTML = QUESTIONS.map((block, i) => `
+    <div class="question-block">
+      <div class="big-q">
+        <div class="qnum">${i + 1}</div>
+        <div><h3>${esc(block.q)}</h3><p>${esc(block.blurb)}</p></div>
+      </div>
+      <div class="grid">
+        ${block.cards.map((c) => `
+          <div class="card ${c.tone || ""}">
+            <div class="eyebrow">${esc(c.eyebrow)}</div>
+            <h4>${esc(c.title)}</h4>
+            <p>${rich(c.text)}</p>
+            <p class="muted"><span class="label">Key authors:</span> ${esc(c.authors)}</p>
+            <div class="spacer"></div>
+            <div class="debate-q"><b>Discuss:</b> ${esc(c.debate)}</div>
+            ${c.link ? `<a class="more" href="${esc(c.link.url)}" target="_blank" rel="noopener">${esc(c.link.label)}</a>` : ""}
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `).join("");
+}
+
+function setupTerms() {
+  const grid = document.getElementById("termGrid");
+  const count = document.getElementById("termCount");
+  const search = document.getElementById("termSearch");
+  const chips = Array.from(document.querySelectorAll("#termFilters .chip"));
+  let lens = "all";
+
+  function draw() {
+    const q = search.value.trim().toLowerCase();
+    const shown = TERMS.filter((t) =>
+      (lens === "all" || t.lens === lens) &&
+      (!q || t.term.toLowerCase().includes(q) || t.def.toLowerCase().includes(q))
+    ).sort((a, b) => a.term.localeCompare(b.term));
+
+    count.textContent = `${shown.length} of ${TERMS.length} terms`;
+    grid.innerHTML = shown.length ? shown.map((t) => `
+      <div class="card lens-${t.lens}">
+        <div class="tags"><span class="pill ${t.lens}">${esc(LENS_LABEL[t.lens])}</span></div>
+        <h4>${esc(t.term)}</h4>
+        <p>${esc(t.def)}</p>
+        ${t.link ? `<a class="more" href="${esc(t.link)}" target="_blank" rel="noopener">Learn more on Wikipedia →</a>` : ""}
+      </div>
+    `).join("") : `<div class="empty">No terms match. Try another word or choose "All".</div>`;
+  }
+
+  chips.forEach((chip) => chip.addEventListener("click", () => {
+    lens = chip.dataset.lens;
+    chips.forEach((c) => c.setAttribute("aria-pressed", c === chip ? "true" : "false"));
+    draw();
+  }));
+  search.addEventListener("input", draw);
+  draw();
+}
+
+function renderTurkiye() {
+  document.getElementById("turkiyeGrid").innerHTML = TURKIYE.map((c) => `
+    <div class="card ${c.tone || c.lens}">
+      <div class="eyebrow">${esc(c.eyebrow)}</div>
+      <h4>${esc(c.title)}</h4>
+      <ul>${c.points.map((p) => `<li>${esc(p)}</li>`).join("")}</ul>
+      <div class="spacer"></div>
+      <div class="debate-q"><b>Discuss:</b> ${esc(c.debate)}</div>
+      ${c.link ? `<a class="more" href="${esc(c.link.url)}" target="_blank" rel="noopener">${esc(c.link.label)}</a>` : ""}
+    </div>
+  `).join("");
+}
+
+function renderAssignments() {
+  document.getElementById("assessmentGrid").innerHTML = ASSESSMENTS.map((a) => `
+    <div class="card">
+      <div class="eyebrow">${esc(a.eyebrow)}</div>
+      <h4>${esc(a.title)}</h4>
+      <p>${esc(a.text)}</p>
+      <div class="spacer"></div>
+      <div class="tags"><span class="pill foundations">${esc(a.ai)}</span></div>
+    </div>
+  `).join("");
+
+  document.getElementById("podcastRoadmap").innerHTML = PODCAST_STEPS.map((s) => `
+    <li>
+      <div class="step-head">
+        <b>${esc(s.title)}</b>
+        <span class="when">${esc(s.when)}</span>
+        ${s.pts ? `<span class="pill">${esc(s.pts)}</span>` : ""}
+      </div>
+      <p>${esc(s.text)}</p>
+    </li>
+  `).join("");
+}
+
+function renderData() {
+  document.getElementById("dataGrid").innerHTML = DATA_SOURCES.map((d) => `
+    <div class="card ${d.lens || ""}">
+      <div class="eyebrow">${esc(d.eyebrow)}</div>
+      <h4>${esc(d.title)}</h4>
+      <p>${esc(d.text)}</p>
+      <div class="spacer"></div>
+      <div class="debate-q"><b>Try this:</b> ${esc(d.tryThis)}</div>
+      <a class="more" href="${esc(d.url)}" target="_blank" rel="noopener">Open ${esc(new URL(d.url).hostname.replace(/^www\./, ""))} →</a>
+    </div>
+  `).join("");
+}
+
+function setupTabs() {
+  const tabs = Array.from(document.querySelectorAll(".tab"));
+  const bar = document.querySelector(".site-bar");
+
+  function select(tab, { focus = false, updateHash = true } = {}) {
+    tabs.forEach((t) => {
+      const on = t === tab;
+      t.setAttribute("aria-selected", on ? "true" : "false");
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+    });
+    if (focus) tab.focus();
+    if (updateHash) history.replaceState(null, "", "#" + tab.dataset.hash);
+    if (window.scrollY > bar.offsetTop) window.scrollTo({ top: bar.offsetTop });
+  }
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener("click", () => select(tab));
+    tab.addEventListener("keydown", (ev) => {
+      let next = null;
+      if (ev.key === "ArrowRight") next = tabs[(i + 1) % tabs.length];
+      if (ev.key === "ArrowLeft") next = tabs[(i - 1 + tabs.length) % tabs.length];
+      if (ev.key === "Home") next = tabs[0];
+      if (ev.key === "End") next = tabs[tabs.length - 1];
+      if (next) { ev.preventDefault(); select(next, { focus: true }); }
+    });
+  });
+
+  // Links like pol3612_migration.html#terms open straight on that tab.
+  const fromHash = () => {
+    const tab = tabs.find((t) => "#" + t.dataset.hash === location.hash);
+    if (tab) select(tab, { updateHash: false });
+  };
+  window.addEventListener("hashchange", fromHash);
+  fromHash();
+}
+
+renderLenses();
+renderSyllabus();
+renderQuestions();
+setupTerms();
+renderTurkiye();
+renderAssignments();
+renderData();
+setupTabs();
+</script>
+</body>
+</html>
