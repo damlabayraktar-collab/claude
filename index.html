@@ -2710,6 +2710,8 @@ function buildExplainHTML(o){
   return h;
 }
 function isMathSubject(su){ return !!(su && /matemat/i.test(su.name||'')); }
+/* Karalama kâğıdı: Matematik'te işlem için, Sosyal'de yön/kroki çizimi için. */
+function hasScratchPad(su){ return isMathSubject(su) || !!(su && /sosyal/i.test(su.name||'')); }
 function scratchHTML(){
   return `<div class="scratch"><div class="scratch-h"><span>✏️ Karalama kâğıdı</span><button class="scratch-clear">🧽 Temizle</button></div><canvas class="scratch-cv"></canvas></div>`;
 }
@@ -2781,7 +2783,7 @@ function runQuiz(f, entries, resume){
     const passage = item.passage ? `<div class="passage">${escapeHtml(item.passage)}</div>` : '';
     const svg = item.svg ? `<div class="qsvg">${item.svg}</div>` : '';
     const total=Math.max(baseCount, answered+ (queue.length-pos));
-    const math = isMathSubject(f.su);
+    const math = hasScratchPad(f.su);
     sheet.innerHTML=`
       <div class="quizbar"><span class="qprog">Soru ${answered+1} / ${total}${e.review?' · 🔁 tekrar':''}</span><span class="qlvl">${'⭐'.repeat(qLvl(item))}</span><button class="xclose">✕</button></div>
       <div class="quizbody">
@@ -3452,9 +3454,9 @@ function runLevelQuiz(su, level){
     const svg=item.svg?`<div class="qsvg">${item.svg}</div>`:'';
     sheet.innerHTML=`
       <div class="quizbar"><span class="qprog">${su.emoji} ${LEVELS[level].name} · ${mastered}/${need} 🏁</span><span class="qlvl">${'⭐'.repeat(level)}</span><button class="xclose">✕</button></div>
-      <div class="quizbody"><div class="qwrap${isMathSubject(su)?' mathrow':''}"><div class="qcard">${passage}${svg}
+      <div class="quizbody"><div class="qwrap${hasScratchPad(su)?' mathrow':''}"><div class="qcard">${passage}${svg}
         <div class="qtext">${escapeHtml(item.q)}</div><div class="choices"></div><div class="exp"></div></div>
-        ${isMathSubject(su)?scratchHTML():''}</div></div>
+        ${hasScratchPad(su)?scratchHTML():''}</div></div>
       <div class="quizfoot"></div>`;
     sheet.querySelector('.xclose').onclick=closeOverlay;
     const cw=sheet.querySelector('.choices');
