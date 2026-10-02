@@ -782,6 +782,39 @@ mark { background: rgba(241, 194, 50, 0.45); color: inherit; padding: 0 1px; bor
 
 .quote cite { display: block; margin-top: 8px; font-style: normal; font-size: 0.82rem; color: var(--muted); font-weight: 600; }
 
+/* Proposal outline checklist, example timeline, budget template */
+.outline { padding: 14px 20px 0; max-width: 1000px; }
+.outline details.week > summary { grid-template-columns: 64px 1fr auto; }
+.check { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; font-size: 0.88rem; line-height: 1.5; cursor: pointer; }
+.check input { margin-top: 4px; accent-color: #7f6000; width: 16px; height: 16px; flex: 0 0 auto; }
+.check input:checked + span { color: var(--muted); text-decoration: line-through; text-decoration-color: rgba(0,0,0,0.25); }
+.progress { font-size: 0.74rem; color: var(--muted); font-weight: 600; }
+.progress.done { color: var(--debate); }
+
+.gantt { margin: 14px 20px 0; max-width: 900px; }
+.gantt-head, .gantt-row { display: grid; grid-template-columns: 210px 1fr; gap: 10px; align-items: center; }
+.gantt-row { padding: 5px 0; border-bottom: 1px dashed var(--border); }
+.gantt-row .lbl { font-size: 0.84rem; line-height: 1.35; }
+.gantt-row .lbl small { display: block; color: var(--muted); font-size: 0.72rem; }
+.gantt-track { position: relative; height: 22px; background: repeating-linear-gradient(90deg, transparent 0, transparent calc(100%/11 - 1px), var(--border) calc(100%/11 - 1px), var(--border) calc(100%/11)); border-radius: 4px; }
+.gantt-bar { position: absolute; top: 3px; bottom: 3px; border-radius: 4px; background: var(--accent-warm); }
+.gantt-bar.alt { background: var(--debate); opacity: 0.75; }
+.gantt-head .months { display: grid; grid-template-columns: repeat(11, 1fr); font-size: 0.68rem; color: var(--muted); text-align: center; font-weight: 700; }
+
+.budget { margin: 14px 20px 0; max-width: 900px; overflow-x: auto; }
+.budget table { width: 100%; border-collapse: collapse; font-size: 0.84rem; min-width: 520px; }
+.budget th, .budget td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.budget th { font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); background: var(--bg-soft); }
+.budget td.blank { color: #b9b0a0; }
+.budget tfoot td { font-weight: 700; background: var(--bg-soft); }
+
+@media (max-width: 640px) {
+  .outline { padding-left: 16px; padding-right: 16px; }
+  .gantt, .budget { margin-left: 16px; margin-right: 16px; }
+  .gantt-head, .gantt-row { grid-template-columns: 1fr; gap: 4px; }
+  .gantt-head > span:first-child { display: none; }
+}
+
 @media (max-width: 640px) {
   .toolbar, .weeks { padding-left: 16px; padding-right: 16px; }
   .toolbar .sep { display: none; }
@@ -928,13 +961,44 @@ mark { background: rgba(241, 194, 50, 0.45); color: inherit; padding: 0 1px; bor
     <div class="panel-head">
       <div class="kicker">60% · built across the semester</div>
       <h2>Research Proposal</h2>
-      <p>A research proposal of about 4,000 words, developed in stages. Detailed guidelines are given in class, and those guidelines take precedence over anything on this page.</p>
+      <p>A research proposal of about 4,000 words, developed in stages across the semester. This page follows the course's <b>Guideline for Research Proposal</b>. If anything here differs from the guideline or from what is said in class, those take precedence.</p>
     </div>
     <ol class="roadmap" id="proposalRoadmap"></ol>
 
     <div class="section-heading">
-      <h3>Anatomy of a strong proposal</h3>
-      <p>General advice for MA research proposals in migration studies, to use alongside the guidelines from class.</p>
+      <h3>Outline of the final proposal</h3>
+      <p>The final submission can follow this outline from the guideline. Tick items off as you draft. Your ticks are saved only in this browser.</p>
+    </div>
+    <div class="outline" id="outlineList"></div>
+    <div class="note"><b>Don't forget contributions and limitations.</b> The final proposal must say how it will contribute to the existing literature (in theory, methodology or the case), which gaps it fills, and what limitations the proposed project has.</div>
+
+    <div class="section-heading">
+      <h3>Where to find the literature</h3>
+      <p>For the theory review (Week 7) and the case review (Week 9).</p>
+    </div>
+    <div class="grid" id="litGrid"></div>
+
+    <div class="section-heading">
+      <h3>Timeline: an example plan by work package</h3>
+      <p>The example from the guideline, as an 11-month plan. Your own timeline should estimate how long each work package of <em>your</em> project will take.</p>
+    </div>
+    <div class="gantt" id="gantt" role="img" aria-label="Example timeline: literature review months 1 to 3, final questionnaire month 4, reaching the target population month 5, survey months 6 to 8, analysis months 9 to 10, reporting month 11"></div>
+
+    <div class="section-heading">
+      <h3>Preliminary budget: a template</h3>
+      <p>Follow the example in the TÜBİTAK template and estimate a cost for each expense item. The rows below are the items named in the guideline. Add or remove rows to fit your project.</p>
+    </div>
+    <div class="budget">
+      <table>
+        <thead><tr><th>Expense item</th><th>What it covers in your project</th><th>Unit cost</th><th>Quantity</th><th>Total</th></tr></thead>
+        <tbody id="budgetRows"></tbody>
+        <tfoot><tr><td colspan="4">Total estimated budget</td><td>…</td></tr></tfoot>
+      </table>
+    </div>
+
+    <div class="section-heading">
+      <h3>Writing tips</h3>
+      <p>General advice for MA research proposals in migration studies, to use alongside the guideline.</p>
     </div>
     <div class="grid" id="anatomyGrid"></div>
   </section>
@@ -1736,16 +1800,16 @@ const ASSESSMENTS = [
   { eyebrow: "20% (2 × 10%) · from Week 4", title: "Reaction papers & discussion",
     items: ["<b>Two</b> reaction papers across the semester", "At least 600 words each, on one of the week's <b>case readings</b>", "Present each one in 10 minutes", "Discuss it under the guidance of that week's moderator"] },
   { eyebrow: "60% · all semester", title: "Research proposal",
-    items: ["About 4,000 words", "Built in stages from Week 3 (see the Research Proposal tab)", "Graded parts: literature review on theory 10%, case literature and methodology 10%, draft presentation 10%, final paper 30%"] },
+    items: ["About 4,000 words", "Built in stages from Week 3 (see the Research Proposal tab)", "Graded parts: theoretical framework 10%, case & methodology 10%, draft presentation (12–15 min) 10%, final submission 30%"] },
 ];
 
 const PROPOSAL_STEPS = [
-  { title: "Research topic & research questions", when: "Week 3", pts: "", text: "Define the puzzle. A good question is answerable, matters for a debate in the field, and is narrow enough for one study." },
-  { title: "Literature review on theory", when: "Week 7", pts: "10%", text: "Place your question within the theoretical debates. Which theory or concept will you use, which will you challenge, and why?" },
-  { title: "Short literature review on the case & methodology", when: "Week 9", pts: "10%", text: "Review what is known about your case, then set out how you will answer the question: research design, data, methods and ethics." },
-  { title: "Timeline & preliminary budget", when: "Week 11", pts: "", text: "A realistic work plan and an estimate of costs such as fieldwork, transcription and access to data." },
-  { title: "Draft presentation", when: "Week 12", pts: "10%", text: "Present your draft in class and use the feedback before final submission." },
-  { title: "Final paper", when: "After Week 12 (date TBA)", pts: "30%", text: "The complete proposal of about 4,000 words, integrating everything above." },
+  { title: "Research topic & research question(s)", when: "Week 3", pts: "", text: "State the research topic in one or a few sentences, and add a few sentences on why it is worth studying. Then write your research questions: one main question and 1–2 sub-questions is recommended." },
+  { title: "Short analysis of the theoretical framework", when: "Week 7", pts: "10%", text: "Briefly review existing research on your theoretical framework. Show which parts of it your project will build on, and how your research will differ from existing work." },
+  { title: "Short analysis of the case & methodology", when: "Week 9", pts: "10%", text: "Briefly review existing work on your case. Then set out a plan for answering your research questions: population and sample, time frame, and data collection strategies, whether qualitative or quantitative (surveys, in-depth interviews, participant observation, focus groups, statistical analysis, content analysis, discourse analysis, etc.)." },
+  { title: "Timeline & preliminary budget", when: "Week 11", pts: "", text: "Estimate how long each task, or work package, will take (see the example below). Prepare a preliminary budget following the TÜBİTAK template example, with an estimated cost for each expense item such as travel, personnel and equipment." },
+  { title: "Draft presentation", when: "Week 12", pts: "10%", text: "Present your draft research proposal in 12–15 minutes." },
+  { title: "Final submission", when: "After the end of classes (date TBA)", pts: "30%", text: "The complete proposal of about 4,000 words. It must address its contributions and limitations: how it adds to the existing literature (theory, methodology or case), which gaps it fills, and what limitations the project has." },
 ];
 
 const ANATOMY = [
@@ -1761,6 +1825,7 @@ const METHOD_NOTES = [
   { title: "Methodological nationalism", text: "Taking the nation-state as the given container of social life can hide transnational ties and naturalize state categories (Wimmer & Glick Schiller 2002). Ask whether your unit of analysis is a country, a city, a network or a transnational field, and why." },
   { title: "Categories are political", text: "Categories such as \"refugee\", \"migrant\", \"guest\", \"under temporary protection\" and \"irregular\" are produced by law and policy. Decide whether you are using them as analytical tools or studying them as objects, and keep that distinction consistent." },
   { title: "Hard-to-reach populations", text: "Irregular migrants and some diaspora groups lack sampling frames. Snowball sampling, gatekeepers and multi-sited fieldwork each have biases that you should acknowledge." },
+  { title: "Choosing data collection strategies", text: "The guideline lists the main options: surveys, in-depth interviews, participant observation, focus groups, statistical analysis, content analysis and discourse analysis. Choose according to your question, and specify your population and sample and the time frame." },
   { title: "Researching vulnerable people", text: "Informed consent, anonymity, secure data storage and avoiding harm are central to the research, not formalities. Check whether your project needs ethics committee approval." },
 ];
 
@@ -1774,6 +1839,72 @@ const DATA_SOURCES = [
   { eyebrow: "Türkiye", title: "Presidency of Migration Management", text: "Türkiye's migration authority, which publishes statistics on residence permits, international and temporary protection, and irregular migration.", use: "Official Turkish figures. Compare them with UNHCR's and explain any differences.", url: "https://www.goc.gov.tr/" },
   { eyebrow: "Türkiye · Diaspora", title: "YTB", text: "The Presidency for Turks Abroad and Related Communities.", use: "A primary source for analysing the discourse and institutions of Turkish diaspora policy.", url: "https://www.ytb.gov.tr/", lens: "lens-diasporas" },
   { eyebrow: "Borders", title: "Frontex", text: "The European Border and Coast Guard Agency, read in Week 6.", use: "Risk analyses are primary sources for studying how the EU frames migration as a security issue. Read them critically, as discourse.", url: "https://frontex.europa.eu/" },
+];
+
+const OUTLINE = [
+  { title: "Introduction", items: [
+    "Clearly state the research problem or question.",
+    "Highlight the significance of the study.",
+    "Give an overview of the broader context and relevance of the topic.",
+    "Outline the main objectives and expected contributions.",
+  ] },
+  { title: "Literature analysis & conceptualization", items: [
+    "Summarize key debates, theories and findings from previous research.",
+    "Identify gaps in the literature that the study aims to address.",
+    "Discuss the conceptual framework or theoretical lens guiding the research.",
+    "Explain how the study contributes to existing knowledge, whether through new empirical findings, theoretical refinement or methodological innovation.",
+  ] },
+  { title: "Background information on the case", items: [
+    "Give a concise overview of the case, including its historical, political or socio-economic context.",
+    "Justify the selection of the case: why it is relevant and what it illustrates.",
+    "Provide any preliminary data or key statistics that help frame the study.",
+  ] },
+  { title: "Methodology", items: [
+    "Define the research design (qualitative, quantitative or mixed-methods).",
+    "Specify data sources: primary data (interviews, surveys, archival research) and/or secondary data (existing databases).",
+    "Address ethical considerations, limitations and potential biases.",
+  ] },
+  { title: "Timeline", items: [
+    "Give a timeline of key activities such as literature review, data collection, analysis and writing.",
+    "Break it down into milestones, such as when fieldwork will take place and when the first draft is expected.",
+    "Give an estimated duration for each phase of the project.",
+  ] },
+  { title: "Preliminary budget", items: [
+    "List anticipated costs, such as travel, data collection tools, software and participant compensation.",
+  ] },
+  { title: "Contributions & limitations", items: [
+    "State how the project contributes to the literature (theory, methodology or case).",
+    "Say which gaps it fills.",
+    "Acknowledge the limitations of the proposed project.",
+  ] },
+];
+
+const LIT_SOURCES = [
+  { eyebrow: "Core journals", title: "International migration journals", text: "Start with International Migration Review, International Migration, Migration Studies, Journal of Ethnic and Migration Studies, and Ethnic and Racial Studies. Several of this semester's readings come from these journals.", url: "", lens: "" },
+  { eyebrow: "Journal list", title: "PRIO — migration journals", text: "A curated list of academic journals in migration studies, useful for finding field-specific journals beyond the core ones.", url: "https://migration.prio.org/Journals/", lens: "" },
+  { eyebrow: "Türkiye", title: "DergiPark", text: "The platform for Turkish academic journals, especially useful if your case is Türkiye. Many articles are in Turkish.", url: "https://dergipark.org.tr/tr/", lens: "lens-diasporas" },
+  { eyebrow: "Theses · Turkish", title: "YÖK National Thesis Center", text: "Master's and doctoral theses written at Turkish universities. Useful for finding earlier research on your case and for seeing how others designed similar studies.", url: "https://tez.yok.gov.tr/UlusalTezMerkezi/", lens: "lens-diasporas" },
+  { eyebrow: "Theses · English", title: "ProQuest Dissertations & Theses", text: "An international database of dissertations and theses, mostly in English.", url: "https://about.proquest.com/en/dissertations/", lens: "lens-refugees" },
+  { eyebrow: "This course", title: "The GLA5913 reading list", text: "Search the Syllabus & Readings tab by keyword, then use the Google Scholar links to follow who cites each reading. This is a quick way to find recent work.", url: "#readings", lens: "lens-foundations" },
+];
+
+// Example from the guideline: 3 + 1 + 1 + 3 + 2 + 1 = 11 months.
+const WORK_PACKAGES = [
+  { label: "Literature review", months: 3 },
+  { label: "Preparing the final questionnaire", months: 1 },
+  { label: "Reaching the target population in the field", months: 1 },
+  { label: "Conducting the survey", months: 3, alt: true },
+  { label: "Analysis", months: 2, alt: true },
+  { label: "Reporting", months: 1 },
+];
+
+const BUDGET_ITEMS = [
+  ["Travel", "Fieldwork trips, local transport, accommodation"],
+  ["Personnel", "Research assistants, interpreters, transcription"],
+  ["Equipment", "Recorder, laptop or other hardware"],
+  ["Data collection tools", "Survey platform, printing questionnaires"],
+  ["Software", "Qualitative or statistical analysis software licences"],
+  ["Participant compensation", "Incentives or reimbursement for interviewees"],
 ];
 
 /* ---------------- Rendering ---------------- */
@@ -1956,6 +2087,76 @@ function renderAssignments() {
     </div>`).join("");
 }
 
+function renderProposalExtras() {
+  const KEY = "gla5913-outline";
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { saved = {}; }
+  const list = document.getElementById("outlineList");
+
+  list.innerHTML = OUTLINE.map((sec, i) => `
+    <details class="week lens-${i === OUTLINE.length - 1 ? "refugees" : ""}">
+      <summary>
+        <span class="wk-num">${i + 1}</span>
+        <span class="wk-title">${esc(sec.title)}</span>
+        <span class="wk-chev" aria-hidden="true">▶</span>
+        <span class="wk-meta"><span class="progress" data-sec="${i}"></span></span>
+      </summary>
+      <div class="wk-body">
+        ${sec.items.map((it, j) => `
+          <label class="check"><input type="checkbox" data-id="${i}-${j}" ${saved[i + "-" + j] ? "checked" : ""} /><span>${esc(it)}</span></label>`).join("")}
+      </div>
+    </details>`).join("");
+
+  function updateProgress() {
+    OUTLINE.forEach((sec, i) => {
+      const done = sec.items.filter((_, j) => saved[i + "-" + j]).length;
+      const el = list.querySelector(`.progress[data-sec="${i}"]`);
+      el.textContent = `${done} of ${sec.items.length} done`;
+      el.classList.toggle("done", done === sec.items.length);
+    });
+  }
+
+  list.addEventListener("change", (ev) => {
+    const box = ev.target.closest("input[type=checkbox]");
+    if (!box) return;
+    if (box.checked) saved[box.dataset.id] = true; else delete saved[box.dataset.id];
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) { /* storage unavailable: ticks last for this visit only */ }
+    updateProgress();
+  });
+  updateProgress();
+
+  document.getElementById("litGrid").innerHTML = LIT_SOURCES.map((d) => {
+    const internal = d.url.startsWith("#");
+    const label = internal ? "Go to Syllabus & Readings →" : d.url ? `Open ${esc(new URL(d.url).hostname.replace(/^www\./, ""))} →` : "";
+    return `
+      <div class="card ${d.lens}">
+        <div class="eyebrow">${esc(d.eyebrow)}</div>
+        <h4>${esc(d.title)}</h4>
+        <p>${esc(d.text)}</p>
+        <div class="spacer"></div>
+        ${d.url ? `<a class="more" href="${esc(d.url)}"${internal ? "" : ` target="_blank" rel="noopener"`}>${label}</a>` : ""}
+      </div>`;
+  }).join("");
+
+  const totalMonths = WORK_PACKAGES.reduce((n, w) => n + w.months, 0);
+  let start = 0;
+  document.getElementById("gantt").innerHTML = `
+    <div class="gantt-head"><span></span><div class="months">${Array.from({ length: totalMonths }, (_, m) => `<span>M${m + 1}</span>`).join("")}</div></div>
+    ${WORK_PACKAGES.map((w, i) => {
+      const left = (start / totalMonths) * 100;
+      const width = (w.months / totalMonths) * 100;
+      start += w.months;
+      return `
+        <div class="gantt-row">
+          <div class="lbl">WP${i + 1} · ${esc(w.label)}<small>${w.months} month${w.months > 1 ? "s" : ""}</small></div>
+          <div class="gantt-track"><div class="gantt-bar${w.alt ? " alt" : ""}" style="left:${left}%;width:${width}%"></div></div>
+        </div>`;
+    }).join("")}`;
+
+  document.getElementById("budgetRows").innerHTML = BUDGET_ITEMS.map(([item, eg]) => `
+    <tr><td><b>${esc(item)}</b></td><td class="blank">e.g. ${esc(eg)}</td><td class="blank">…</td><td class="blank">…</td><td class="blank">…</td></tr>`).join("");
+}
+
 function renderMethods() {
   document.getElementById("methodGrid").innerHTML = METHOD_NOTES.map((m) => `
     <div class="card debate">
@@ -2017,6 +2218,7 @@ setupReadings();
 renderDebates();
 renderTurkiye();
 renderAssignments();
+renderProposalExtras();
 renderMethods();
 setupTabs();
 </script>
