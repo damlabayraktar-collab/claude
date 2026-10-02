@@ -1,0 +1,2024 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GLA5913 — The Politics of International Migration</title>
+<style>
+:root {
+  /* Same "Simple Light" palette as the POL3315 site, so the course sites read
+     as one family: white background, near-black text, a gold/mustard accent
+     ramp and the deepened folHlink teal. Dark golds carry text; bright golds
+     are washes only. One extra hue (--wine) marks the diaspora lens so the
+     course's three lenses can be told apart at a glance. */
+  --bg: #ffffff;
+  --bg-soft: #fbf8ef;
+  --card: #ffffff;
+  --border: #e7ddc0;
+  --text: #1a1a1a;
+  --muted: #666666;
+  --accent: #7f6000;
+  --accent-warm: #f1c232;
+  --accent-soft: rgba(241, 194, 50, 0.16);
+  --debate: #00838f;
+  --debate-soft: rgba(0, 151, 167, 0.10);
+  --wine: #8e3b46;
+  --wine-soft: rgba(142, 59, 70, 0.09);
+  --radius: 14px;
+  font-size: 16px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent); }
+
+/* Sticky tab bar: one tab per section, so students see one thing at a time. */
+.site-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 20px 0;
+}
+
+.site-title {
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.74rem;
+  margin-bottom: 6px;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar { display: none; }
+
+.tab {
+  flex: 0 0 auto;
+  background: none;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  padding: 8px 12px 9px;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.tab:hover { color: var(--text); }
+
+.tab[aria-selected="true"] {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+
+.tab:focus-visible,
+.chip:focus-visible,
+.search:focus-visible {
+  outline: 2px solid var(--debate);
+  outline-offset: 2px;
+}
+
+.tab-panel { padding-bottom: 20px; }
+
+.panel-head {
+  padding: 22px 20px 6px;
+  max-width: 900px;
+}
+
+.kicker {
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.76rem;
+  margin-bottom: 6px;
+}
+
+.panel-head h1 {
+  font-size: clamp(1.4rem, 3.4vw, 2rem);
+  margin: 0 0 10px;
+  line-height: 1.2;
+}
+
+.panel-head h2 {
+  font-size: clamp(1.2rem, 2.6vw, 1.6rem);
+  margin: 0 0 8px;
+  line-height: 1.25;
+}
+
+.panel-head p {
+  color: var(--muted);
+  margin: 0 0 6px;
+  font-size: 0.96rem;
+  line-height: 1.55;
+  max-width: 780px;
+}
+
+.section-heading {
+  padding: 22px 20px 0;
+  max-width: 900px;
+}
+
+.section-heading h3 {
+  font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+  margin: 0 0 4px;
+}
+
+.section-heading p {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 780px;
+}
+
+/* ---------- Shared card language ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+  padding: 16px 20px 8px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 18px 16px 16px;
+  box-shadow: 0 1px 3px rgba(20, 15, 0, 0.05), 0 4px 14px rgba(20, 15, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+}
+
+.card.lens-refugees { border-top-color: var(--debate); }
+.card.lens-diasporas { border-top-color: var(--wine); }
+.card.lens-foundations { border-top-color: var(--muted); }
+
+.card.debate {
+  border-top-color: var(--debate);
+  background: linear-gradient(180deg, var(--debate-soft), var(--card) 45%);
+}
+
+.card .eyebrow {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.78rem;
+  margin-bottom: 6px;
+}
+
+.card.lens-refugees .eyebrow, .card.debate .eyebrow { color: var(--debate); }
+.card.lens-diasporas .eyebrow { color: var(--wine); }
+.card.lens-foundations .eyebrow { color: var(--muted); }
+
+.card h4 {
+  margin: 0 0 8px;
+  font-size: 1.02rem;
+  line-height: 1.3;
+}
+
+.card p {
+  margin: 0 0 10px;
+  font-size: 0.86rem;
+  line-height: 1.55;
+}
+
+.card .muted { color: var(--muted); }
+
+.card .label { font-weight: 700; }
+
+.card ul {
+  margin: 0 0 10px;
+  padding-left: 18px;
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.card .spacer { flex: 1; }
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.pill {
+  display: inline-block;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid rgba(241, 194, 50, 0.55);
+  border-radius: 20px;
+  padding: 2px 10px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.pill.refugees { background: var(--debate-soft); color: var(--debate); border-color: rgba(0, 131, 143, 0.35); }
+.pill.diasporas { background: var(--wine-soft); color: var(--wine); border-color: rgba(142, 59, 70, 0.3); }
+.pill.foundations { background: #f3f3f3; color: #555; border-color: #ddd; }
+.pill.milestone { background: rgba(241, 194, 50, 0.35); color: #5c4400; border-color: var(--accent-warm); }
+
+.debate-q {
+  margin-top: 4px;
+  padding: 10px 12px;
+  border-left: 3px solid var(--debate);
+  background: var(--debate-soft);
+  border-radius: 0 8px 8px 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.debate-q b { color: var(--debate); }
+
+a.more {
+  display: inline-flex;
+  gap: 4px;
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+a.more:hover { text-decoration: underline; }
+
+.source {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ---------- Start Here ---------- */
+.lens-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  padding: 16px 20px 8px;
+}
+
+.lens-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 18px;
+  background: linear-gradient(180deg, var(--accent-soft), var(--card) 55%);
+  border-top: 4px solid var(--accent);
+}
+
+.lens-card.refugees { background: linear-gradient(180deg, var(--debate-soft), var(--card) 55%); border-top-color: var(--debate); }
+.lens-card.diasporas { background: linear-gradient(180deg, var(--wine-soft), var(--card) 55%); border-top-color: var(--wine); }
+
+.lens-card .num {
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.lens-card h3 { margin: 4px 0 8px; font-size: 1.25rem; }
+.lens-card p { margin: 0 0 10px; font-size: 0.88rem; line-height: 1.55; }
+.lens-card .q { font-style: italic; color: var(--text); }
+.lens-card .weeks { font-size: 0.78rem; color: var(--muted); font-weight: 600; }
+
+.info-strip {
+  margin: 16px 20px 0;
+  padding: 16px 18px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.info-strip div { font-size: 0.84rem; line-height: 1.45; }
+.info-strip b {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 3px;
+}
+
+.clo-list {
+  margin: 12px 20px 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+  max-width: 900px;
+}
+
+.clo-list li {
+  padding: 10px 14px;
+  border-left: 3px solid var(--accent-warm);
+  background: var(--card);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.clo-list li b { color: var(--accent); margin-right: 6px; }
+
+/* ---------- Weekly syllabus (horizontal scroller, as on POL3315) ---------- */
+.scroller-wrap { position: relative; padding: 4px 0 20px; }
+
+.scroller {
+  display: flex;
+  align-items: flex-start;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 10px 20px 20px;
+  scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
+  scroll-padding-left: 20px;
+}
+
+.scroller::-webkit-scrollbar { height: 10px; }
+.scroller::-webkit-scrollbar-track { background: var(--bg-soft); }
+.scroller::-webkit-scrollbar-thumb { background: var(--border); border-radius: 6px; }
+
+.syl-card {
+  flex: 0 0 auto;
+  width: 260px;
+  margin-right: 18px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 16px 15px 14px;
+  margin-top: 12px;
+  scroll-snap-align: start;
+  box-shadow: 0 1px 3px rgba(20, 15, 0, 0.05), 0 4px 14px rgba(20, 15, 0, 0.04);
+}
+
+.syl-card.lens-refugees { border-top-color: var(--debate); }
+.syl-card.lens-diasporas { border-top-color: var(--wine); }
+.syl-card.lens-foundations { border-top-color: var(--muted); }
+.syl-card.milestone {
+  border-top-color: var(--accent-warm);
+  background: linear-gradient(180deg, var(--accent-soft), var(--card) 45%);
+}
+
+.syl-week {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.8rem;
+  margin-bottom: 6px;
+}
+
+.syl-date { color: var(--muted); font-weight: 500; font-size: 0.7rem; }
+.syl-card h3 { margin: 0 0 8px; font-size: 0.98rem; line-height: 1.3; }
+.syl-activity { font-size: 0.8rem; line-height: 1.5; margin: 0 0 8px; }
+.syl-reading { font-size: 0.76rem; line-height: 1.45; color: var(--muted); margin: 0 0 10px; }
+.syl-label { font-weight: 700; color: var(--text); }
+
+.syl-watch {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+}
+
+.syl-watch a {
+  display: block;
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.76rem;
+  line-height: 1.4;
+  font-weight: 600;
+  margin-top: 5px;
+}
+
+.syl-watch a:hover { text-decoration: underline; }
+
+.no-class {
+  flex: 0 0 auto;
+  width: 90px;
+  align-self: stretch;
+  margin: 12px 18px 0 0;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.74rem;
+  line-height: 1.4;
+  padding: 10px;
+}
+
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--border);
+  color: var(--text);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(20, 15, 0, 0.12);
+}
+
+.nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+.nav-btn.left { left: 8px; }
+.nav-btn.right { right: 8px; }
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+/* ---------- Key terms: filter chips + search ---------- */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  padding: 12px 20px 0;
+}
+
+.chip {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.chip:hover { color: var(--text); }
+.chip[aria-pressed="true"] { background: var(--text); border-color: var(--text); color: #fff; }
+
+.search {
+  flex: 1 1 200px;
+  max-width: 320px;
+  margin-left: auto;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 7px 14px;
+  font: inherit;
+  font-size: 0.86rem;
+  background: var(--card);
+  color: var(--text);
+}
+
+.count { padding: 8px 20px 0; font-size: 0.78rem; color: var(--muted); }
+.empty { padding: 20px; color: var(--muted); font-size: 0.9rem; }
+
+/* ---------- Big questions ---------- */
+.question-block { margin-top: 8px; }
+.question-block + .question-block { border-top: 1px solid var(--border); margin-top: 18px; }
+
+.big-q {
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  padding: 22px 20px 0;
+  max-width: 900px;
+}
+
+.big-q .qnum {
+  flex: 0 0 auto;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--accent-warm);
+  line-height: 1;
+}
+
+.big-q h3 { margin: 0 0 4px; font-size: clamp(1.1rem, 2.4vw, 1.35rem); }
+.big-q p { margin: 0; color: var(--muted); font-size: 0.9rem; line-height: 1.5; }
+
+/* ---------- Assignments ---------- */
+.weights {
+  display: flex;
+  height: 38px;
+  margin: 16px 20px 6px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  max-width: 900px;
+}
+
+.weights div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 0 6px;
+}
+
+.w-podcast { background: #f1c232; }
+.w-midterm { background: #f6d77a; }
+.w-pk { background: #fbe9b5; }
+.w-final { background: #e7ddc0; }
+
+.roadmap {
+  list-style: none;
+  margin: 14px 20px 0;
+  padding: 0;
+  max-width: 900px;
+  counter-reset: step;
+}
+
+.roadmap li {
+  position: relative;
+  padding: 0 0 18px 46px;
+}
+
+.roadmap li::before {
+  counter-increment: step;
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  border: 2px solid var(--accent-warm);
+  color: var(--accent);
+  font-weight: 800;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.roadmap li::after {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 32px;
+  bottom: 2px;
+  width: 2px;
+  background: var(--border);
+}
+
+.roadmap li:last-child::after { display: none; }
+
+.roadmap .step-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.roadmap .step-head b { font-size: 0.98rem; }
+.roadmap .when { font-size: 0.76rem; color: var(--muted); font-weight: 600; }
+.roadmap p { margin: 0; font-size: 0.86rem; line-height: 1.55; color: var(--text); max-width: 720px; }
+
+.note {
+  margin: 14px 20px 0;
+  padding: 12px 14px;
+  max-width: 900px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+footer.foot {
+  padding: 18px 20px 40px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  max-width: 780px;
+  line-height: 1.6;
+  border-top: 1px solid var(--border);
+  margin-top: 20px;
+}
+
+@media (max-width: 900px) {
+  .lens-grid { grid-template-columns: 1fr; }
+  .info-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 640px) {
+  .site-bar { padding: 10px 16px 0; }
+  .tab { padding: 8px 9px 9px; font-size: 0.86rem; }
+  .panel-head, .section-heading, .big-q { padding-left: 16px; padding-right: 16px; }
+  .grid, .lens-grid { padding-left: 16px; padding-right: 16px; }
+  .filters, .count { padding-left: 16px; padding-right: 16px; }
+  .info-strip, .clo-list, .roadmap, .note, .weights { margin-left: 16px; margin-right: 16px; }
+  .info-strip { grid-template-columns: 1fr; }
+  .scroller { padding-left: 16px; padding-right: 16px; }
+  .syl-card { width: 230px; }
+  .nav-btn { display: none; }
+  .search { margin-left: 0; max-width: none; }
+}
+
+/* ---------- GLA5913 additions: reading list, debates, proposal ---------- */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  padding: 12px 20px 0;
+}
+
+.toolbar .sep { width: 1px; height: 24px; background: var(--border); margin: 0 4px; }
+
+.linkbtn {
+  background: none;
+  border: 0;
+  padding: 6px 4px;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.linkbtn:hover { text-decoration: underline; }
+
+.weeks { padding: 14px 20px 0; max-width: 1000px; }
+
+details.week {
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 10px;
+  background: var(--card);
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(20, 15, 0, 0.04);
+}
+
+details.week.lens-refugees { border-left-color: var(--debate); }
+details.week.lens-diasporas { border-left-color: var(--wine); }
+details.week.lens-foundations, details.week.lens-cross { border-left-color: var(--muted); }
+
+details.week > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: 4px 12px;
+  align-items: baseline;
+}
+
+details.week > summary::-webkit-details-marker { display: none; }
+
+details.week > summary:focus-visible { outline: 2px solid var(--debate); outline-offset: 2px; border-radius: 8px; }
+
+.wk-num { white-space: nowrap; font-weight: 800; color: var(--accent); font-size: 0.95rem; }
+.wk-title { font-weight: 700; font-size: 1rem; line-height: 1.35; }
+.wk-meta { grid-column: 2 / 4; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.wk-count { font-size: 0.74rem; color: var(--muted); }
+.wk-chev { color: var(--muted); font-size: 0.9rem; transition: transform 0.15s; }
+details.week[open] .wk-chev { transform: rotate(90deg); }
+
+.wk-body { padding: 0 16px 14px 80px; }
+
+.rgroup-title {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 12px 0 6px;
+}
+
+.rgroup-title span { font-weight: 600; letter-spacing: 0; text-transform: none; font-style: italic; }
+
+.reading {
+  padding: 8px 0 8px 12px;
+  border-left: 2px solid var(--border);
+  margin-bottom: 4px;
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.reading.case { border-left-color: var(--debate); }
+.reading.suggested { border-left-color: #cfcfcf; color: #444; }
+
+.reading .links { display: inline-flex; gap: 10px; margin-left: 6px; flex-wrap: wrap; }
+.reading .links a { font-size: 0.76rem; font-weight: 600; text-decoration: none; white-space: nowrap; }
+.reading .links a:hover { text-decoration: underline; }
+.tr-flag { font-size: 0.66rem; font-weight: 800; color: #b3261e; margin-left: 6px; letter-spacing: 0.04em; white-space: nowrap; }
+
+mark { background: rgba(241, 194, 50, 0.45); color: inherit; padding: 0 1px; border-radius: 2px; }
+
+.positions { list-style: none; margin: 0 0 10px; padding: 0; }
+.positions li {
+  font-size: 0.84rem;
+  line-height: 1.5;
+  padding: 6px 0 6px 10px;
+  border-left: 2px solid var(--border);
+  margin-bottom: 4px;
+}
+.positions li b { color: var(--text); }
+
+.proposal-angle {
+  margin-top: 4px;
+  padding: 10px 12px;
+  border-left: 3px solid var(--accent-warm);
+  background: var(--accent-soft);
+  border-radius: 0 8px 8px 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.proposal-angle b { color: var(--accent); }
+
+.quote {
+  margin: 14px 20px 0;
+  max-width: 820px;
+  padding: 16px 20px;
+  border-left: 4px solid var(--accent-warm);
+  background: var(--bg-soft);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 1.02rem;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.quote cite { display: block; margin-top: 8px; font-style: normal; font-size: 0.82rem; color: var(--muted); font-weight: 600; }
+
+@media (max-width: 640px) {
+  .toolbar, .weeks { padding-left: 16px; padding-right: 16px; }
+  .toolbar .sep { display: none; }
+  .wk-body { padding: 0 14px 14px 14px; }
+  details.week > summary { grid-template-columns: 58px 1fr auto; }
+  .wk-meta { grid-column: 1 / 4; }
+  .quote { margin-left: 16px; margin-right: 16px; }
+}
+</style>
+</head>
+<body>
+  <div class="site-bar">
+    <div class="site-title">GLA5913 · Special Topics in International Relations · MA</div>
+    <nav class="tabs" role="tablist" aria-label="Page sections">
+      <button class="tab" role="tab" id="tab-start" aria-controls="panel-start" aria-selected="true" data-hash="start">Start Here</button>
+      <button class="tab" role="tab" id="tab-readings" aria-controls="panel-readings" aria-selected="false" tabindex="-1" data-hash="readings">Syllabus &amp; Readings</button>
+      <button class="tab" role="tab" id="tab-debates" aria-controls="panel-debates" aria-selected="false" tabindex="-1" data-hash="debates">Key Debates</button>
+      <button class="tab" role="tab" id="tab-turkiye" aria-controls="panel-turkiye" aria-selected="false" tabindex="-1" data-hash="turkiye">Türkiye Thread</button>
+      <button class="tab" role="tab" id="tab-assignments" aria-controls="panel-assignments" aria-selected="false" tabindex="-1" data-hash="assignments">Assignments</button>
+      <button class="tab" role="tab" id="tab-proposal" aria-controls="panel-proposal" aria-selected="false" tabindex="-1" data-hash="proposal">Research Proposal</button>
+      <button class="tab" role="tab" id="tab-methods" aria-controls="panel-methods" aria-selected="false" tabindex="-1" data-hash="methods">Methods &amp; Data</button>
+    </nav>
+  </div>
+
+  <!-- START HERE -->
+  <section class="tab-panel" role="tabpanel" id="panel-start" aria-labelledby="tab-start">
+    <div class="panel-head">
+      <div class="kicker">Fall 2026–2027 · MA seminar · Bahçeşehir University</div>
+      <h1>The Politics of International Migration</h1>
+      <p>Migration was long marginal to both policymaking and IR scholarship. Since the 1970s it has moved steadily up the agenda of states, especially developed states, and today it is becoming more political and more politicized every day. This seminar engages with the debates, theories and research on the politics of migratory movements and post-migratory processes. It is organized around three subsections: <b>migrants</b>, <b>refugees</b> and <b>diasporas</b>.</p>
+    </div>
+
+    <blockquote class="quote">“International migration is an inherently political phenomenon, in that it entails not merely physical relocation but a change of jurisdiction from one state to another and eventually also a change of membership from one community to another.”<cite>— Aristide Zolberg</cite></blockquote>
+
+    <div class="lens-grid" id="lensGrid"></div>
+
+    <div class="info-strip">
+      <div><b>Seminar</b>Thursdays 19:00–22:00<br>A203, A Block · face-to-face</div>
+      <div><b>Instructor</b>Assoc. Prof. Damla Aksel<br><a href="mailto:damla.aksel@bau.edu.tr">damla.aksel@bau.edu.tr</a> · <a href="https://cdn.bau.edu.tr/staff/2148.pdf" target="_blank" rel="noopener">CV</a></div>
+      <div><b>Office hours</b>Thursday 13:00–15:00, and by appointment<br>A Block, 2nd floor, 310</div>
+      <div><b>Course structure</b>Weekly seminars plus asynchronous content announced on MS Teams. Credits: 3 · ECTS: 7</div>
+    </div>
+
+    <div class="section-heading">
+      <h3>Course learning outcomes</h3>
+      <p>Students who complete this course will be able to:</p>
+    </div>
+    <ul class="clo-list">
+      <li><b>I</b>Evaluate the political dimensions of international migration.</li>
+      <li><b>II</b>Gain knowledge about migration and asylum movements in history and in the current period.</li>
+      <li><b>III</b>Make sense of the relationship between social processes that cause migration and those that migration creates.</li>
+      <li><b>IV</b>Comprehend the legal and institutional processes of different types of migration.</li>
+      <li><b>V</b>Evaluate migration processes in Türkiye in the context of its global position, together with their causes and consequences.</li>
+    </ul>
+
+    <div class="section-heading">
+      <h3>How this seminar works</h3>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="eyebrow">Every week</div><h4>Read before class</h4><p>The reading pack is on MS Teams. <b>Weekly readings</b> are required for everyone and form the basis of that week's discussion paper. <b>Case readings</b> apply the debates to specific contexts and are the basis for reaction papers.</p></div>
+      <div class="card debate"><div class="eyebrow">From Week 4</div><h4>Students lead</h4><p>Each week one student presents a discussion paper and moderates, and one or two students present reaction papers on the case readings.</p></div>
+      <div class="card lens-diasporas"><div class="eyebrow">All semester</div><h4>Build a research proposal</h4><p>60% of the grade. You develop a research proposal of about 4,000 words in stages, from research question to final paper. See the <a href="#proposal">Research Proposal</a> tab.</p></div>
+      <div class="card lens-foundations"><div class="eyebrow">Teams</div><h4>Stay connected</h4><p>Announcements, asynchronous material, uploads and grading all happen on MS Teams. Installing the mobile app is strongly recommended. Late submissions are not accepted.</p></div>
+    </div>
+  </section>
+
+  <!-- SYLLABUS & READINGS -->
+  <section class="tab-panel" role="tabpanel" id="panel-readings" aria-labelledby="tab-readings" hidden>
+    <div class="panel-head">
+      <div class="kicker">Course calendar</div>
+      <h2>Syllabus &amp; Readings</h2>
+      <p>Open a week to see its readings and deadlines. Use the filters to find, for example, all case readings for a reaction paper, every reading on Türkiye, or a particular author for your literature review. Each reading has a Google Scholar link to help you find the full text and see who cites it.</p>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#666;"></span> Foundations / cross-cutting</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#7f6000;"></span> Migrants</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#00838f;"></span> Refugees</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#8e3b46;"></span> Diasporas</span>
+      </div>
+    </div>
+    <div class="toolbar" id="readingFilters">
+      <button class="chip" data-type="all" aria-pressed="true">All readings</button>
+      <button class="chip" data-type="weekly" aria-pressed="false">Weekly</button>
+      <button class="chip" data-type="case" aria-pressed="false">Case</button>
+      <button class="chip" data-type="suggested" aria-pressed="false">Suggested</button>
+      <span class="sep"></span>
+      <button class="chip" id="trToggle" aria-pressed="false">Türkiye-related</button>
+      <input class="search" id="readingSearch" type="search" placeholder="Search author, title, keyword…" aria-label="Search readings" />
+    </div>
+    <div class="toolbar">
+      <span class="count" id="readingCount" aria-live="polite" style="padding:0;"></span>
+      <button class="linkbtn" id="expandAll">Expand all</button>
+      <button class="linkbtn" id="collapseAll">Collapse all</button>
+    </div>
+    <div class="weeks" id="weekList"></div>
+    <div class="note"><b>Recommended:</b> De Haas, H., Miller, M. J., &amp; Castles, S. (2019). <em>The Age of Migration</em> (6th ed.). Red Globe Press (an earlier edition is available in Turkish). Inglis, C., Li, W., &amp; Khadria, B. (Eds.). (2019). <em>The SAGE Handbook of International Migration</em>. Sage. Further suggested readings are in the course content section on Teams.</div>
+  </section>
+
+  <!-- KEY DEBATES -->
+  <section class="tab-panel" role="tabpanel" id="panel-debates" aria-labelledby="tab-debates" hidden>
+    <div class="panel-head">
+      <div class="kicker">Mapping the literature</div>
+      <h2>Key Debates</h2>
+      <p>Each week's readings disagree with each other, and that disagreement is where the seminar happens. These cards show who is arguing with whom and what is at stake. Each one ends with a possible research angle for your proposal. They are starting points for discussion, not summaries to quote: always go back to the texts.</p>
+    </div>
+    <div class="grid" id="debateGrid"></div>
+  </section>
+
+  <!-- TÜRKİYE THREAD -->
+  <section class="tab-panel" role="tabpanel" id="panel-turkiye" aria-labelledby="tab-turkiye" hidden>
+    <div class="panel-head">
+      <div class="kicker">Learning outcome V</div>
+      <h2>The Türkiye Thread</h2>
+      <p>Türkiye runs through the whole syllabus as an emigration state, a host of one of the world's largest refugee populations, a transit country on the EU's external border, and a diaspora-engaging state. Below are research puzzles that connect the course's theories to the Turkish case, followed by every Türkiye-related reading on the syllabus.</p>
+    </div>
+    <div class="grid" id="puzzleGrid"></div>
+    <div class="section-heading">
+      <h3>Türkiye-related readings on the syllabus</h3>
+      <p>Drawn automatically from the reading list. A good place to start the case literature for your proposal.</p>
+    </div>
+    <div class="weeks" id="trList"></div>
+  </section>
+
+  <!-- ASSIGNMENTS -->
+  <section class="tab-panel" role="tabpanel" id="panel-assignments" aria-labelledby="tab-assignments" hidden>
+    <div class="panel-head">
+      <div class="kicker">Grading &amp; evaluation</div>
+      <h2>Assignments</h2>
+      <p>The instructor presents the assignments in detail in Week 2 and shares the evaluation rubrics. All work is uploaded to MS Teams, and late submissions are not accepted. If something prevents you from submitting, contact the instructor immediately.</p>
+    </div>
+
+    <div class="weights" role="img" aria-label="Grade weights: Discussion paper 20%, Reaction papers 20%, Research proposal 60%">
+      <div class="w-midterm" style="flex:20">Discussion 20%</div>
+      <div class="w-pk" style="flex:20">Reactions 20%</div>
+      <div class="w-podcast" style="flex:60">Research proposal 60%</div>
+    </div>
+
+    <div class="grid" id="assessmentGrid"></div>
+
+    <div class="note"><b>Who presents when?</b> Discussion paper and reaction paper slots start in Week 4 and are allocated through MS Teams. Use the <a href="#readings">Syllabus &amp; Readings</a> tab to look at each week's weekly and case readings before choosing.</div>
+  </section>
+
+  <!-- RESEARCH PROPOSAL -->
+  <section class="tab-panel" role="tabpanel" id="panel-proposal" aria-labelledby="tab-proposal" hidden>
+    <div class="panel-head">
+      <div class="kicker">60% · built across the semester</div>
+      <h2>Research Proposal</h2>
+      <p>A research proposal of about 4,000 words, developed in stages. Detailed guidelines are given in class, and those guidelines take precedence over anything on this page.</p>
+    </div>
+    <ol class="roadmap" id="proposalRoadmap"></ol>
+
+    <div class="section-heading">
+      <h3>Anatomy of a strong proposal</h3>
+      <p>General advice for MA research proposals in migration studies, to use alongside the guidelines from class.</p>
+    </div>
+    <div class="grid" id="anatomyGrid"></div>
+  </section>
+
+  <!-- METHODS & DATA -->
+  <section class="tab-panel" role="tabpanel" id="panel-methods" aria-labelledby="tab-methods" hidden>
+    <div class="panel-head">
+      <div class="kicker">For your methodology section</div>
+      <h2>Methods &amp; Data</h2>
+      <p>Where to find data, policy indices and primary documents, and the methodological issues that migration research raises in particular.</p>
+    </div>
+    <div class="section-heading"><h3>Methodological issues</h3></div>
+    <div class="grid" id="methodGrid"></div>
+    <div class="section-heading"><h3>Data, indices &amp; primary sources</h3></div>
+    <div class="grid" id="dataGrid"></div>
+  </section>
+
+  <footer class="foot">
+    Built for GLA5913 – Special Topics in International Relations (MA), Bahçeşehir University. The reading list and deadlines follow the official syllabus (updated 24.09.2026); if anything here conflicts with MS Teams or the syllabus, those take precedence. Debate summaries are interpretive starting points written for this page, not quotations. Google Scholar links are search shortcuts, not endorsements of a particular version of a text.
+  </footer>
+
+<script>
+/* GLA5913 — The Politics of International Migration (MA)
+   WEEKS is generated from the official syllabus's course calendar.
+   Everything else is hand-written content in the arrays below. */
+
+const WEEKS = [
+ {
+  "week": "Week 1",
+  "topic": "Introduction",
+  "todo": "",
+  "lens": "foundations",
+  "readings": [
+   {
+    "type": "weekly",
+    "cite": "International Organization for Migration, Key Migration Terms",
+    "url": "https://www.iom.int/key-migration-terms",
+    "tr": false,
+    "scholar": false
+   },
+   {
+    "type": "weekly",
+    "cite": "International Organization for Migration, World Migration Report",
+    "url": "https://worldmigrationreport.iom.int",
+    "tr": false,
+    "scholar": false
+   },
+   {
+    "type": "weekly",
+    "cite": "UN 1951 Refugee Convention",
+    "url": "https://www.unhcr.org/3b66c2aa10",
+    "tr": false,
+    "scholar": false
+   },
+   {
+    "type": "weekly",
+    "cite": "Migrant Integration Policy Index",
+    "url": "https://www.mipex.eu/",
+    "tr": false,
+    "scholar": false
+   }
+  ]
+ },
+ {
+  "week": "Week 2",
+  "topic": "Trends and Theories in Migration",
+  "todo": "Presentation of the assignments by the instructor.",
+  "lens": "foundations",
+  "readings": [
+   {
+    "type": "weekly",
+    "cite": "Massey, D. S., Arango, J., Hugo, G., Kouaouci, A., Pellegrino, A., & Taylor, J. E. (1993). Theories of international migration: A review and appraisal. Population and development review, 431-466.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "De Haas, H., Czaika, M., Flahaux, M. L., Mahendra, E., Natter, K., Vezzoli, S., & Villares‐Varela, M. (2019). International migration: Trends, determinants, and policy effects. Population and Development Review, 45(4), 885-922.",
+    "url": "https://onlinelibrary.wiley.com/share/CZ57SJDKDJZRAU2EPDHP?target=10.1111/padr.12291",
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Wimmer, A. and Nina Glick Schiller, (2002) “Methodological Nationalism and Beyond: NationState Building, Migration, and the Social Sciences,” Global Networks Vol. 2, No. 4: pp. 301-334.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Bilecen, B., Barglowski, K., Faist, T., & Kofman, E. (2019). Gendered dynamics of transnational social protection. Comparative Migration Studies, 7, 1-14.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   }
+  ]
+ },
+ {
+  "week": "Week 3",
+  "topic": "Migration States and the Ethics of Migration Governance",
+  "todo": "Research topic and research questions",
+  "lens": "migrants",
+  "readings": [
+   {
+    "type": "weekly",
+    "cite": "Carens, J. (1987) “Aliens and Citizens,” Review of Politics 49: pp. 251-73.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Miller, D. (2010) “Why Immigration Controls Are Not Coercive: A Reply to Arash Abizadeh,” Political Theory 38: pp. 111-20.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Bauböck, R. (2019). Mare nostrum: the political ethics of migration in the Mediterranean. Comparative migration studies, 7(1), 1-15.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Abizadeh, A. (2008) “Democratic Theory and Border Coercion: No Right to Unilaterally Control Your Own Border,” Political Theory 36: pp. 37–65.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Kasaba, R. (2011). Empire, State and People, In The Moveable Empire. University of Washington Press.",
+    "url": null,
+    "tr": true,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Adamson, F. B., & Tsourapas, G. (2020). The migration state in the global south: Nationalizing, developmental, and neoliberal models of migration management. International Migration Review, 54(3), 853-882.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "suggested",
+    "cite": "Torpey, J. (1998) “Coming and Going: On the State Monopolization of the Legitimate ‘Means of Movement’,” Sociological Theory Vol. 16, No. 3: pp. 239-259.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "suggested",
+    "cite": "Hollifield, J. F. (2004). The emerging migration state 1. International migration review, 38(3), 885-912.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "suggested",
+    "cite": "Natter, K. (2021). Beyond the dichotomy of liberal and illiberal migration governance. In Handbook on the Governance and Politics of Migration. Edward Elgar Publishing.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   }
+  ]
+ },
+ {
+  "week": "Week 4",
+  "topic": "Politics of Incorporation",
+  "todo": "",
+  "lens": "migrants",
+  "readings": [
+   {
+    "type": "weekly",
+    "cite": "Ager, A., & Strang, A. (2008). Understanding integration: A conceptual framework. Journal of refugee studies, 21(2), 166-191.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Kymlicka, W. (2020). Solidarity in diverse societies: Beyond neoliberal multiculturalism and welfare chauvinism. In Minorities and Populism–Critical Perspectives from South Asia and Europe (pp. 41-62). Springer, Cham.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Vertovec, S. (2019). Talking around super-diversity. Ethnic and Racial Studies, 42(1), 125-139.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Şimşek, D. (2019). Transnational activities of Syrian refugees in Turkey: Hindering or supporting integration. International Migration, 57(2), 268-282.",
+    "url": null,
+    "tr": true,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Doomernik, J., & Ardon, D. (2018). The city as an agent of refugee integration. Urban Planning, 3(4), 91-100.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Errichiello, G. (2023). The ‘local turn’and everyday integration. The Pakistani middle-class migrants in Dubai. Journal of Immigrant & Refugee Studies, 21(2), 217-229.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   }
+  ]
+ },
+ {
+  "week": "Week 5",
+  "topic": "Citizenship and Globalization",
+  "todo": "",
+  "lens": "migrants",
+  "readings": [
+   {
+    "type": "weekly",
+    "cite": "Marshall, T. H. (1950). Citizenship and social class (Vol. 11, pp. 28-29). New York, NY: Cambridge.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Yasemin Nuhoglu Soysal (2000): Citizenship and identity: living in diasporas in post-war Europe?, Ethnic and Racial Studies, 23:1, 1-15",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Bloemraad, I., & Sheares, A. (2017). Understanding membership in a world of global migration:(How) does citizenship matter?. International Migration Review, 51(4), 823-867.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Bauböck, R. (2017). Political membership and democratic boundaries. The Oxford Handbook of Citizenship, 60.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Kirişçi, K. (2000). Disaggregating Turkish citizenship and immigration practices. Middle Eastern Studies, 36(3), 1-22.",
+    "url": null,
+    "tr": true,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Çağlar, A., & Glick Schiller, N. (2021). Relational Multiscalar Analysis: A Comparative Approach to Migrants within City-Making Processes. Geographical Review, 111(2), 206-232.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   }
+  ]
+ },
+ {
+  "week": "Week 6",
+  "topic": "Borders, Border Politics and Securitization of Migration",
+  "todo": "",
+  "lens": "migrants",
+  "readings": [
+   {
+    "type": "weekly",
+    "cite": "Huysmans, J. (2000). The European Union and the securitization of migration. JCMS: Journal of Common Market Studies, 38(5), 751-777.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Bigo, D., & Guild, E. (2017). Policing at a distance: Schengen visa policies. In Controlling Frontiers (pp. 233-263). Routledge.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Walters, W. (2010). Migration and security. In The Routledge Handbook of New Security Studies (pp. 229-240). Routledge.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Frontex",
+    "url": "https://frontex.europa.eu/",
+    "tr": false,
+    "scholar": false
+   },
+   {
+    "type": "case",
+    "cite": "Bilgin, P. (2011). The politics of studying securitization? The Copenhagen School in Turkey. Security Dialogue, 42(4-5), 399-412.",
+    "url": null,
+    "tr": true,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Karadağ, S. (2019). Extraterritoriality of European borders to Turkey: an implementation perspective of counteractive strategies. Comparative Migration Studies, 7(1), 1-16.",
+    "url": null,
+    "tr": true,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Tazzioli, M., & Walters, W. (2016). The sight of migration: Governmentality, visibility and Europe’s contested borders. Global society, 30(3), 445-464.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Koinova, M., Düvell, F., Kalantzi, F., De Jong, S., Kaunert, C., & Marchand, M. H. (2023). International politics of migration in times of ‘crisis’ and beyond the COVID-19 pandemic. Migration studies, 11(1), 242-257.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   }
+  ]
+ },
+ {
+  "week": "Week 7",
+  "topic": "National and International Refugee Regime",
+  "todo": "Literature review on theory (10%)",
+  "lens": "refugees",
+  "readings": [
+   {
+    "type": "weekly",
+    "cite": "Betts, A., & Collier, P. (2017). “Chapter 1: Global Disorder”, In Refuge: Transforming a broken refugee system. Penguin UK.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Benhabib, S. (2020). The end of the 1951 Refugee Convention? Dilemmas of sovereignty, territoriality, and human rights. Jus Cogens, 2(1), 75-100.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Freier, L. F., Micinski, N. R., & Tsourapas, G. (2021). Refugee commodification: the diffusion of refugee rent-seeking in the Global South. Third World Quarterly, 1-20.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Convention and Protocol Relating to the Status of Refugees",
+    "url": "https://www.unhcr.org/3b66c2aa10",
+    "tr": false,
+    "scholar": false
+   },
+   {
+    "type": "case",
+    "cite": "Özçürümez, S, Julinda Hoxha, Ahmet İçduygu, Does social cohesion solve forced migration riddles? Troubled concepts and constrained practices in Turkey, Migration Studies, 2020;, mnaa011,",
+    "url": "https://doi.org/10.1093/migration/mnaa011",
+    "tr": true,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Zaman, T, Collyer, M, Sabates-Wheeler R, Szyp C. (2023) “Beyond right-based social protection for refugees”, Global Social Policy, 23(2): 224-246.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Barbulescu, R. “Still a Beacon of Human Rights? Considerations on the EU Response to the Refugee Crisis in the Mediterranean,” Mediterranean Politics, Vol. 22, No. 2 (2017): pp. 301-308.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Wahlbeck, Ö. (2019). To share or not to share responsibility? Finnish refugee policy and the hesitant support for a common European asylum system. Journal of Immigrant & Refugee Studies, 17(3), 299-316.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Carrera, S., & Geddes, A. (2021). The EU pact on migration and asylum in light of the united nations global compact on refugees. International Experiences on Containment and Mobility and their Impacts on Trust and Rights, European University Institute, San Domenico di Fiesole.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   }
+  ]
+ },
+ {
+  "week": "Week 8",
+  "topic": "Transnationalism and the Rise of Diasporas",
+  "todo": "",
+  "lens": "diasporas",
+  "readings": [
+   {
+    "type": "weekly",
+    "cite": "Basch, Linda; Glick Schiller, Nina & Szanton Blanc, Cristina (1994) Nations unbound: transnational projects, postcolonial predicaments and deterritorialized nation-states, Amsterdam: Gordon and Breach, p. 1-21.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Bauböck, R. & Faist, T. (2010) Diaspora and transnationalism: Concepts, theories and methods (p. 360). Amsterdam University Press, p. 9-34.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Dufoix, S. (2018). Diaspora before it became a concept. In Routledge Handbook of Diaspora Studies (pp. 13-21). Routledge.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Kaya, A. (2004). Political participation strategies of the Circassian diaspora in Turkey. Mediterranean politics, 9(2), 221-239.",
+    "url": null,
+    "tr": true,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Koinova, M. (2018). Critical junctures and transformative events in diaspora mobilisation for Kosovo and Palestinian statehood. Journal of Ethnic and Migration Studies, 44(8), 1289-1308.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Adamson, F. B. (2020). Non‐state authoritarianism and diaspora politics. Global Networks, 20(1), 150-169.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   }
+  ]
+ },
+ {
+  "week": "Week 9",
+  "topic": "Politics of Emigration and Diaspora Engagement Policies",
+  "todo": "Short literature on case & Methodology (10%)",
+  "lens": "diasporas",
+  "readings": [
+   {
+    "type": "weekly",
+    "cite": "Østergaard-Nielsen, E. (2016). Sending country policies. In Integration processes and policies in Europe (pp. 147-165). Springer, Cham.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Cummings, M. E., & Gamlen, A. (2019). Diaspora engagement institutions and venture investment activity in developing countries. Journal of International Business Policy, 2(4), 289-313.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Alexandra Délano Alonso & Harris Mylonas (2017): The microfoundations of diaspora politics: unpacking the state and disaggregating the diaspora, Journal of Ethnic and Migration Studies, DOI: 10.1080/1369183X.2017.1409160",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Akçapar, Ş. K., & Aksel, D. B. (2017). Public diplomacy through diaspora engagement: The case of Turkey. Perceptions: Journal of International Affairs, 22(3), 135-160.",
+    "url": null,
+    "tr": true,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Baser, B., & Ozturk, A. E. (2020). Positive and negative diaspora governance in context: from public diplomacy to transnational authoritarianism. Middle East Critique, 29(3), 319-334.",
+    "url": null,
+    "tr": true,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Alexandra Délano, “The diffusion of diaspora engagement policies: A Latin American agenda,” Political Geography, Vol. 41 (2014), pp. 90-100.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Hong Liu and Els van Dongen, “China’s Diaspora Policies as a New Mode of Transnational Governance,” Journal of Contemporary China (2016), pp. 1-17.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Palop‐García, P., & Pedroza, L. (2021). Do Diaspora Engagement Policies Endure? An Update of the Emigrant Policies Index (EMIX) to 2017. Global Policy, 12(3), 361-371.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   }
+  ]
+ },
+ {
+  "week": "Week 10",
+  "topic": "Migration & Precarity & Solidarity",
+  "todo": "",
+  "lens": "cross",
+  "readings": [
+   {
+    "type": "weekly",
+    "cite": "Wise, R. D. (2015). Migration and Labour under Neoliberal Globalization. In Schierup, C. U., Munck, R., Likic-Brboric, B., & Neergaard, A. (Eds.). (2015). Migration, precarity, and global governance: Challenges and opportunities for labour. OUP Oxford.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Schierup, C. U., Likić-Brborić, B., Wise, R. D., & Toksöz, G. (2018). Migration, civil society and global governance: an introduction to the special issue.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Ilker Ataç, Kim Rygiel & Maurice Stierl (2016) Introduction: The Contentious Politics of Refugee and Migrant Protest and Solidarity Movements: Remaking Citizenship from the Margins, Citizenship Studies, 20:5, 527-544, DOI: 10.1080/13621025.2016.1182681",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Şenses, N. (2017). Rethinking migration in the context of precarity: The case of Turkey. In Politics of Precarity (pp. 99-117). Brill.",
+    "url": null,
+    "tr": true,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Baban, F., Ilcan, S., & Rygiel, K. (2017). Syrian refugees in Turkey: Pathways to precarity, differential inclusion, and negotiated citizenship rights. Journal of Ethnic and Migration Studies, 43(1), 41-57.",
+    "url": null,
+    "tr": true,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Goździak, E. M., & Main, I. (2020). Contesting Flexible Solidarity: Poland and the “Migration Crisis”. Frontiers in Human Dynamics, 2, 2.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   }
+  ]
+ },
+ {
+  "week": "Week 11",
+  "topic": "Regional & Global Governance of Migration and Asylum",
+  "todo": "Timeline, preliminary budget",
+  "lens": "refugees",
+  "readings": [
+   {
+    "type": "weekly",
+    "cite": "Pécoud, A. (2021). Narrating an ideal migration world? An analysis of the Global Compact for Safe, Orderly and Regular Migration. Third World Quarterly, 42(1), 16-33.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Aleinikoff, T. A. (2017). Toward a Global System of Human Mobility: Three Thoughts. AJIL Unbound, 111, 24-28.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Betts, A., & Milner, J. (2019). Governance of the Global Refugee Regime.",
+    "url": "https://www.cigionline.org/sites/default/files/documents/WRC%20Research%20Paper%20No.13.pdf",
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "Ratha, D. (2021). Staying the course on global governance of migration through the COVID‐19 and economic crises. International Migration (Geneva, Switzerland), 59(1), 285.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "weekly",
+    "cite": "UN General Assembly, New York Declaration for Refugees and Migrants",
+    "url": "https://www.unhcr.org/57e39d987",
+    "tr": false,
+    "scholar": false
+   },
+   {
+    "type": "case",
+    "cite": "Martin, S. F., & Ferris, E. (2017). US leadership and the international refugee regime. Refuge: Canada's journal on refugees, 33(1), 18-28.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Kale, B., & Erdoğan, M. (2019). The impact of GCR on local governments and Syrian refugees in Turkey. International Migration, 57(6), 224-242.",
+    "url": null,
+    "tr": true,
+    "scholar": true
+   },
+   {
+    "type": "case",
+    "cite": "Van Hear, N., Barbelet, V., Bennett, C., & Lutz, H. (2018). Refugia Roundtable: Imagining Refugia: Thinking Outside the Current Refugee Regime. Migration and Society, 1(1), 175-194.",
+    "url": null,
+    "tr": false,
+    "scholar": true
+   }
+  ]
+ },
+ {
+  "week": "Week 12",
+  "topic": "Proposal Presentations; Review & Discussion: The Future of Migration at a Period of Crises",
+  "todo": "Draft presentation (10%)",
+  "lens": "cross",
+  "readings": [
+   {
+    "type": "note",
+    "cite": "No reading. Prepare for presentations.",
+    "url": null,
+    "tr": false,
+    "scholar": false
+   }
+  ]
+ }
+];
+
+const LENSES = [
+  { id: "migrants", num: "SUBSECTION 01", title: "Migrants", weeks: "Weeks 3–6",
+    text: "Migration states and the ethics of border control, the politics of incorporation, citizenship beyond the nation-state, and the securitization of migration.",
+    q: "On what grounds, if any, may a democracy close its borders?" },
+  { id: "refugees", num: "SUBSECTION 02", title: "Refugees", weeks: "Weeks 7 & 11",
+    text: "National and international refugee regimes, refugee rent-seeking and responsibility sharing, and global governance from the New York Declaration to the Global Compacts.",
+    q: "Is the 1951 Convention a regime in crisis, or one that states are deliberately hollowing out?" },
+  { id: "diasporas", num: "SUBSECTION 03", title: "Diasporas", weeks: "Weeks 8–9",
+    text: "Transnationalism, the history of the diaspora concept, diaspora mobilization, and sending-state engagement, from public diplomacy to transnational authoritarianism.",
+    q: "When states reach out to their diasporas, are they extending membership or extending control?" },
+];
+
+const DEBATES = [
+  {
+    week: "Week 2", lens: "lens-foundations",
+    title: "Can migration research escape the nation-state?",
+    positions: [
+      ["Massey et al. (1993)", "systematize competing theories of why migration starts and why it persists"],
+      ["de Haas et al. (2019)", "test those theories against long-run data on trends, determinants and policy effects"],
+      ["Wimmer & Glick Schiller (2002)", "argue that the social sciences have taken the nation-state for granted as the natural unit of analysis (\"methodological nationalism\"), which distorts how migration is studied"],
+      ["Bilecen et al. (2019)", "show what a transnational, gendered lens reveals, here in social protection that crosses borders"],
+    ],
+    angle: "Pick a migration phenomenon and ask what changes when the unit of analysis is a transnational social field rather than a country.",
+  },
+  {
+    week: "Week 3", lens: "",
+    title: "Do states have a right to exclude?",
+    positions: [
+      ["Carens (1987)", "makes the liberal egalitarian case for open borders: birthright citizenship in rich states works like feudal privilege"],
+      ["Abizadeh (2008)", "argues that border control coerces outsiders too, so democratic theory gives a state no right to control its border unilaterally"],
+      ["Miller (2010)", "replies that immigration controls prevent rather than coerce, so they need not be justified to outsiders in the same way"],
+      ["Bauböck (2019)", "brings these normative debates to the Mediterranean and the obligations it creates for European states"],
+    ],
+    angle: "How do actual policies, such as visa regimes, pushbacks or resettlement quotas, implicitly take sides in this debate?",
+  },
+  {
+    week: "Week 3", lens: "",
+    title: "Is the \"migration state\" a liberal model?",
+    positions: [
+      ["Hollifield (2004)", "describes the liberal migration state, caught between economic openness and political closure"],
+      ["Adamson & Tsourapas (2020)", "identify nationalizing, developmental and neoliberal models of migration management in the Global South"],
+      ["Natter (2021)", "questions the assumption that liberal regimes produce liberal migration policies and illiberal regimes restrictive ones"],
+      ["Torpey (1998); Kasaba (2011)", "provide historical depth: the state's monopoly over the \"means of movement\", and mobility in the Ottoman Empire"],
+    ],
+    angle: "Which migration-state model best describes Türkiye, and has it changed over time?",
+  },
+  {
+    week: "Week 4", lens: "",
+    title: "Integration: national, multicultural, super-diverse or local?",
+    positions: [
+      ["Ager & Strang (2008)", "propose a domain-based framework (markers and means, social connections, facilitators, rights)"],
+      ["Kymlicka (2020)", "seeks forms of solidarity in diverse societies that avoid both neoliberal multiculturalism and welfare chauvinism"],
+      ["Vertovec (2019)", "reflects on how the concept of \"super-diversity\" has been used, and misused"],
+      ["Doomernik & Ardon (2018); Errichiello (2023)", "represent the \"local turn\": cities and everyday life as the real sites of integration"],
+    ],
+    angle: "Compare national integration policy with what a municipality actually does. Where do they diverge?",
+  },
+  {
+    week: "Week 5", lens: "",
+    title: "Has citizenship gone post-national?",
+    positions: [
+      ["Marshall (1950)", "defines citizenship as a bundle of civil, political and social rights"],
+      ["Soysal (2000)", "argues that rights increasingly attach to personhood rather than nationality, and asks what this means for diasporas in Europe"],
+      ["Bloemraad & Sheares (2017)", "ask whether, and how, formal citizenship still matters for membership"],
+      ["Bauböck (2017)", "examines who should be included in the democratic demos, and on what principle"],
+    ],
+    angle: "Does dual citizenship or external voting support the post-national thesis, or show the nation-state reasserting itself?",
+  },
+  {
+    week: "Week 6", lens: "",
+    title: "How is migration securitized, and where are borders?",
+    positions: [
+      ["Huysmans (2000)", "traces how the EU turned migration into a security question"],
+      ["Bigo & Guild (2017)", "show Schengen visas as \"policing at a distance\": the border begins at the consulate"],
+      ["Tazzioli & Walters (2016)", "study visibility, meaning what is made seen and unseen at Europe's contested borders"],
+      ["Bilgin (2011); Karadağ (2019)", "bring the Turkish case in, through securitization theory in Türkiye and the extraterritorial reach of European borders"],
+    ],
+    angle: "Trace one EU border practice, such as readmission or visa liberalization, to its effects in Türkiye.",
+  },
+  {
+    week: "Week 7", lens: "lens-refugees",
+    title: "Is the refugee regime broken, or being broken?",
+    positions: [
+      ["Betts & Collier (2017)", "diagnose a broken system and argue for development-led approaches in regions of origin"],
+      ["Benhabib (2020)", "asks whether the 1951 Convention can survive the tension between sovereignty, territoriality and human rights"],
+      ["Freier, Micinski & Tsourapas (2021)", "describe \"refugee commodification\": host states in the Global South using refugees for rent-seeking"],
+      ["Wahlbeck (2019); Carrera & Geddes (2021)", "examine responsibility sharing in Europe, and the EU Pact in light of the Global Compact on Refugees"],
+    ],
+    angle: "Is refugee rent-seeking a useful lens for EU–Türkiye relations, or does it erase the agency of refugees?",
+  },
+  {
+    week: "Week 8", lens: "lens-diasporas",
+    title: "What, exactly, is a diaspora?",
+    positions: [
+      ["Dufoix (2018)", "traces the history of the word before it became an analytical concept"],
+      ["Basch, Glick Schiller & Szanton Blanc (1994)", "frame migrants as transmigrants who build social fields across borders"],
+      ["Bauböck & Faist (2010)", "distinguish diaspora from transnationalism, and set out the concepts and methods for studying each"],
+      ["Koinova (2018); Adamson (2020)", "examine mobilization: the critical junctures that drive it, and authoritarian practices carried out by non-state actors"],
+    ],
+    angle: "Is a group a diaspora because of its history, or because someone mobilizes it as one?",
+  },
+  {
+    week: "Week 9", lens: "lens-diasporas",
+    title: "Why do states court their emigrants?",
+    positions: [
+      ["Østergaard-Nielsen (2016)", "maps the range of sending-country policies"],
+      ["Délano Alonso & Mylonas (2017)", "unpack \"the state\" and disaggregate \"the diaspora\" to explain diaspora politics from the micro level"],
+      ["Cummings & Gamlen (2019)", "link diaspora engagement institutions to investment outcomes"],
+      ["Baser & Öztürk (2020); Akçapar & Aksel (2017)", "show diaspora governance ranging from public diplomacy to transnational authoritarianism"],
+    ],
+    angle: "Use EMIX (Palop-García & Pedroza 2021) to compare two countries' engagement policies and explain the difference.",
+  },
+  {
+    week: "Week 10", lens: "lens-foundations",
+    title: "Precarity and solidarity: who acts?",
+    positions: [
+      ["Wise (2015); Schierup et al. (2018)", "place migrant labour within neoliberal globalization and global governance"],
+      ["Ataç, Rygiel & Stierl (2016)", "read refugee and migrant protest as citizenship being remade from the margins"],
+      ["Baban, Ilcan & Rygiel (2017); Şenses (2017)", "examine precarity and differential inclusion in Türkiye"],
+      ["Goździak & Main (2020)", "analyse \"flexible solidarity\" and its contestation in Poland"],
+    ],
+    angle: "How do migrants without citizenship make political claims, and who listens?",
+  },
+  {
+    week: "Week 11", lens: "lens-refugees",
+    title: "Can mobility be governed globally?",
+    positions: [
+      ["Pécoud (2021)", "reads the Global Compact for Migration as a narrative of an \"ideal\" migration world"],
+      ["Aleinikoff (2017); Betts & Milner (2019)", "consider what a global system of mobility and refugee governance would require"],
+      ["Ratha (2021)", "examines global migration governance through the COVID-19 and economic crises"],
+      ["Kale & Erdoğan (2019); Van Hear et al. (2018)", "move from local implementation of the Global Compact on Refugees in Türkiye to the radical idea of \"Refugia\""],
+    ],
+    angle: "Trace a commitment in one Global Compact down to its implementation by a national or local actor.",
+  },
+];
+
+const PUZZLES = [
+  { title: "What kind of migration state is Türkiye?", text: "From Ottoman mobility to Republican nation-building and today's large-scale hosting of refugees, which of Adamson & Tsourapas's models fits, and when?", readings: "Kasaba (2011); Adamson & Tsourapas (2020); Kirişçi (2000)" },
+  { title: "Securitization in a non-Western setting", text: "Does the Copenhagen School travel to Türkiye, and how do European border practices become Turkish ones?", readings: "Bilgin (2011); Karadağ (2019); Huysmans (2000)" },
+  { title: "Refugees as leverage?", text: "To what extent does the refugee-rent framework explain Türkiye's bargaining with the EU, and what does it leave out?", readings: "Freier, Micinski & Tsourapas (2021); Carrera & Geddes (2021)" },
+  { title: "From integration to \"social cohesion\"", text: "What do the concepts used in Turkish policy reveal and conceal about the long-term presence of Syrians?", readings: "Özçürümez, Hoxha & İçduygu (2020); Şimşek (2019); Baban, Ilcan & Rygiel (2017)" },
+  { title: "Local governments on the front line", text: "How do municipalities translate global commitments into everyday practice?", readings: "Kale & Erdoğan (2019); Doomernik & Ardon (2018)" },
+  { title: "Diaspora outreach: diplomacy or control?", text: "How has Türkiye's engagement with its citizens abroad changed, and how should its effects be evaluated?", readings: "Akçapar & Aksel (2017); Baser & Öztürk (2020); Adamson (2020); Kaya (2004)" },
+];
+
+const ASSESSMENTS = [
+  { eyebrow: "20% · from Week 4", title: "Discussion paper, presentation & moderation",
+    items: ["At least 1,000 words, based on the week's <b>weekly readings</b>", "Submit on MS Teams <b>before class</b>", "Present for 20–25 minutes", "Lead the moderation of the class discussion"] },
+  { eyebrow: "20% (2 × 10%) · from Week 4", title: "Reaction papers & discussion",
+    items: ["<b>Two</b> reaction papers across the semester", "At least 600 words each, on one of the week's <b>case readings</b>", "Present each one in 10 minutes", "Discuss it under the guidance of that week's moderator"] },
+  { eyebrow: "60% · all semester", title: "Research proposal",
+    items: ["About 4,000 words", "Built in stages from Week 3 (see the Research Proposal tab)", "Graded parts: literature review on theory 10%, case literature and methodology 10%, draft presentation 10%, final paper 30%"] },
+];
+
+const PROPOSAL_STEPS = [
+  { title: "Research topic & research questions", when: "Week 3", pts: "", text: "Define the puzzle. A good question is answerable, matters for a debate in the field, and is narrow enough for one study." },
+  { title: "Literature review on theory", when: "Week 7", pts: "10%", text: "Place your question within the theoretical debates. Which theory or concept will you use, which will you challenge, and why?" },
+  { title: "Short literature review on the case & methodology", when: "Week 9", pts: "10%", text: "Review what is known about your case, then set out how you will answer the question: research design, data, methods and ethics." },
+  { title: "Timeline & preliminary budget", when: "Week 11", pts: "", text: "A realistic work plan and an estimate of costs such as fieldwork, transcription and access to data." },
+  { title: "Draft presentation", when: "Week 12", pts: "10%", text: "Present your draft in class and use the feedback before final submission." },
+  { title: "Final paper", when: "After Week 12 (date TBA)", pts: "30%", text: "The complete proposal of about 4,000 words, integrating everything above." },
+];
+
+const ANATOMY = [
+  { eyebrow: "Puzzle", title: "Start from a puzzle, not a topic", text: "\"Syrian refugees in Istanbul\" is a topic. \"Why do some district municipalities in Istanbul engage refugees as residents while others treat them as a security issue?\" is a research question. Look for variation, surprises and contradictions." },
+  { eyebrow: "Theory", title: "Enter a conversation", text: "Your theoretical literature review should be organized by argument, not author by author. Identify two or three positions, show where they disagree, and say where your project fits. The Key Debates tab is a starting map." },
+  { eyebrow: "Case", title: "Justify the case", text: "Why this country, city, group or period? Say what kind of case it is: typical, extreme, deviant or most-likely. Explain what it can show that another case could not." },
+  { eyebrow: "Method", title: "Match the method to the question", text: "Questions about \"how\" and \"why\" often call for qualitative designs such as interviews, process tracing or discourse analysis. Questions about \"how much\" and \"under what conditions\" may call for comparative or quantitative designs. Explain your sampling and access as well." },
+  { eyebrow: "Ethics", title: "Plan the ethics early", text: "Research with migrants and refugees often involves people in precarious legal situations. Address informed consent, anonymity, data protection, power asymmetries and the principle of \"do no harm\" in the proposal itself." },
+  { eyebrow: "Feasibility", title: "Be realistic", text: "Your timeline and budget should convince a reader that the project can be done with the time, language skills, access and money you have. A smaller project done well is better than an ambitious one that cannot be completed." },
+];
+
+const METHOD_NOTES = [
+  { title: "Methodological nationalism", text: "Taking the nation-state as the given container of social life can hide transnational ties and naturalize state categories (Wimmer & Glick Schiller 2002). Ask whether your unit of analysis is a country, a city, a network or a transnational field, and why." },
+  { title: "Categories are political", text: "Categories such as \"refugee\", \"migrant\", \"guest\", \"under temporary protection\" and \"irregular\" are produced by law and policy. Decide whether you are using them as analytical tools or studying them as objects, and keep that distinction consistent." },
+  { title: "Hard-to-reach populations", text: "Irregular migrants and some diaspora groups lack sampling frames. Snowball sampling, gatekeepers and multi-sited fieldwork each have biases that you should acknowledge." },
+  { title: "Researching vulnerable people", text: "Informed consent, anonymity, secure data storage and avoiding harm are central to the research, not formalities. Check whether your project needs ethics committee approval." },
+];
+
+const DATA_SOURCES = [
+  { eyebrow: "Concepts", title: "IOM — Key Migration Terms", text: "The standard glossary of international migration terminology, read in Week 1.", use: "Check your proposal's key terms against IOM usage, and note where you deliberately depart from it.", url: "https://www.iom.int/key-migration-terms" },
+  { eyebrow: "Trends", title: "IOM — World Migration Report", text: "IOM's biennial flagship report with global and regional data and thematic chapters.", use: "Use the regional chapters for context in the introduction of your case.", url: "https://worldmigrationreport.iom.int/" },
+  { eyebrow: "Data", title: "Migration Data Portal", text: "Brings together migration statistics from many sources, with notes on definitions and data quality.", use: "Check the definitions behind each figure before comparing countries.", url: "https://www.migrationdataportal.org/" },
+  { eyebrow: "Refugees", title: "UNHCR — Refugee Data Finder", text: "Statistics on refugees, asylum seekers, IDPs and stateless people by origin and host country.", use: "Build time series for your case. Note when a host state, rather than UNHCR, does the registering.", url: "https://www.unhcr.org/refugee-statistics/", lens: "lens-refugees" },
+  { eyebrow: "Policy index", title: "MIPEX", text: "The Migrant Integration Policy Index, which compares integration policies across countries and policy areas.", use: "Compare policy scores with outcomes in your case. Note that MIPEX measures policy on paper, not implementation.", url: "https://www.mipex.eu/" },
+  { eyebrow: "Policy index", title: "EMIX — Emigrant Policies Index", text: "Measures states' policies towards their emigrants. It is discussed in Palop-García & Pedroza (2021), a Week 9 case reading.", use: "Comparing diaspora engagement across states. Find the dataset through the article.", url: "", lens: "lens-diasporas" },
+  { eyebrow: "Türkiye", title: "Presidency of Migration Management", text: "Türkiye's migration authority, which publishes statistics on residence permits, international and temporary protection, and irregular migration.", use: "Official Turkish figures. Compare them with UNHCR's and explain any differences.", url: "https://www.goc.gov.tr/" },
+  { eyebrow: "Türkiye · Diaspora", title: "YTB", text: "The Presidency for Turks Abroad and Related Communities.", use: "A primary source for analysing the discourse and institutions of Turkish diaspora policy.", url: "https://www.ytb.gov.tr/", lens: "lens-diasporas" },
+  { eyebrow: "Borders", title: "Frontex", text: "The European Border and Coast Guard Agency, read in Week 6.", use: "Risk analyses are primary sources for studying how the EU frames migration as a security issue. Read them critically, as discourse.", url: "https://frontex.europa.eu/" },
+];
+
+/* ---------------- Rendering ---------------- */
+
+const LENS_LABEL = { foundations: "Foundations", migrants: "Migrants", refugees: "Refugees", diasporas: "Diasporas", cross: "Cross-cutting" };
+const TYPE_LABEL = { weekly: "Weekly readings", case: "Case readings", suggested: "Suggested readings", note: "" };
+const TYPE_HINT = { weekly: "basis for the discussion paper", case: "choose from these for reaction papers", suggested: "optional, useful for your literature review" };
+
+function esc(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+// Trusted inline markup (<b>) is allowed in the hand-written ASSESSMENTS list.
+function rich(s) {
+  return esc(s).replace(/&lt;(\/?)(b|em)&gt;/g, "<$1$2>");
+}
+
+function highlight(text, q) {
+  const safe = esc(text);
+  if (!q) return safe;
+  const re = new RegExp("(" + esc(q).replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "gi");
+  return safe.replace(re, "<mark>$1</mark>");
+}
+
+function scholar(cite) {
+  return "https://scholar.google.com/scholar?q=" + encodeURIComponent(cite.slice(0, 200));
+}
+
+function readingHtml(r, q) {
+  const links = [];
+  if (r.url) links.push(`<a href="${esc(r.url)}" target="_blank" rel="noopener">Open ↗</a>`);
+  if (r.scholar) links.push(`<a href="${esc(scholar(r.cite))}" target="_blank" rel="noopener">Google Scholar ↗</a>`);
+  return `
+    <div class="reading ${r.type}">
+      ${highlight(r.cite, q)}${r.tr ? `<span class="tr-flag">TÜRKİYE</span>` : ""}
+      ${links.length ? `<span class="links">${links.join("")}</span>` : ""}
+    </div>`;
+}
+
+function renderLenses() {
+  document.getElementById("lensGrid").innerHTML = LENSES.map((l) => `
+    <div class="lens-card ${l.id}">
+      <div class="num">${esc(l.num)}</div>
+      <h3>${esc(l.title)}</h3>
+      <p>${esc(l.text)}</p>
+      <p class="q">${esc(l.q)}</p>
+      <div class="weeks">${esc(l.weeks)}</div>
+    </div>`).join("");
+}
+
+function setupReadings() {
+  const list = document.getElementById("weekList");
+  const count = document.getElementById("readingCount");
+  const search = document.getElementById("readingSearch");
+  const chips = Array.from(document.querySelectorAll("#readingFilters .chip[data-type]"));
+  const trToggle = document.getElementById("trToggle");
+  const total = WEEKS.reduce((n, w) => n + w.readings.filter((r) => r.type !== "note").length, 0);
+  let type = "all";
+  let trOnly = false;
+
+  function draw() {
+    const q = search.value.trim();
+    const ql = q.toLowerCase();
+    const filtering = type !== "all" || trOnly || q;
+    let shown = 0;
+
+    list.innerHTML = WEEKS.map((w) => {
+      const rs = w.readings.filter((r) =>
+        (r.type === "note" ? !filtering : true) &&
+        (type === "all" || r.type === type) &&
+        (!trOnly || r.tr) &&
+        (!ql || r.cite.toLowerCase().includes(ql))
+      );
+      const topicHit = ql && (w.topic.toLowerCase().includes(ql));
+      if (filtering && !rs.length && !topicHit) return "";
+      shown += rs.filter((r) => r.type !== "note").length;
+
+      const groups = ["weekly", "case", "suggested", "note"].map((t) => {
+        const g = rs.filter((r) => r.type === t);
+        if (!g.length) return "";
+        const head = TYPE_LABEL[t] ? `<div class="rgroup-title">${TYPE_LABEL[t]} <span>— ${TYPE_HINT[t]}</span></div>` : "";
+        return head + g.map((r) => readingHtml(r, q)).join("");
+      }).join("");
+
+      const nW = w.readings.filter((r) => r.type === "weekly").length;
+      const nC = w.readings.filter((r) => r.type === "case").length;
+      const countTxt = nW || nC ? `${nW} weekly · ${nC} case` : "No reading";
+      return `
+        <details class="week lens-${w.lens}"${filtering ? " open" : ""}>
+          <summary>
+            <span class="wk-num">${esc(w.week)}</span>
+            <span class="wk-title">${highlight(w.topic, q)}</span>
+            <span class="wk-chev" aria-hidden="true">▶</span>
+            <span class="wk-meta">
+              <span class="pill ${w.lens === "cross" ? "foundations" : w.lens}">${esc(LENS_LABEL[w.lens])}</span>
+              ${w.todo ? `<span class="pill ${w.week === "Week 2" ? "foundations" : "milestone"}">${esc(w.week === "Week 2" ? w.todo : "Due: " + w.todo)}</span>` : ""}
+              <span class="wk-count">${countTxt}</span>
+            </span>
+          </summary>
+          <div class="wk-body">${groups || `<div class="reading">No readings match this filter.</div>`}</div>
+        </details>`;
+    }).join("") || `<div class="empty">No readings match. Try another word or clear the filters.</div>`;
+
+    count.textContent = filtering ? `${shown} of ${total} readings` : `${total} readings across 12 weeks`;
+  }
+
+  chips.forEach((chip) => chip.addEventListener("click", () => {
+    type = chip.dataset.type;
+    chips.forEach((c) => c.setAttribute("aria-pressed", c === chip ? "true" : "false"));
+    draw();
+  }));
+  trToggle.addEventListener("click", () => {
+    trOnly = !trOnly;
+    trToggle.setAttribute("aria-pressed", trOnly ? "true" : "false");
+    draw();
+  });
+  search.addEventListener("input", draw);
+  document.getElementById("expandAll").addEventListener("click", () => list.querySelectorAll("details").forEach((d) => (d.open = true)));
+  document.getElementById("collapseAll").addEventListener("click", () => list.querySelectorAll("details").forEach((d) => (d.open = false)));
+  draw();
+}
+
+function renderDebates() {
+  document.getElementById("debateGrid").innerHTML = DEBATES.map((d) => `
+    <div class="card ${d.lens}">
+      <div class="eyebrow">${esc(d.week)}</div>
+      <h4>${esc(d.title)}</h4>
+      <ul class="positions">${d.positions.map(([who, what]) => `<li><b>${esc(who)}</b> ${esc(what)}</li>`).join("")}</ul>
+      <div class="spacer"></div>
+      <div class="proposal-angle"><b>Proposal angle:</b> ${esc(d.angle)}</div>
+    </div>`).join("");
+}
+
+function renderTurkiye() {
+  document.getElementById("puzzleGrid").innerHTML = PUZZLES.map((p, i) => `
+    <div class="card ${i % 2 ? "debate" : ""}">
+      <div class="eyebrow">Research puzzle ${i + 1}</div>
+      <h4>${esc(p.title)}</h4>
+      <p>${esc(p.text)}</p>
+      <div class="spacer"></div>
+      <p class="muted"><span class="label">Start with:</span> ${esc(p.readings)}</p>
+    </div>`).join("");
+
+  document.getElementById("trList").innerHTML = WEEKS
+    .filter((w) => w.readings.some((r) => r.tr))
+    .map((w) => `
+      <details class="week lens-${w.lens}" open>
+        <summary>
+          <span class="wk-num">${esc(w.week)}</span>
+          <span class="wk-title">${esc(w.topic)}</span>
+          <span class="wk-chev" aria-hidden="true">▶</span>
+        </summary>
+        <div class="wk-body">${w.readings.filter((r) => r.tr).map((r) => readingHtml(r, "")).join("")}</div>
+      </details>`).join("");
+}
+
+function renderAssignments() {
+  document.getElementById("assessmentGrid").innerHTML = ASSESSMENTS.map((a) => `
+    <div class="card">
+      <div class="eyebrow">${esc(a.eyebrow)}</div>
+      <h4>${esc(a.title)}</h4>
+      <ul>${a.items.map((i) => `<li>${rich(i)}</li>`).join("")}</ul>
+    </div>`).join("");
+
+  document.getElementById("proposalRoadmap").innerHTML = PROPOSAL_STEPS.map((s) => `
+    <li>
+      <div class="step-head">
+        <b>${esc(s.title)}</b>
+        <span class="when">${esc(s.when)}</span>
+        ${s.pts ? `<span class="pill">${esc(s.pts)}</span>` : `<span class="pill foundations">not graded separately</span>`}
+      </div>
+      <p>${esc(s.text)}</p>
+    </li>`).join("");
+
+  document.getElementById("anatomyGrid").innerHTML = ANATOMY.map((a) => `
+    <div class="card">
+      <div class="eyebrow">${esc(a.eyebrow)}</div>
+      <h4>${esc(a.title)}</h4>
+      <p>${esc(a.text)}</p>
+    </div>`).join("");
+}
+
+function renderMethods() {
+  document.getElementById("methodGrid").innerHTML = METHOD_NOTES.map((m) => `
+    <div class="card debate">
+      <h4>${esc(m.title)}</h4>
+      <p>${esc(m.text)}</p>
+    </div>`).join("");
+
+  document.getElementById("dataGrid").innerHTML = DATA_SOURCES.map((d) => `
+    <div class="card ${d.lens || ""}">
+      <div class="eyebrow">${esc(d.eyebrow)}</div>
+      <h4>${esc(d.title)}</h4>
+      <p>${esc(d.text)}</p>
+      <div class="spacer"></div>
+      <div class="debate-q"><b>Research use:</b> ${esc(d.use)}</div>
+      ${d.url ? `<a class="more" href="${esc(d.url)}" target="_blank" rel="noopener">Open ${esc(new URL(d.url).hostname.replace(/^www\./, ""))} →</a>` : ""}
+    </div>`).join("");
+}
+
+function setupTabs() {
+  const tabs = Array.from(document.querySelectorAll(".tab"));
+  const bar = document.querySelector(".site-bar");
+
+  function select(tab, { focus = false, updateHash = true } = {}) {
+    tabs.forEach((t) => {
+      const on = t === tab;
+      t.setAttribute("aria-selected", on ? "true" : "false");
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+    });
+    if (focus) tab.focus();
+    if (updateHash) history.replaceState(null, "", "#" + tab.dataset.hash);
+    if (window.scrollY > bar.offsetTop) window.scrollTo({ top: bar.offsetTop });
+  }
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener("click", () => select(tab));
+    tab.addEventListener("keydown", (ev) => {
+      let next = null;
+      if (ev.key === "ArrowRight") next = tabs[(i + 1) % tabs.length];
+      if (ev.key === "ArrowLeft") next = tabs[(i - 1 + tabs.length) % tabs.length];
+      if (ev.key === "Home") next = tabs[0];
+      if (ev.key === "End") next = tabs[tabs.length - 1];
+      if (next) { ev.preventDefault(); select(next, { focus: true }); }
+    });
+  });
+
+  // Links like gla5913_migration.html#readings open straight on that tab;
+  // in-page links (href="#proposal") switch tabs the same way.
+  const fromHash = () => {
+    const tab = tabs.find((t) => "#" + t.dataset.hash === location.hash);
+    if (tab) select(tab, { updateHash: false });
+  };
+  window.addEventListener("hashchange", fromHash);
+  fromHash();
+}
+
+renderLenses();
+setupReadings();
+renderDebates();
+renderTurkiye();
+renderAssignments();
+renderMethods();
+setupTabs();
+</script>
+</body>
+</html>
