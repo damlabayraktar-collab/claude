@@ -852,6 +852,23 @@ footer.foot {
 .world-panel { padding-bottom: 40px; }
 .world-panel[hidden] { display: none; }
 
+.wm-notice {
+  margin: 4px 0 14px;
+  padding: 12px 14px;
+  max-width: 780px;
+  border: 1px solid rgba(255, 138, 101, 0.5);
+  border-left: 4px solid var(--accent-2);
+  border-radius: 10px;
+  background: rgba(255, 138, 101, 0.1);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+.wm-notice strong { display: block; color: #ffb49b; margin-bottom: 2px; }
+.wm-howto { color: var(--muted); font-size: 0.92rem; line-height: 1.55; margin: 0 0 6px; padding-left: 20px; max-width: 780px; }
+.wm-howto li { margin-bottom: 3px; }
+.wm-howto b, .section-intro p b { color: var(--text); }
+.world-panel .page-foot p { margin: 0 0 8px; }
+
 .wm-controls {
   display: flex;
   flex-wrap: wrap;
@@ -1104,10 +1121,21 @@ footer.foot {
 
   <section class="tab-panel world-panel" role="tabpanel" id="panel-world" aria-labelledby="tab-world" hidden>
     <div class="section-intro">
-      <div class="kicker">Ideologies in government today</div>
-      <h2>Which Ideology Governs Where?</h2>
-      <p>All 195 states (193 UN members, Palestine and Vatican City), coded by the ideological family that organises the governing programme of their current executive. The coding follows Michael Freeden's morphological approach: an ideology is a configuration of core, adjacent and peripheral concepts, so a family is identified by the concepts at its core — not by a left–right position or a policy checklist.</p>
-      <p>Each family appears in several variants, shown as shades of the family's colour. As with C and C+ in the earlier conservatism map, a "+" variant marks a family core fused with nationalism, populism, religion or authoritarian rule. Nationalism is thin-centred in Freeden's account, so it is never coded as the family — find it in the Components row. Stripes show a secondary family. Hover or tap a country for details. Snapshot: 3 October 2026.</p>
+      <div class="kicker">Teaching illustration · Ideologies in government</div>
+      <h2>An Illustrative Map of Governing Ideologies</h2>
+      <div class="wm-notice" role="note">
+        <strong>Created with Claude. Illustrative only.</strong>
+        This map and its country codes were created with Claude (Anthropic's AI model), starting from a dataset generated with ChatGPT. It is a representative teaching illustration, not a visualisation of actual research. Treat every code as material to question, not as evidence.
+      </div>
+      <p><b>What the map shows.</b> Each of the 195 states (the 193 UN members, Palestine and Vatican City) is coloured by the ideological family that most plausibly organises the programme of its current government, as of 3 October 2026. The coding applies Michael Freeden's morphological approach. An ideology is a cluster of core, adjacent and peripheral concepts, so a government is placed by the concepts at the centre of its ideas, not by its position on a left–right line.</p>
+      <p><b>How to read it.</b></p>
+      <ul class="wm-howto">
+        <li><b>Colour = family.</b> Liberalism, conservatism, socialism, religious-political ideology, and a leftover "traditionalist-authoritarian" category for regimes with no full ideology behind them.</li>
+        <li><b>Shade = variant.</b> Within each family, a "+" variant (C+, S+, L+, RE+) marks a family whose core is fused with nationalism, populism, theocratic or religious-nationalist claims, or authoritarian rule.</li>
+        <li><b>Stripes = a secondary family</b> with a strong presence close to the core.</li>
+        <li><b>Nationalism is never the colour.</b> Freeden treats it as a thin-centred ideology that attaches to a host, so it appears in the Components filter instead.</li>
+        <li><b>Hover or tap a country</b> to see its leaders, its code and the reasoning behind it.</li>
+      </ul>
     </div>
     <div class="wm-controls">
       <input class="wm-search" id="wmSearch" type="search" list="wmNames" placeholder="Find a country…" aria-label="Find a country" autocomplete="off">
@@ -1127,7 +1155,7 @@ footer.foot {
         <div class="wm-hint">Scroll or pinch to zoom · drag to pan · small states are shown as dots</div>
       </div>
       <aside class="wm-detail" id="wmDetail" aria-live="polite">
-        <p class="empty">Select a country on the map, in the search box or in the table to see who holds power, which ideological family organises its government, and what that family's core concepts are.</p>
+        <p class="empty">Select a country on the map, in the search box or in the table. You'll see who holds power, which family and variant it was coded as, and what that family's core concepts are. Every code is an interpretation you are invited to challenge.</p>
       </aside>
     </div>
     <div class="wm-tablewrap">
@@ -1142,7 +1170,8 @@ footer.foot {
       </details>
     </div>
     <footer class="page-foot">
-      Source: <em>Freedenian Ideologies Global Dataset</em> (snapshot 3 October 2026), recoded from the earlier conservatism-only dataset. Leaders come from Wikipedia's list of current heads of state and government, cross-checked against news reports. The code describes the executive that directs policy; a ceremonial head of state does not set it. "Traditionalist-authoritarian" is a residual category for regimes that sustain no liberal, conservative or socialist programme; it is not a Freeden family. "Authoritarian rule" describes how power is held, not an ideology. Treat every code as an argument to discuss, not a verdict. Territories in grey are not among the 195 states coded. Boundaries: Natural Earth, simplified; they are not a statement on disputed borders.
+      <p><b>About this map.</b> The country codes were produced with Claude from a dataset generated with ChatGPT for this course. That dataset has its own heads of state and government, policy summaries and an earlier conservatism-only classification. The leader names come from that dataset as of 3 October 2026, have not been independently verified, and may since have changed. The code describes the executive that actually sets policy, so a ceremonial head of state does not determine it. "Authoritarian rule" describes how power is held, not an ideology. "Traditionalist-authoritarian" is a teaching category, not one of Freeden's families. Countries in grey are not among the 195 states coded. Boundaries come from Natural Earth (simplified) and are not a position on disputed borders.</p>
+      <p><b>For class discussion:</b> pick a country whose code you disagree with. Which concepts would you place at its core, and what evidence would settle the question?</p>
     </footer>
   </section>
 
@@ -1769,7 +1798,7 @@ const WM_VARIANTS = {
   "C+": {
     "family": "CON",
     "name": "National / religious / populist conservatism",
-    "def": "Conservative core combined strongly with nationalism, populism, religion or authoritarianism.",
+    "def": "Conservative core combined strongly with nationalism, populism, religious-nationalist claims or authoritarian rule.",
     "color": "#2f62d0"
   },
   "Cm": {
@@ -1805,7 +1834,7 @@ const WM_VARIANTS = {
   "RE+": {
     "family": "REL",
     "name": "Religious-national rule",
-    "def": "Religious legitimacy fused with dynastic or national authority.",
+    "def": "Theocratic claims to legitimacy fused with dynastic or national authority.",
     "color": "#13805d"
   },
   "T": {
