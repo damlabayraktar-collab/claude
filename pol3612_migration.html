@@ -626,6 +626,34 @@ a.more:hover { text-decoration: underline; }
   color: var(--text);
 }
 
+/* Data-analysis assignment box + compact source cards */
+.assign-box {
+  margin: 16px 20px 0;
+  max-width: 1000px;
+  display: grid;
+  grid-template-columns: 1fr 230px;
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--accent-warm);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, var(--accent-soft), var(--card) 70%);
+  overflow: hidden;
+}
+.assign-main { padding: 18px 20px; }
+.assign-main h3 { margin: 0 0 8px; font-size: 1.2rem; }
+.assign-main p { margin: 0; font-size: 0.9rem; line-height: 1.6; }
+.assign-facts { border-left: 1px solid var(--border); padding: 18px 18px; display: grid; gap: 10px; align-content: start; background: var(--card); }
+.assign-facts div { font-size: 0.88rem; }
+.assign-facts b { display: block; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.card.src h4 { font-size: 0.96rem; }
+.card.src p { font-size: 0.82rem; }
+.card .path { font-size: 0.74rem; color: var(--muted); margin: -4px 0 8px; }
+.card .path b { color: var(--text); }
+.card .links { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+@media (max-width: 640px) {
+  .assign-box { grid-template-columns: 1fr; margin-left: 16px; margin-right: 16px; }
+  .assign-facts { border-left: 0; border-top: 1px solid var(--border); grid-template-columns: repeat(3, 1fr); }
+}
+
 footer.foot {
   padding: 18px 20px 40px;
   color: var(--muted);
@@ -802,8 +830,40 @@ footer.foot {
     <div class="panel-head">
       <div class="kicker">Evidence toolkit</div>
       <h2>Data &amp; Sources</h2>
-      <p>Where to find reliable numbers and primary documents. Each card suggests one thing to try with the source, which is a good way into the podcast's data-analysis step (due Week 8).</p>
+      <p>Where to find reliable migration statistics, and how to use them for the podcast's data-analysis step. The sources below come from the course guideline <em>Analysis of Statistical Data</em>.</p>
     </div>
+
+    <div class="assign-box">
+      <div class="assign-main">
+        <div class="kicker">BAU Migration Story Podcast · step 3</div>
+        <h3>Analysis of statistical data</h3>
+        <p>Find <b>two statistical datasets</b> on your research topic and write a short analysis of them, about <b>400 words</b>. The data can be about your type of migration (for example student migration, labour migration or asylum) worldwide, or about the country or countries you are studying. If you need help finding data, contact the instructor.</p>
+      </div>
+      <div class="assign-facts">
+        <div><b>Due</b>Week 8 · Nov 19</div>
+        <div><b>Weight</b>5 pts · Pass/Fail</div>
+        <div><b>Length</b>≈ 400 words + 2 graphs or tables</div>
+      </div>
+    </div>
+
+    <div class="section-heading">
+      <h3>How to write it</h3>
+      <p>These steps follow the worked example in the guideline.</p>
+    </div>
+    <ol class="roadmap" id="analysisSteps"></ol>
+
+    <div class="section-heading">
+      <h3>Inside the example</h3>
+      <p>The guideline's example analyses Afghan asylum seekers and refugees in Türkiye. Here is what each part of it does.</p>
+    </div>
+    <div class="grid" id="exampleGrid"></div>
+
+    <div class="section-heading">
+      <h3>Where to find data</h3>
+      <p>The sources suggested in the guideline, grouped by topic. Filter by category or search by name. Some also have a short exercise to get you started.</p>
+    </div>
+    <div class="filters" id="sourceFilters"></div>
+    <div class="count" id="sourceCount" aria-live="polite"></div>
     <div class="grid" id="dataGrid"></div>
     <div class="note"><b>Before you quote a number,</b> check three things: <em>who</em> counted it (a government, UNHCR, IOM or an NGO), <em>what</em> it counts (stocks or flows, people or applications, registered or estimated) and <em>when</em> it was counted. Most disagreements between migration statistics come down to one of these three.</div>
   </section>
@@ -1261,70 +1321,101 @@ const ASSESSMENTS = [
 const PODCAST_STEPS = [
   { title: "Form your group & pick a theme", when: "Week 3 · Oct 8", pts: "", text: "Submit group members and your theme. Pick a story you can actually reach through an interview, for example a migrant, refugee or diaspora member, or someone who works with them." },
   { title: "React to an academic article", when: "Week 5 · Oct 22", pts: "5 pts · P/F", text: "Read one scholarly article related to your theme and write a reaction. This gives your episode its analytical frame and ties the story to the course's Big Questions." },
-  { title: "Analyze the data", when: "Week 8 · Nov 19", pts: "5 pts · P/F", text: "Put your story in numbers: how big is this movement, and how has it changed? The Data & Sources tab lists where to look." },
+  { title: "Analyze the data", when: "Week 8 · Nov 19", pts: "5 pts · P/F", text: "Find two statistical datasets on your topic and write a short analysis of about 400 words. How big is this movement, and how has it changed? The Data & Sources tab explains the task and lists where to look." },
   { title: "Interview notes & analysis", when: "Week 10 · Nov 28", pts: "10 pts · P/F", text: "Conduct your interview with informed consent, then submit your notes and an analysis linking what you heard to the concepts from class." },
   { title: "Record, publish & present", when: "Week 12 · Dec 10", pts: "10 pts", text: "Submit the recorded episode and present it in class (10 minutes per group)." },
 ];
 
+const SOURCE_CATS = [
+  { id: "global", label: "Global trends" },
+  { id: "forced", label: "Refugees & displacement", lens: "lens-refugees" },
+  { id: "eu", label: "European Union" },
+  { id: "integration", label: "Integration & citizenship" },
+  { id: "turkiye", label: "Türkiye", lens: "lens-diasporas" },
+  { id: "student", label: "Student migration" },
+  { id: "marriage", label: "Marriage" },
+  { id: "context", label: "Concepts & context", lens: "lens-foundations" },
+];
+
+// Sources and links follow the course guideline "Analysis of Statistical Data".
 const DATA_SOURCES = [
-  {
-    eyebrow: "Concepts",
-    title: "IOM — Key Migration Terms",
-    text: "The International Organization for Migration's glossary, and the starting point for Week 1.",
-    tryThis: "Compare IOM's definition of \"migrant\" with the 1951 Convention's definition of \"refugee\". What does each one include or leave out?",
-    url: "https://www.iom.int/key-migration-terms",
-  },
-  {
-    eyebrow: "Trends",
-    title: "IOM — World Migration Report",
-    text: "IOM's flagship report, with global and regional overviews and chapters on current issues.",
-    tryThis: "Find the regional chapter covering Türkiye's region and note the three largest movements it describes.",
-    url: "https://worldmigrationreport.iom.int/",
-  },
-  {
-    eyebrow: "Data",
-    title: "Migration Data Portal",
-    text: "IOM's portal bringing together migration statistics from many sources, with country profiles and explainers on data quality.",
-    tryThis: "Open a country profile for your podcast theme and record the migrant stock and the latest remittance figure, with their sources.",
-    url: "https://www.migrationdataportal.org/",
-  },
-  {
-    eyebrow: "Data",
-    title: "UNHCR — Refugee Data Finder",
-    text: "Official statistics on refugees, asylum seekers, IDPs and stateless people, by country of origin and asylum.",
-    tryThis: "Find the top five refugee-hosting countries this year. Where do most refugees live: near their origin, or far away?",
-    url: "https://www.unhcr.org/refugee-statistics/",
-    lens: "lens-refugees",
-  },
-  {
-    eyebrow: "Policy index",
-    title: "MIPEX — Migrant Integration Policy Index",
-    text: "Scores integration policies across many countries in areas such as labour market access, family reunion, education, political participation and access to nationality.",
-    tryThis: "Compare Türkiye with one EU country of your choice. Which policy area shows the biggest gap?",
-    url: "https://www.mipex.eu/",
-  },
-  {
-    eyebrow: "Türkiye",
-    title: "Presidency of Migration Management",
-    text: "Türkiye's migration authority. It publishes statistics on residence permits, international and temporary protection, and irregular migration.",
-    tryThis: "Find the current number of Syrians under temporary protection and note how it has changed over the past three years.",
-    url: "https://www.goc.gov.tr/",
-  },
-  {
-    eyebrow: "Türkiye · Diaspora",
-    title: "YTB — Presidency for Turks Abroad",
-    text: "The state agency for citizens abroad, kin communities and international students.",
-    tryThis: "Look at how YTB describes its mission. Which of Gamlen's motives (tapping, embracing, governing) does its language suggest?",
-    url: "https://www.ytb.gov.tr/",
-    lens: "lens-diasporas",
-  },
-  {
-    eyebrow: "Borders",
-    title: "Frontex",
-    text: "The European Border and Coast Guard Agency, which publishes risk analyses and detection data on irregular border crossings.",
-    tryThis: "Frontex counts detections of crossings, not people. Why could the same person be counted more than once?",
-    url: "https://www.frontex.europa.eu/",
-  },
+  // 1. Global trends
+  { cat: "global", title: "IOM — World Migration Report", text: "IOM's flagship report, with global and regional overviews and chapters on current issues.",
+    url: "https://worldmigrationreport.iom.int/", extra: { label: "IOM Data and Research", url: "https://www.iom.int/data-and-research" },
+    tryThis: "Find the regional chapter covering Türkiye's region and note the three largest movements it describes." },
+  { cat: "global", title: "Displacement Tracking Matrix (DTM)", text: "IOM's system for tracking displacement and population mobility, especially in crises.", url: "https://dtm.iom.int/" },
+  { cat: "global", title: "Migration Data Portal", text: "Brings together migration statistics from many sources, with country profiles and explainers on data quality.", url: "https://www.migrationdataportal.org/",
+    tryThis: "Open a country profile for your podcast theme and record the migrant stock and the latest remittance figure, with their sources." },
+  { cat: "global", title: "UN DESA — International Migrant Stock", text: "UN estimates of the number of international migrants in each country, by origin, sex and age.", url: "https://www.un.org/development/desa/pd/content/international-migrant-stock" },
+  { cat: "global", title: "UN DESA — International Migration Flows", text: "Data on flows of migrants to and from selected countries, based on national statistics.", url: "https://www.un.org/development/desa/pd/data/international-migration-flows" },
+  { cat: "global", title: "OECD — International Migration Database", text: "Data on migration flows and migrant populations in OECD countries.", url: "https://www.oecd.org/en/data/datasets/overview-data-on-migration-flows-and-migrant-populations.html" },
+  { cat: "global", title: "Our World in Data — Migration", text: "Interactive charts and explainers on migration, built on UN and other data. Charts are easy to download and cite.", url: "https://ourworldindata.org/migration" },
+  { cat: "global", title: "World Bank — Remittances", text: "Personal remittances received, by country and year.", url: "https://data.worldbank.org/indicator/BX.TRF.PWKR.CD.DT",
+    tryThis: "Find the countries that receive the most remittances. How has the figure for your podcast country changed over the past decade?" },
+
+  // 2. Refugees & displacement
+  { cat: "forced", title: "UNHCR — Figures at a Glance", text: "UNHCR's headline figures on forced displacement worldwide. A quick starting point.", url: "https://www.unhcr.org/about-unhcr/who-we-are/figures-glance" },
+  { cat: "forced", title: "UNHCR — Global Trends", text: "UNHCR's annual report on forced displacement: refugees, asylum seekers, IDPs and stateless people.", url: "https://www.unhcr.org/global-trends" },
+  { cat: "forced", title: "UNHCR — Global Report", text: "UNHCR's annual report on its operations and the situations it responds to.", url: "https://www.unhcr.org/the-global-report.html" },
+  { cat: "forced", title: "UNHCR — Refugee Data Finder", text: "UNHCR's population statistics database. Download data by country of origin and of asylum, year and population type. This is the source of Graph 1 in the guideline's example.", url: "https://www.unhcr.org/refugee-statistics/download/",
+    tryThis: "Download a time series for one origin–asylum pair, as the example does for Afghans in Türkiye, and describe the trend." },
+  { cat: "forced", title: "UNHCR — Operational Data Portal", text: "Data and reports for specific refugee situations, such as regional responses to particular crises.", url: "https://data.unhcr.org/en/situations" },
+  { cat: "forced", title: "IOM — Missing Migrants Project", text: "Records deaths and disappearances of people on migration routes worldwide.", url: "https://missingmigrants.iom.int/" },
+  { cat: "forced", title: "IDMC — Global Internal Displacement Database", text: "Data on internal displacement caused by conflict, violence and disasters.", url: "https://www.internal-displacement.org/database/displacement-data/" },
+
+  // 3. European Union
+  { cat: "eu", title: "Eurostat — Migration & asylum", text: "EU statistics on immigration, asylum applications and decisions, residence permits, citizenship acquisition and more.",
+    url: "https://ec.europa.eu/eurostat/web/migration-asylum", path: "or the <b>Eurostat database</b> › Population and social conditions › Migration",
+    extra: { label: "Eurostat database", url: "https://ec.europa.eu/eurostat/data/database" } },
+  { cat: "eu", title: "EUAA — Latest Asylum Trends", text: "The EU Agency for Asylum's regular overview of asylum applications and decisions in the EU+.", url: "https://www.euaa.europa.eu/latest-asylum-trends" },
+  { cat: "eu", title: "Frontex — Migratory Map", text: "Detections of irregular border crossings on Europe's main migration routes.", url: "https://www.frontex.europa.eu/what-we-do/monitoring-and-risk-analysis/migratory-map/",
+    tryThis: "Frontex counts detections of crossings, not people. Why could the same person be counted more than once?" },
+
+  // 4. Integration & citizenship
+  { cat: "integration", title: "MIPEX — Migrant Integration Policy Index", text: "Scores integration policies across many countries in areas such as labour market access, family reunion, education, political participation and access to nationality.", url: "https://www.mipex.eu/",
+    tryThis: "Compare Türkiye with one EU country of your choice. Which policy area shows the biggest gap?" },
+  { cat: "integration", title: "DEMIG POLICY", text: "A database that tracks changes in migration policies across many countries over the long term.", url: "https://www.migrationinstitute.org/data/demig-data/demig-policy-1" },
+  { cat: "integration", title: "GLOBALCIT", text: "The Global Citizenship Observatory, with data on citizenship laws, acquisition and loss, and electoral rights around the world.", url: "https://globalcit.eu/" },
+  { cat: "integration", title: "Eurostat — Migrant Integration & Inclusion Dashboard", text: "Indicators comparing migrants and natives in the EU in areas such as employment, education and social inclusion.", url: "https://ec.europa.eu/eurostat/cache/dashboard/migrant-integration-inclusion/" },
+
+  // 5. Türkiye
+  { cat: "turkiye", title: "PMM — Residence permits", text: "Presidency of Migration Management statistics on residence permits. Other datasets are listed under \"Up-to-Date Statistics\" in the left-hand menu.", url: "https://en.goc.gov.tr/residence-permits" },
+  { cat: "turkiye", title: "PMM — Temporary protection", text: "Statistics on Syrians under temporary protection in Türkiye.", url: "https://en.goc.gov.tr/temporary-protection27",
+    tryThis: "Find the current number of Syrians under temporary protection and note how it has changed over the past three years." },
+  { cat: "turkiye", title: "PMM — International protection statistics", text: "Applications for international protection in Türkiye, including the main nationalities of applicants. A similar table is the source of Graph 2 in the guideline's example.", url: "https://www.goc.gov.tr/uluslararasi-koruma-istatistikler" },
+  { cat: "turkiye", title: "PMM — Irregular migration statistics", text: "Statistics on apprehended irregular migrants, by nationality and year.", url: "https://www.goc.gov.tr/duzensiz-goc-istatistikler" },
+  { cat: "turkiye", title: "TÜİK — Data Portal", text: "The Turkish Statistical Institute's international migration statistics.", url: "https://veriportali.tuik.gov.tr/", path: "Go to <b>Nüfus ve Demografi</b> › Uluslararası Göç İstatistikleri" },
+
+  // 6. Student migration
+  { cat: "student", title: "YÖK — Higher Education Information System", text: "Statistics on Turkish higher education, including international students coming to Türkiye.", url: "https://istatistik.yok.gov.tr/" },
+  { cat: "student", title: "OECD — International Student Mobility", text: "An indicator of international and foreign students in OECD and partner countries.", url: "https://www.oecd.org/en/data/indicators/international-student-mobility.html" },
+  { cat: "student", title: "UNESCO Institute for Statistics — Data Browser", text: "Education data, including inbound and outbound internationally mobile students, by country.", url: "https://databrowser.uis.unesco.org/" },
+  { cat: "student", title: "IIE — Project Atlas", text: "Global data on international student mobility: main host countries and countries of origin.", url: "https://www.iie.org/projectatlas" },
+
+  // 7. Marriage
+  { cat: "marriage", title: "UN DESA — World Marriage Data", text: "Data on marital status and the timing of marriage for countries worldwide.", url: "https://www.un.org/development/desa/pd/data/world-marriage-data" },
+  { cat: "marriage", title: "TÜİK — Marriage & divorce statistics", text: "Turkish marriage and divorce statistics, useful if your podcast is about transnational or cross-border marriage.", url: "https://veriportali.tuik.gov.tr/", path: "Go to <b>Nüfus ve Demografi</b> › Evlenme ve Boşanma İstatistikleri" },
+
+  // Concepts & context (not statistics, but useful framing)
+  { cat: "context", title: "IOM — Key Migration Terms", text: "IOM's glossary of migration terms, and the starting point for Week 1.", url: "https://www.iom.int/key-migration-terms",
+    tryThis: "Compare IOM's definition of \"migrant\" with the 1951 Convention's definition of \"refugee\". What does each one include or leave out?" },
+  { cat: "context", title: "YTB — Presidency for Turks Abroad", text: "The state agency for citizens abroad, kin communities and international students.", url: "https://www.ytb.gov.tr/",
+    tryThis: "Look at how YTB describes its mission. Which of Gamlen's motives (tapping, embracing, governing) does its language suggest?" },
+];
+
+const ANALYSIS_STEPS = [
+  { title: "Start from your topic and your reading", text: "Say what your research is about and what the literature you have already read leads you to expect. The example begins with İçduygu & Karadağ's (2016) article on Afghan migration through Türkiye, which it analysed in an earlier step, and then checks that article's argument against the data." },
+  { title: "Choose two datasets that complement each other", text: "The data can be about your type of migration worldwide or about the country you are studying. A good pairing combines an international source with a national one. The example pairs UNHCR's Refugee Data Finder with Türkiye's migration authority." },
+  { title: "Present each dataset as a numbered, sourced graph or table", text: "Give each one a title (Graph 1, Graph 2…) and a full source line underneath: the institution, the dataset, the URL and the date you accessed it." },
+  { title: "Describe the data with specific numbers and years", text: "Don't just say \"it increased\": say from how much, to how much, between which years. Point out turning points, such as a rise and then a decline, and rankings, such as the top nationalities." },
+  { title: "Interpret it", text: "What does the data confirm, add to or complicate in the literature? Be careful about what the numbers actually count (applications, people, recognitions) and keep the analysis to about 400 words." },
+];
+
+const EXAMPLE_PARTS = [
+  { eyebrow: "Opening", title: "Topic, sources and expectation", text: "Names the focus (Afghan asylum seekers and refugees in Türkiye), the two sources, and what an earlier reading suggests: Afghans increasingly seek protection in Türkiye and stay there as a final destination." },
+  { eyebrow: "Findings in brief", title: "The main point first", text: "Summarizes the findings before the details: applications rose after 2010 while the rate of recognition as refugees fell, and Afghanistan was the main country of origin for applicants in 2020." },
+  { eyebrow: "Graph 1 · UNHCR", title: "A trend over time", text: "Asylum seekers and refugees from Afghanistan in Türkiye, 2000–2020. The text walks through specific years, showing the rise and then the fall after 2018." },
+  { eyebrow: "Graph 2 · Migration authority", title: "A comparison", text: "The top three nationalities applying for international protection. The text ranks them and draws a conclusion: after Syrians under temporary protection, Afghans are the second-largest group of forced migrants seeking protection." },
 ];
 
 /* ---------------- Rendering ---------------- */
@@ -1485,16 +1576,63 @@ function renderAssignments() {
 }
 
 function renderData() {
-  document.getElementById("dataGrid").innerHTML = DATA_SOURCES.map((d) => `
-    <div class="card ${d.lens || ""}">
-      <div class="eyebrow">${esc(d.eyebrow)}</div>
-      <h4>${esc(d.title)}</h4>
-      <p>${esc(d.text)}</p>
-      <div class="spacer"></div>
-      <div class="debate-q"><b>Try this:</b> ${esc(d.tryThis)}</div>
-      <a class="more" href="${esc(d.url)}" target="_blank" rel="noopener">Open ${esc(new URL(d.url).hostname.replace(/^www\./, ""))} →</a>
-    </div>
-  `).join("");
+  document.getElementById("analysisSteps").innerHTML = ANALYSIS_STEPS.map((st) => `
+    <li><div class="step-head"><b>${esc(st.title)}</b></div><p>${esc(st.text)}</p></li>`).join("");
+
+  document.getElementById("exampleGrid").innerHTML = EXAMPLE_PARTS.map((e, i) => `
+    <div class="card ${i >= 2 ? "lens-refugees" : ""}">
+      <div class="eyebrow">${esc(e.eyebrow)}</div>
+      <h4>${esc(e.title)}</h4>
+      <p>${esc(e.text)}</p>
+    </div>`).join("");
+
+  const filters = document.getElementById("sourceFilters");
+  const grid = document.getElementById("dataGrid");
+  const count = document.getElementById("sourceCount");
+  const catById = Object.fromEntries(SOURCE_CATS.map((c) => [c.id, c]));
+  let cat = "all";
+
+  filters.innerHTML =
+    `<button class="chip" data-cat="all" aria-pressed="true">All</button>` +
+    SOURCE_CATS.map((c) => `<button class="chip" data-cat="${c.id}" aria-pressed="false">${esc(c.label)}</button>`).join("") +
+    `<input class="search" id="sourceSearch" type="search" placeholder="Search sources…" aria-label="Search data sources" />`;
+  const search = document.getElementById("sourceSearch");
+  const host = (u) => new URL(u).hostname.replace(/^www\./, "");
+
+  function draw() {
+    const q = search.value.trim().toLowerCase();
+    const shown = DATA_SOURCES.filter((d) =>
+      (cat === "all" || d.cat === cat) &&
+      (!q || (d.title + " " + d.text).toLowerCase().includes(q))
+    );
+    count.textContent = `${shown.length} of ${DATA_SOURCES.length} sources`;
+    grid.innerHTML = shown.length ? shown.map((d) => {
+      const c = catById[d.cat];
+      return `
+        <div class="card src ${c.lens || ""}">
+          <div class="eyebrow">${esc(c.label)}</div>
+          <h4>${esc(d.title)}</h4>
+          <p>${esc(d.text)}</p>
+          ${d.path ? `<p class="path">${d.path}</p>` : ""}
+          <div class="spacer"></div>
+          ${d.tryThis ? `<div class="debate-q"><b>Try this:</b> ${esc(d.tryThis)}</div>` : ""}
+          <div class="links">
+            <a class="more" href="${esc(d.url)}" target="_blank" rel="noopener">Open ${esc(host(d.url))} →</a>
+            ${d.extra ? `<a class="more" href="${esc(d.extra.url)}" target="_blank" rel="noopener">${esc(d.extra.label)} →</a>` : ""}
+          </div>
+        </div>`;
+    }).join("") : `<div class="empty">No sources match. Try another word or choose "All".</div>`;
+  }
+
+  filters.addEventListener("click", (ev) => {
+    const chip = ev.target.closest(".chip");
+    if (!chip) return;
+    cat = chip.dataset.cat;
+    filters.querySelectorAll(".chip").forEach((c) => c.setAttribute("aria-pressed", c === chip ? "true" : "false"));
+    draw();
+  });
+  search.addEventListener("input", draw);
+  draw();
 }
 
 function setupTabs() {
