@@ -629,9 +629,12 @@ a.more:hover { text-decoration: underline; }
 /* Compact source cards */
 .card.src h4 { font-size: 0.96rem; }
 .card.src p { font-size: 0.82rem; }
-.card .path { font-size: 0.74rem; color: var(--muted); margin: -4px 0 8px; }
-.card .path b { color: var(--text); }
-.card .links { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+.card ul.datasets { list-style: none; padding: 0; margin: 0 0 12px; }
+.card ul.datasets li { font-size: 0.82rem; line-height: 1.5; padding: 6px 0 6px 10px; border-left: 2px solid var(--border); margin-bottom: 4px; }
+.card ul.datasets a { font-weight: 700; text-decoration: none; }
+.card ul.datasets a:hover { text-decoration: underline; }
+.card ul.datasets .path { display: block; font-size: 0.74rem; color: var(--muted); }
+.card ul.datasets .path b { color: var(--text); font-weight: 600; }
 
 footer.foot {
   padding: 18px 20px 40px;
@@ -809,7 +812,7 @@ footer.foot {
     <div class="panel-head">
       <div class="kicker">Evidence toolkit</div>
       <h2>Data &amp; Sources</h2>
-      <p>Where to find reliable migration statistics, grouped by topic. Filter by category or search by name. Some sources also have a short exercise to get you started.</p>
+      <p>Where to find reliable migration statistics, one card per institution, listing its different datasets. Filter by topic or search by name, and use each card's <b>Try this</b> exercise to get started.</p>
     </div>
 
     <div class="filters" id="sourceFilters"></div>
@@ -1288,68 +1291,133 @@ const SOURCE_CATS = [
 ];
 
 // Sources and links follow the course guideline on statistical data.
+// One card per institution; `items` lists its different datasets.
 const DATA_SOURCES = [
-  // 1. Global trends
-  { cat: "global", title: "IOM — World Migration Report", text: "IOM's flagship report, with global and regional overviews and chapters on current issues.",
-    url: "https://worldmigrationreport.iom.int/", extra: { label: "IOM Data and Research", url: "https://www.iom.int/data-and-research" },
-    tryThis: "Find the regional chapter covering Türkiye's region and note the three largest movements it describes." },
-  { cat: "global", title: "Displacement Tracking Matrix (DTM)", text: "IOM's system for tracking displacement and population mobility, especially in crises.", url: "https://dtm.iom.int/" },
-  { cat: "global", title: "Migration Data Portal", text: "Brings together migration statistics from many sources, with country profiles and explainers on data quality.", url: "https://www.migrationdataportal.org/",
-    tryThis: "Open a country profile for your podcast theme and record the migrant stock and the latest remittance figure, with their sources." },
-  { cat: "global", title: "UN DESA — International Migrant Stock", text: "UN estimates of the number of international migrants in each country, by origin, sex and age.", url: "https://www.un.org/development/desa/pd/content/international-migrant-stock" },
-  { cat: "global", title: "UN DESA — International Migration Flows", text: "Data on flows of migrants to and from selected countries, based on national statistics.", url: "https://www.un.org/development/desa/pd/data/international-migration-flows" },
-  { cat: "global", title: "OECD — International Migration Database", text: "Data on migration flows and migrant populations in OECD countries.", url: "https://www.oecd.org/en/data/datasets/overview-data-on-migration-flows-and-migrant-populations.html" },
-  { cat: "global", title: "Our World in Data — Migration", text: "Interactive charts and explainers on migration, built on UN and other data. Charts are easy to download and cite.", url: "https://ourworldindata.org/migration" },
-  { cat: "global", title: "World Bank — Remittances", text: "Personal remittances received, by country and year.", url: "https://data.worldbank.org/indicator/BX.TRF.PWKR.CD.DT",
+  { cats: ["global", "forced", "context"], title: "IOM — International Organization for Migration",
+    text: "The UN migration agency publishes global reports, data portals and a standard glossary.",
+    items: [
+      { name: "World Migration Report", url: "https://worldmigrationreport.iom.int/", text: "flagship report with global and regional overviews and chapters on current issues" },
+      { name: "Data and Research", url: "https://www.iom.int/data-and-research", text: "IOM's hub for its data and research outputs" },
+      { name: "Migration Data Portal", url: "https://www.migrationdataportal.org/", text: "statistics from many sources, with country profiles and notes on data quality" },
+      { name: "Displacement Tracking Matrix (DTM)", url: "https://dtm.iom.int/", text: "tracking of displacement and population mobility, especially in crises" },
+      { name: "Missing Migrants Project", url: "https://missingmigrants.iom.int/", text: "deaths and disappearances of people on migration routes worldwide" },
+      { name: "Key Migration Terms", url: "https://www.iom.int/key-migration-terms", text: "IOM's glossary, the starting point for Week 1" },
+    ],
+    tryThis: "Read the World Migration Report's chapter on Türkiye's region and note the three largest movements it describes. Then check one of them in the Migration Data Portal's country profile." },
+
+  { cats: ["global", "marriage"], title: "UN DESA — Population Division",
+    text: "The UN Department of Economic and Social Affairs publishes the standard global estimates of migrant populations.",
+    items: [
+      { name: "International Migrant Stock", url: "https://www.un.org/development/desa/pd/content/international-migrant-stock", text: "estimates of the number of international migrants in each country, by origin, sex and age" },
+      { name: "International Migration Flows", url: "https://www.un.org/development/desa/pd/data/international-migration-flows", text: "flows to and from selected countries, based on national statistics" },
+      { name: "World Marriage Data", url: "https://www.un.org/development/desa/pd/data/world-marriage-data", text: "marital status and the timing of marriage, country by country" },
+    ],
+    tryThis: "Find the number of international migrants in Türkiye in two years a decade apart, and the top three countries of origin in each. What changed?" },
+
+  { cats: ["global", "student"], title: "OECD",
+    text: "Comparable data for OECD member countries and some partner countries.",
+    items: [
+      { name: "International Migration Database", url: "https://www.oecd.org/en/data/datasets/overview-data-on-migration-flows-and-migrant-populations.html", text: "migration flows and migrant populations by nationality" },
+      { name: "International Student Mobility", url: "https://www.oecd.org/en/data/indicators/international-student-mobility.html", text: "the share of international and foreign students in tertiary education" },
+    ],
+    tryThis: "Choose one OECD country. How have inflows of foreign nationals changed over five years, and which nationalities lead?" },
+
+  { cats: ["global"], title: "Our World in Data — Migration",
+    text: "Interactive charts and explainers on migration, built on UN and other data. Charts are easy to download and cite.",
+    items: [ { name: "Migration topic page", url: "https://ourworldindata.org/migration", text: "charts on migrant shares, refugee populations, remittances and more" } ],
+    tryThis: "Download a chart comparing the migrant share of the population in your podcast country and one neighbour. Cite it with the date you accessed it." },
+
+  { cats: ["global"], title: "World Bank — Remittances",
+    text: "Personal remittances received, by country and year.",
+    items: [ { name: "Personal remittances, received (current US$)", url: "https://data.worldbank.org/indicator/BX.TRF.PWKR.CD.DT", text: "a time series for every country" } ],
     tryThis: "Find the countries that receive the most remittances. How has the figure for your podcast country changed over the past decade?" },
 
-  // 2. Refugees & displacement
-  { cat: "forced", title: "UNHCR — Figures at a Glance", text: "UNHCR's headline figures on forced displacement worldwide. A quick starting point.", url: "https://www.unhcr.org/about-unhcr/who-we-are/figures-glance" },
-  { cat: "forced", title: "UNHCR — Global Trends", text: "UNHCR's annual report on forced displacement: refugees, asylum seekers, IDPs and stateless people.", url: "https://www.unhcr.org/global-trends" },
-  { cat: "forced", title: "UNHCR — Global Report", text: "UNHCR's annual report on its operations and the situations it responds to.", url: "https://www.unhcr.org/the-global-report.html" },
-  { cat: "forced", title: "UNHCR — Refugee Data Finder", text: "UNHCR's population statistics database. Download data by country of origin and of asylum, year and population type.", url: "https://www.unhcr.org/refugee-statistics/download/",
-    tryThis: "Download a time series for one origin–asylum pair, such as Afghans in Türkiye, and describe the trend." },
-  { cat: "forced", title: "UNHCR — Operational Data Portal", text: "Data and reports for specific refugee situations, such as regional responses to particular crises.", url: "https://data.unhcr.org/en/situations" },
-  { cat: "forced", title: "IOM — Missing Migrants Project", text: "Records deaths and disappearances of people on migration routes worldwide.", url: "https://missingmigrants.iom.int/" },
-  { cat: "forced", title: "IDMC — Global Internal Displacement Database", text: "Data on internal displacement caused by conflict, violence and disasters.", url: "https://www.internal-displacement.org/database/displacement-data/" },
+  { cats: ["forced"], title: "UNHCR — UN Refugee Agency",
+    text: "The main source for statistics on refugees, asylum seekers, internally displaced and stateless people.",
+    items: [
+      { name: "Figures at a Glance", url: "https://www.unhcr.org/about-unhcr/who-we-are/figures-glance", text: "headline numbers on forced displacement, a quick starting point" },
+      { name: "Global Trends", url: "https://www.unhcr.org/global-trends", text: "annual report on forced displacement worldwide" },
+      { name: "Global Report", url: "https://www.unhcr.org/the-global-report.html", text: "annual report on UNHCR's operations and the situations it responds to" },
+      { name: "Refugee Data Finder", url: "https://www.unhcr.org/refugee-statistics/download/", text: "downloadable data by country of origin and of asylum, year and population type" },
+      { name: "Operational Data Portal", url: "https://data.unhcr.org/en/situations", text: "data and reports on specific refugee situations and regional responses" },
+    ],
+    tryThis: "Use the Refugee Data Finder to download a time series for one origin–asylum pair, such as Afghans in Türkiye, and describe the trend. Then compare it with the headline figures in Global Trends." },
 
-  // 3. European Union
-  { cat: "eu", title: "Eurostat — Migration & asylum", text: "EU statistics on immigration, asylum applications and decisions, residence permits, citizenship acquisition and more.",
-    url: "https://ec.europa.eu/eurostat/web/migration-asylum", path: "or the <b>Eurostat database</b> › Population and social conditions › Migration",
-    extra: { label: "Eurostat database", url: "https://ec.europa.eu/eurostat/data/database" } },
-  { cat: "eu", title: "EUAA — Latest Asylum Trends", text: "The EU Agency for Asylum's regular overview of asylum applications and decisions in the EU+.", url: "https://www.euaa.europa.eu/latest-asylum-trends" },
-  { cat: "eu", title: "Frontex — Migratory Map", text: "Detections of irregular border crossings on Europe's main migration routes.", url: "https://www.frontex.europa.eu/what-we-do/monitoring-and-risk-analysis/migratory-map/",
-    tryThis: "Frontex counts detections of crossings, not people. Why could the same person be counted more than once?" },
+  { cats: ["forced"], title: "IDMC — Internal Displacement Monitoring Centre",
+    text: "The leading source on people displaced within their own country.",
+    items: [ { name: "Global Internal Displacement Database", url: "https://www.internal-displacement.org/database/displacement-data/", text: "internal displacement caused by conflict, violence and disasters" } ],
+    tryThis: "For one country, compare displacement caused by conflict with displacement caused by disasters. Which is larger, and has the balance changed?" },
 
-  // 4. Integration & citizenship
-  { cat: "integration", title: "MIPEX — Migrant Integration Policy Index", text: "Scores integration policies across many countries in areas such as labour market access, family reunion, education, political participation and access to nationality.", url: "https://www.mipex.eu/",
+  { cats: ["eu", "integration"], title: "Eurostat — EU statistics",
+    text: "The EU's statistical office, with harmonized data for all member states.",
+    items: [
+      { name: "Migration & asylum", url: "https://ec.europa.eu/eurostat/web/migration-asylum", text: "immigration, asylum applications and decisions, residence permits, citizenship acquisition" },
+      { name: "Eurostat database", url: "https://ec.europa.eu/eurostat/data/database", text: "full tables", path: "Population and social conditions › Migration" },
+      { name: "Migrant Integration & Inclusion Dashboard", url: "https://ec.europa.eu/eurostat/cache/dashboard/migrant-integration-inclusion/", text: "how migrants and natives compare on employment, education and social inclusion" },
+    ],
+    tryThis: "Compare first-time asylum applications from one nationality in two EU countries. Then use the integration dashboard to find one gap between migrants and natives in either country." },
+
+  { cats: ["eu"], title: "EUAA — EU Agency for Asylum",
+    text: "Regular monitoring of asylum in the EU, Norway and Switzerland (EU+).",
+    items: [ { name: "Latest Asylum Trends", url: "https://www.euaa.europa.eu/latest-asylum-trends", text: "applications, decisions and recognition rates in the EU+" } ],
+    tryThis: "Which nationalities lodged the most asylum applications in the latest period reported, and how do their recognition rates differ?" },
+
+  { cats: ["eu"], title: "Frontex — European Border and Coast Guard Agency",
+    text: "Data on irregular crossings at the EU's external borders.",
+    items: [ { name: "Migratory Map", url: "https://www.frontex.europa.eu/what-we-do/monitoring-and-risk-analysis/migratory-map/", text: "detections of irregular border crossings on the main routes into Europe" } ],
+    tryThis: "Frontex counts detections of crossings, not people. Why could the same person be counted more than once, and what does that mean for how the numbers are used in politics?" },
+
+  { cats: ["integration"], title: "MIPEX — Migrant Integration Policy Index",
+    text: "Scores integration policies in many countries across areas such as labour market access, family reunion, education, political participation and access to nationality.",
+    items: [ { name: "MIPEX website", url: "https://www.mipex.eu/", text: "country profiles and comparisons" } ],
     tryThis: "Compare Türkiye with one EU country of your choice. Which policy area shows the biggest gap?" },
-  { cat: "integration", title: "DEMIG POLICY", text: "A database that tracks changes in migration policies across many countries over the long term.", url: "https://www.migrationinstitute.org/data/demig-data/demig-policy-1" },
-  { cat: "integration", title: "GLOBALCIT", text: "The Global Citizenship Observatory, with data on citizenship laws, acquisition and loss, and electoral rights around the world.", url: "https://globalcit.eu/" },
-  { cat: "integration", title: "Eurostat — Migrant Integration & Inclusion Dashboard", text: "Indicators comparing migrants and natives in the EU in areas such as employment, education and social inclusion.", url: "https://ec.europa.eu/eurostat/cache/dashboard/migrant-integration-inclusion/" },
 
-  // 5. Türkiye
-  { cat: "turkiye", title: "PMM — Residence permits", text: "Presidency of Migration Management statistics on residence permits. Other datasets are listed under \"Up-to-Date Statistics\" in the left-hand menu.", url: "https://en.goc.gov.tr/residence-permits" },
-  { cat: "turkiye", title: "PMM — Temporary protection", text: "Statistics on Syrians under temporary protection in Türkiye.", url: "https://en.goc.gov.tr/temporary-protection27",
-    tryThis: "Find the current number of Syrians under temporary protection and note how it has changed over the past three years." },
-  { cat: "turkiye", title: "PMM — International protection statistics", text: "Applications for international protection in Türkiye, including the main nationalities of applicants.", url: "https://www.goc.gov.tr/uluslararasi-koruma-istatistikler" },
-  { cat: "turkiye", title: "PMM — Irregular migration statistics", text: "Statistics on apprehended irregular migrants, by nationality and year.", url: "https://www.goc.gov.tr/duzensiz-goc-istatistikler" },
-  { cat: "turkiye", title: "TÜİK — Data Portal", text: "The Turkish Statistical Institute's international migration statistics.", url: "https://veriportali.tuik.gov.tr/", path: "Go to <b>Nüfus ve Demografi</b> › Uluslararası Göç İstatistikleri" },
+  { cats: ["integration"], title: "DEMIG POLICY",
+    text: "Tracks changes in migration policies across many countries over the long term.",
+    items: [ { name: "DEMIG POLICY database", url: "https://www.migrationinstitute.org/data/demig-data/demig-policy-1", text: "policy changes coded by type and by whether they made policy more or less restrictive" } ],
+    tryThis: "Pick a country. Did its migration policy changes become more restrictive or more liberal over time? Does that match the political rhetoric about migration?" },
 
-  // 6. Student migration
-  { cat: "student", title: "YÖK — Higher Education Information System", text: "Statistics on Turkish higher education, including international students coming to Türkiye.", url: "https://istatistik.yok.gov.tr/" },
-  { cat: "student", title: "OECD — International Student Mobility", text: "An indicator of international and foreign students in OECD and partner countries.", url: "https://www.oecd.org/en/data/indicators/international-student-mobility.html" },
-  { cat: "student", title: "UNESCO Institute for Statistics — Data Browser", text: "Education data, including inbound and outbound internationally mobile students, by country.", url: "https://databrowser.uis.unesco.org/" },
-  { cat: "student", title: "IIE — Project Atlas", text: "Global data on international student mobility: main host countries and countries of origin.", url: "https://www.iie.org/projectatlas" },
+  { cats: ["integration"], title: "GLOBALCIT — Global Citizenship Observatory",
+    text: "Data on citizenship laws around the world.",
+    items: [ { name: "GLOBALCIT", url: "https://globalcit.eu/", text: "rules on acquiring and losing citizenship, and electoral rights" } ],
+    tryThis: "Does the country you are studying allow dual citizenship? How long must a migrant live there before naturalizing? Compare it with Türkiye." },
 
-  // 7. Marriage
-  { cat: "marriage", title: "UN DESA — World Marriage Data", text: "Data on marital status and the timing of marriage for countries worldwide.", url: "https://www.un.org/development/desa/pd/data/world-marriage-data" },
-  { cat: "marriage", title: "TÜİK — Marriage & divorce statistics", text: "Turkish marriage and divorce statistics, useful if your podcast is about transnational or cross-border marriage.", url: "https://veriportali.tuik.gov.tr/", path: "Go to <b>Nüfus ve Demografi</b> › Evlenme ve Boşanma İstatistikleri" },
+  { cats: ["turkiye"], title: "PMM — Presidency of Migration Management (Göç İdaresi Başkanlığı)",
+    text: "Türkiye's migration authority. More datasets are listed under \"Up-to-Date Statistics\" in the left-hand menu of its website.",
+    items: [
+      { name: "Residence permits", url: "https://en.goc.gov.tr/residence-permits", text: "foreigners holding residence permits, by type and nationality" },
+      { name: "Temporary protection", url: "https://en.goc.gov.tr/temporary-protection27", text: "Syrians under temporary protection" },
+      { name: "International protection", url: "https://www.goc.gov.tr/uluslararasi-koruma-istatistikler", text: "applications for international protection, including the main nationalities" },
+      { name: "Irregular migration", url: "https://www.goc.gov.tr/duzensiz-goc-istatistikler", text: "apprehended irregular migrants, by nationality and year" },
+    ],
+    tryThis: "Find the current number of Syrians under temporary protection and how it has changed over three years. Then compare the top nationalities among residence-permit holders with those among apprehended irregular migrants. What does the difference suggest?" },
 
-  // Concepts & context (not statistics, but useful framing)
-  { cat: "context", title: "IOM — Key Migration Terms", text: "IOM's glossary of migration terms, and the starting point for Week 1.", url: "https://www.iom.int/key-migration-terms",
-    tryThis: "Compare IOM's definition of \"migrant\" with the 1951 Convention's definition of \"refugee\". What does each one include or leave out?" },
-  { cat: "context", title: "YTB — Presidency for Turks Abroad", text: "The state agency for citizens abroad, kin communities and international students.", url: "https://www.ytb.gov.tr/",
+  { cats: ["turkiye", "marriage"], title: "TÜİK — Turkish Statistical Institute",
+    text: "Türkiye's official statistics agency.",
+    items: [
+      { name: "International migration statistics", url: "https://veriportali.tuik.gov.tr/", text: "immigration to and emigration from Türkiye", path: "Nüfus ve Demografi › Uluslararası Göç İstatistikleri" },
+      { name: "Marriage & divorce statistics", url: "https://veriportali.tuik.gov.tr/", text: "useful for transnational and cross-border marriage", path: "Nüfus ve Demografi › Evlenme ve Boşanma İstatistikleri" },
+    ],
+    tryThis: "Compare immigration and emigration figures for the latest year. Did more people arrive or leave, and which age groups or nationalities lead?" },
+
+  { cats: ["student", "turkiye"], title: "YÖK — Council of Higher Education",
+    text: "Statistics on Turkish universities.",
+    items: [ { name: "Higher Education Information System", url: "https://istatistik.yok.gov.tr/", text: "students, including international students coming to Türkiye" } ],
+    tryThis: "How many international students study in Türkiye, and which five countries do most of them come from? Compare with an earlier year." },
+
+  { cats: ["student"], title: "UNESCO Institute for Statistics",
+    text: "Global education data from UNESCO.",
+    items: [ { name: "Data Browser", url: "https://databrowser.uis.unesco.org/", text: "inbound and outbound internationally mobile students, by country" } ],
+    tryThis: "Compare Türkiye's inbound and outbound mobile students. Does Türkiye send more students abroad than it receives?" },
+
+  { cats: ["student"], title: "IIE — Project Atlas",
+    text: "The Institute of International Education's global data on student mobility.",
+    items: [ { name: "Project Atlas", url: "https://www.iie.org/projectatlas", text: "the main host countries and countries of origin of international students" } ],
+    tryThis: "Identify the top five host countries for international students. What makes them attractive, and is the list changing?" },
+
+  { cats: ["context", "turkiye"], title: "YTB — Presidency for Turks Abroad and Related Communities",
+    text: "The Turkish state agency for citizens abroad, kin communities and international students. It is a primary source for studying diaspora policy.",
+    items: [ { name: "YTB website", url: "https://www.ytb.gov.tr/", text: "programmes, scholarships and policy documents" } ],
     tryThis: "Look at how YTB describes its mission. Which of Gamlen's motives (tapping, embracing, governing) does its language suggest?" },
 ];
 
@@ -1527,24 +1595,23 @@ function renderData() {
   function draw() {
     const q = search.value.trim().toLowerCase();
     const shown = DATA_SOURCES.filter((d) =>
-      (cat === "all" || d.cat === cat) &&
-      (!q || (d.title + " " + d.text).toLowerCase().includes(q))
+      (cat === "all" || d.cats.includes(cat)) &&
+      (!q || [d.title, d.text, ...d.items.map((i) => i.name + " " + i.text)].join(" ").toLowerCase().includes(q))
     );
     count.textContent = `${shown.length} of ${DATA_SOURCES.length} sources`;
     grid.innerHTML = shown.length ? shown.map((d) => {
-      const c = catById[d.cat];
+      const lens = catById[d.cats[0]].lens || "";
       return `
-        <div class="card src ${c.lens || ""}">
-          <div class="eyebrow">${esc(c.label)}</div>
+        <div class="card src ${lens}">
+          <div class="eyebrow">${d.cats.map((c) => esc(catById[c].label)).join(" · ")}</div>
           <h4>${esc(d.title)}</h4>
           <p>${esc(d.text)}</p>
-          ${d.path ? `<p class="path">${d.path}</p>` : ""}
+          <ul class="datasets">
+            ${d.items.map((i) => `
+              <li><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.name)} ↗</a>: ${esc(i.text)}${i.path ? `<span class="path">Go to <b>${esc(i.path)}</b></span>` : ""}</li>`).join("")}
+          </ul>
           <div class="spacer"></div>
-          ${d.tryThis ? `<div class="debate-q"><b>Try this:</b> ${esc(d.tryThis)}</div>` : ""}
-          <div class="links">
-            <a class="more" href="${esc(d.url)}" target="_blank" rel="noopener">Open ${esc(host(d.url))} →</a>
-            ${d.extra ? `<a class="more" href="${esc(d.extra.url)}" target="_blank" rel="noopener">${esc(d.extra.label)} →</a>` : ""}
-          </div>
+          <div class="debate-q"><b>Try this:</b> ${esc(d.tryThis)}</div>
         </div>`;
     }).join("") : `<div class="empty">No sources match. Try another word or choose "All".</div>`;
   }
