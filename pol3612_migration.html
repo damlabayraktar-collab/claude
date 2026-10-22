@@ -1287,6 +1287,8 @@ const SOURCE_CATS = [
   { id: "turkiye", label: "Türkiye", lens: "lens-diasporas" },
   { id: "student", label: "Student migration" },
   { id: "marriage", label: "Marriage" },
+  { id: "labour", label: "Labour & wealth" },
+  { id: "opinion", label: "Public opinion" },
   { id: "context", label: "Concepts & context", lens: "lens-foundations" },
 ];
 
@@ -1300,8 +1302,14 @@ const DATA_SOURCES = [
       { name: "Data and Research", url: "https://www.iom.int/data-and-research", text: "IOM's hub for its data and research outputs" },
       { name: "Migration Data Portal", url: "https://www.migrationdataportal.org/", text: "statistics from many sources, with country profiles and notes on data quality" },
       { name: "Displacement Tracking Matrix (DTM)", url: "https://dtm.iom.int/", text: "tracking of displacement and population mobility, especially in crises" },
-      { name: "Missing Migrants Project", url: "https://missingmigrants.iom.int/", text: "deaths and disappearances of people on migration routes worldwide" },
+      { name: "Missing Migrants Project", url: "https://missingmigrants.iom.int/data", text: "deaths and disappearances of people on migration routes worldwide, with downloadable data" },
       { name: "Key Migration Terms", url: "https://www.iom.int/key-migration-terms", text: "IOM's glossary, the starting point for Week 1" },
+      { name: "Global Overview of Migration Routes", url: "https://dtm.iom.int/global-overview-of-migration-routes-portal", text: "DTM portal on the main migration routes worldwide (see also DTM Europe and Flow Monitoring surveys)" },
+      { name: "Counter Trafficking Data Collaborative (CTDC)", url: "https://traffickingdata.iom.int", text: "global data on human trafficking, including a synthetic dataset by citizenship and country of exploitation" },
+      { name: "Survey Bank on Integration", url: "https://gmdac.shinyapps.io/integration/", text: "a searchable bank of survey questions used to measure migrant integration" },
+      { name: "Migration Data Portal: remittances", url: "https://www.migrationdataportal.org/themes/remittances-overview", text: "overview of remittance data and trends" },
+      { name: "International Dialogue on Migration (IDM)", text: "IOM's main policy forum. Its session themes since 2001 show how the global migration agenda has shifted" },
+      { name: "Strategy on Migration, Environment and Climate Change 2021–2030", text: "IOM's framework on climate-related mobility" },
     ],
     tryThis: "Read the World Migration Report's chapter on Türkiye's region and note the three largest movements it describes. Then check one of them in the Migration Data Portal's country profile." },
 
@@ -1311,14 +1319,17 @@ const DATA_SOURCES = [
       { name: "International Migrant Stock", url: "https://www.un.org/development/desa/pd/content/international-migrant-stock", text: "estimates of the number of international migrants in each country, by origin, sex and age" },
       { name: "International Migration Flows", url: "https://www.un.org/development/desa/pd/data/international-migration-flows", text: "flows to and from selected countries, based on national statistics" },
       { name: "World Marriage Data", url: "https://www.un.org/development/desa/pd/data/world-marriage-data", text: "marital status and the timing of marriage, country by country" },
+      { name: "World Population Prospects 2024", url: "https://population.un.org/wpp/", text: "population estimates and projections, useful for comparing growth with and without migration" },
     ],
     tryThis: "Find the number of international migrants in Türkiye in two years a decade apart, and the top three countries of origin in each. What changed?" },
 
-  { cats: ["global", "student"], title: "OECD",
+  { cats: ["global", "student", "integration"], title: "OECD",
     text: "Comparable data for OECD member countries and some partner countries.",
     items: [
       { name: "International Migration Database", url: "https://www.oecd.org/en/data/datasets/overview-data-on-migration-flows-and-migrant-populations.html", text: "migration flows and migrant populations by nationality" },
       { name: "International Student Mobility", url: "https://www.oecd.org/en/data/indicators/international-student-mobility.html", text: "the share of international and foreign students in tertiary education" },
+      { name: "International Migration Outlook", text: "the OECD's annual report on migration movements and policies (2025 edition cited in lecture)" },
+      { name: "Indicators of Immigrant Integration", url: "https://www.oecd.org/en/data/dashboards/indicators-of-immigrant-integration.html", text: "comparative indicators on employment, education, housing and civic engagement" },
     ],
     tryThis: "Choose one OECD country. How have inflows of foreign nationals changed over five years, and which nationalities lead?" },
 
@@ -1327,9 +1338,12 @@ const DATA_SOURCES = [
     items: [ { name: "Migration topic page", url: "https://ourworldindata.org/migration", text: "charts on migrant shares, refugee populations, remittances and more" } ],
     tryThis: "Download a chart comparing the migrant share of the population in your podcast country and one neighbour. Cite it with the date you accessed it." },
 
-  { cats: ["global"], title: "World Bank — Remittances",
-    text: "Personal remittances received, by country and year.",
-    items: [ { name: "Personal remittances, received (current US$)", url: "https://data.worldbank.org/indicator/BX.TRF.PWKR.CD.DT", text: "a time series for every country" } ],
+  { cats: ["global", "labour"], title: "World Bank — Remittances",
+    text: "Data on the money migrants send home.",
+    items: [
+      { name: "Personal remittances, received (current US$)", url: "https://data.worldbank.org/indicator/BX.TRF.PWKR.CD.DT", text: "a DataBank time series for every country" },
+      { name: "KNOMAD", url: "https://www.knomad.org/", text: "the World Bank's Global Knowledge Partnership on Migration and Development: remittance briefs and data" },
+    ],
     tryThis: "Find the countries that receive the most remittances. How has the figure for your podcast country changed over the past decade?" },
 
   { cats: ["forced"], title: "UNHCR — UN Refugee Agency",
@@ -1340,6 +1354,9 @@ const DATA_SOURCES = [
       { name: "Global Report", url: "https://www.unhcr.org/the-global-report.html", text: "annual report on UNHCR's operations and the situations it responds to" },
       { name: "Refugee Data Finder", url: "https://www.unhcr.org/refugee-statistics/download/", text: "downloadable data by country of origin and of asylum, year and population type" },
       { name: "Operational Data Portal", url: "https://data.unhcr.org/en/situations", text: "data and reports on specific refugee situations and regional responses" },
+      { name: "Protection Eroded: The Human Cost of Underfunding (2026)", url: "https://www.unhcr.org/media/underfunding-report-2026-protection-eroded-human-cost-underfunding", text: "how funding gaps affect refugee protection" },
+      { name: "Projected Global Resettlement Needs", text: "annual estimate of refugees needing resettlement (2027 edition cited in lecture)" },
+      { name: "Afghanistan returns data", text: "figures on Afghans returning from Iran and Pakistan" },
     ],
     tryThis: "Use the Refugee Data Finder to download a time series for one origin–asylum pair, such as Afghans in Türkiye, and describe the trend. Then compare it with the headline figures in Global Trends." },
 
@@ -1414,6 +1431,58 @@ const DATA_SOURCES = [
     text: "The Institute of International Education's global data on student mobility.",
     items: [ { name: "Project Atlas", url: "https://www.iie.org/projectatlas", text: "the main host countries and countries of origin of international students" } ],
     tryThis: "Identify the top five host countries for international students. What makes them attractive, and is the list changing?" },
+
+  { cats: ["labour", "global"], title: "ILO — International Labour Organization",
+    text: "Estimates of migrant workers in labour markets worldwide.",
+    items: [
+      { name: "ILOSTAT", url: "https://ilostat.ilo.org/", text: "labour statistics, including inflows of the foreign-born working-age population" },
+      { name: "Modelled Estimates of International Migrants in the Labour Force", text: "global and regional estimates of migrant workers (December 2024 edition)" },
+    ],
+    tryThis: "Compare the share of migrants in the labour force of a Gulf state with that of an EU country. What explains the difference?" },
+
+  { cats: ["labour"], title: "Henley & Partners — Private Wealth Migration Report",
+    text: "Estimates of millionaires moving between countries. The firm sells residence and citizenship-by-investment services, and its methodology has been criticised, for example by the Tax Justice Network. Use it with care.",
+    items: [ { name: "Private Wealth Migration Report 2025", url: "https://www.henleyglobal.com/publications/henley-private-wealth-migration-report-2025/global-wealth-migration-2025", text: "country wealth flows, plus the 2026 Global Wealth Mobility leaders and markets to watch" } ],
+    tryThis: "Read how the report estimates \"millionaire migration\". What does it actually measure, why have critics questioned it, and why might a firm selling investment migration publish it?" },
+
+  { cats: ["opinion"], title: "Gallup International — End-of-Year Survey",
+    text: "A global public opinion survey. Its 2025 edition asked whether emigration and immigration benefit or hurt the surveyed country.",
+    items: [ { name: "End-of-Year Survey 2025", url: "https://www.gallup-international.com/survey-results-and-news/survey-result/the-latest-findings-from-the-worlds-longest-running-global-public-opinion-study-1", text: "global opinion on the impact of emigration and immigration, country by country" } ],
+    tryThis: "Pick two countries from the survey, one mainly sending and one mainly receiving. How do views on emigration and immigration compare, and why?" },
+
+  { cats: ["opinion", "eu"], title: "Migration Policy Centre — Communication Campaigns Database",
+    text: "A database of information and awareness campaigns aimed at potential migrants, run by the European University Institute's Migration Policy Centre.",
+    items: [ { name: "Migration Communication Campaigns Database", url: "https://migrationpolicycentre.eu/campaigns/#reviewTrends", text: "who runs campaigns, where, and with what messages" } ],
+    tryThis: "Find a campaign aimed at would-be migrants in one country. What message does it send, who funded it, and what does that reveal about border externalization?" },
+
+  { cats: ["eu", "turkiye", "opinion"], title: "Youth emigration & brain drain",
+    text: "Sources on young people's intentions to emigrate, in Europe and in Türkiye.",
+    items: [
+      { name: "European Data Journalism Network: Brain drain", url: "https://www.europeandatajournalism.eu/cp_data_news/brain-drain-how-the-exodus-of-talent-is-redefining-the-map-of-europe/", text: "estimates of how the departure of talent is reshaping Europe (with El Confidencial)" },
+      { name: "Eurofound youth survey (2023)", text: "young Europeans' intentions to migrate" },
+      { name: "Habitat Derneği: Türkiye'de Gençlerin İyi Olma Hali, 6th short report (2026)", text: "well-being of young people in Türkiye, including their wish to live abroad" },
+    ],
+    tryThis: "Compare emigration intentions among young people in Türkiye with those in one European country. Do intentions turn into actual moves? Which data would you need to find out?" },
+
+  { cats: ["integration"], title: "Multiculturalism Policy Index (MCP)",
+    text: "Queen's University's index of multiculturalism policies in Western democracies, over several decades.",
+    items: [ { name: "Multiculturalism Policy Index", url: "https://www.queensu.ca/mcp/", text: "scores for immigrant minorities, national minorities and Indigenous peoples" } ],
+    tryThis: "Track one country's score for immigrant minorities across the decades covered. Has multiculturalism \"retreated\", as many politicians claim?" },
+
+  { cats: ["integration"], title: "Immigration Policy Lab — IPL Integration Index",
+    text: "A short survey tool, developed at Stanford and ETH Zurich, that measures immigrants' integration.",
+    items: [ { name: "IPL Integration Index", url: "https://immigrationlab.org/ipl-integration-index/", text: "questions on psychological, economic, political, social, linguistic and navigational integration" } ],
+    tryThis: "Compare the index's dimensions with Ager & Strang's (2008) domains of integration (Week 3). What does each capture that the other misses?" },
+
+  { cats: ["forced"], title: "International Crisis Group — CrisisWatch",
+    text: "A monthly tracker of conflicts worldwide, useful for understanding the drivers of displacement.",
+    items: [ { name: "CrisisWatch", url: "https://www.crisisgroup.org/crisiswatch", text: "month-by-month conflict developments by country" } ],
+    tryThis: "Pick a country of origin from your podcast. What has CrisisWatch reported there over the past six months, and how might it affect migration or displacement?" },
+
+  { cats: ["eu"], title: "European Commission — Pact on Migration and Asylum",
+    text: "The EU's 2024 package of laws reforming asylum and migration management.",
+    items: [ { name: "Pact on Migration and Asylum", url: "https://home-affairs.ec.europa.eu/policies/migration-and-asylum/pact-migration-and-asylum_en", text: "overview, legal texts and implementation plans" } ],
+    tryThis: "Which parts of the Pact concern countries outside the EU, such as Türkiye? Link your answer to the debate on externalization (Week 4)." },
 
   { cats: ["context", "turkiye"], title: "YTB — Presidency for Turks Abroad and Related Communities",
     text: "The Turkish state agency for citizens abroad, kin communities and international students. It is a primary source for studying diaspora policy.",
@@ -1608,7 +1677,7 @@ function renderData() {
           <p>${esc(d.text)}</p>
           <ul class="datasets">
             ${d.items.map((i) => `
-              <li><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.name)} ↗</a>: ${esc(i.text)}${i.path ? `<span class="path">Go to <b>${esc(i.path)}</b></span>` : ""}</li>`).join("")}
+              <li>${i.url ? `<a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.name)} ↗</a>` : `<b>${esc(i.name)}</b>`}: ${esc(i.text)}${i.path ? `<span class="path">Go to <b>${esc(i.path)}</b></span>` : ""}</li>`).join("")}
           </ul>
           <div class="spacer"></div>
           <div class="debate-q"><b>Try this:</b> ${esc(d.tryThis)}</div>
