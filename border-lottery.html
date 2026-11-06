@@ -1,0 +1,675 @@
+<title>The Border Lottery</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+/* Layout: one column "case file" on security-paper ground; stamps carry outcomes, mono carries the paperwork. */
+:root{
+  --paper:#E8EDEB; --sheet:#F8FAF9; --ink:#17212C; --muted:#56636E; --rule:#C6D0CD;
+  --stamp:#4B3897; --stamp-soft:#E7E2F6; --good:#1D6B50; --warn:#8F5B00; --bad:#A12F2F;
+  --display:"Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
+  --body:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0D1218; --sheet:#141B23; --ink:#E3E8EB; --muted:#95A2AD; --rule:#2B3641;
+  --stamp:#A898EE; --stamp-soft:#262140; --good:#5FC99F; --warn:#E3AB4E; --bad:#EF7E7E; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0D1218; --sheet:#141B23; --ink:#E3E8EB; --muted:#95A2AD; --rule:#2B3641;
+  --stamp:#A898EE; --stamp-soft:#262140; --good:#5FC99F; --warn:#E3AB4E; --bad:#EF7E7E; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;
+  background-image:repeating-linear-gradient(135deg, color-mix(in srgb,var(--rule) 35%,transparent) 0 1px, transparent 1px 9px);}
+.wrap{max-width:720px;margin:0 auto;padding-block:28px 64px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));
+  display:flex;flex-direction:column;gap:22px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.08}
+p{margin:0}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--stamp);outline-offset:2px}
+.mono{font-family:var(--mono)}
+.label{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.sheet{background:var(--sheet);border:1px solid var(--rule);border-radius:4px;padding:22px clamp(16px,4vw,30px);
+  display:flex;flex-direction:column;gap:16px;min-width:0}
+
+/* home */
+.hero{display:flex;flex-direction:column;gap:14px;padding-top:8px}
+.hero h1{font-size:clamp(44px,11vw,84px);font-weight:800;letter-spacing:-.025em}
+.hero h1 span{color:var(--stamp)}
+.lede{font-size:19px;max-width:60ch}
+.figs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:4px;overflow:hidden}
+.fig{background:var(--sheet);padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.fig b{font-family:var(--display);font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+.fig small{font-family:var(--mono);font-size:11.5px;color:var(--muted);line-height:1.35}
+@media (max-width:520px){.figs{grid-template-columns:1fr}}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px}
+.btn{border:2px solid var(--ink);background:var(--ink);color:var(--sheet);padding:12px 20px;border-radius:3px;cursor:pointer;
+  font-family:var(--mono);font-weight:600;font-size:14px;letter-spacing:.06em;text-transform:uppercase}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:hover{background:var(--stamp);border-color:var(--stamp);color:var(--sheet)}
+.btn.ghost:hover{background:var(--stamp-soft);color:var(--ink);border-color:var(--ink)}
+.lives{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.life{border:1px solid var(--rule);background:var(--sheet);border-radius:3px;padding:12px 14px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:4px}
+.life:hover{border-color:var(--stamp)}
+.life b{font-family:var(--display);font-size:18px}
+.life span{font-size:14px;color:var(--muted);line-height:1.35}
+details.teacher{background:var(--sheet);border:1px solid var(--rule);border-radius:4px}
+details.teacher>summary{cursor:pointer;padding:16px 20px;font-family:var(--display);font-weight:700;font-size:20px;list-style:none;display:flex;justify-content:space-between;gap:12px}
+details.teacher>summary::after{content:"+";font-family:var(--mono);color:var(--stamp)}
+details.teacher[open]>summary::after{content:"−"}
+.tbody{padding:0 clamp(16px,4vw,26px) 22px;display:flex;flex-direction:column;gap:14px;font-size:16px}
+.plan{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;margin:0}
+.plan dt{font-family:var(--mono);font-size:13px;color:var(--stamp);font-weight:600;padding-top:2px;font-variant-numeric:tabular-nums}
+.plan dd{margin:0}
+.tbody ol,.tbody ul{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px}
+.src{font-size:14px;color:var(--muted)}
+.src a{color:var(--stamp)}
+
+/* file header */
+.filehead{display:flex;flex-direction:column;gap:12px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;
+  background:var(--paper);padding-block:10px 12px;border-bottom:2px solid var(--ink)}
+.idline{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 14px;align-items:baseline}
+.idline h2{font-size:22px;font-weight:700}
+.idline .mono{font-size:13px;color:var(--muted)}
+.meters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media (max-width:560px){.meters{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.meter{display:flex;flex-direction:column;gap:3px;min-width:0}
+.meter .v{font-family:var(--mono);font-weight:600;font-size:15px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar{height:6px;background:var(--rule);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ink);transition:width .5s ease}
+.status{font-family:var(--mono);font-size:12.5px;border:1.5px solid var(--stamp);color:var(--stamp);padding:3px 8px;border-radius:2px;align-self:flex-start;letter-spacing:.03em}
+
+.scene h3{font-size:clamp(26px,6vw,34px);font-weight:700}
+.story{display:flex;flex-direction:column;gap:12px;font-size:18px;max-width:62ch}
+.fact{border-left:3px solid var(--stamp);background:var(--stamp-soft);padding:10px 14px;font-size:15px;line-height:1.45;display:flex;flex-direction:column;gap:4px}
+.choices{display:flex;flex-direction:column;gap:10px}
+.choice{display:flex;gap:12px;align-items:flex-start;text-align:left;cursor:pointer;background:var(--sheet);border:1.5px solid var(--ink);border-radius:3px;padding:13px 15px}
+.choice:hover{background:var(--stamp-soft)}
+.choice .box{flex:none;width:18px;height:18px;border:2px solid var(--ink);margin-top:3px}
+.choice .t{display:flex;flex-direction:column;gap:3px;min-width:0}
+.choice .t b{font-weight:600}
+.tag{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--stamp);text-transform:uppercase}
+
+/* roll */
+.roll{display:flex;flex-direction:column;gap:8px;border:1px dashed var(--stamp);border-radius:3px;padding:14px}
+.track{position:relative;height:30px;border:1.5px solid var(--ink);border-radius:2px;overflow:visible;background:color-mix(in srgb,var(--bad) 14%,var(--sheet))}
+.track .win{position:absolute;inset:0 auto 0 0;background:color-mix(in srgb,var(--good) 28%,var(--sheet));border-right:2px solid var(--good)}
+.track .mark{position:absolute;top:-7px;bottom:-7px;width:3px;background:var(--ink);left:0;transition:left 1.1s cubic-bezier(.2,.8,.2,1)}
+.track .mark::after{content:attr(data-n);position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:13px;font-weight:600;background:var(--ink);color:var(--sheet);padding:0 5px;border-radius:2px}
+.scale{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.verdict{font-family:var(--mono);font-weight:600;font-size:14px;letter-spacing:.04em}
+.verdict.ok{color:var(--good)} .verdict.no{color:var(--bad)}
+.deltas{display:flex;flex-wrap:wrap;gap:6px}
+.delta{font-family:var(--mono);font-size:12.5px;padding:3px 8px;border-radius:2px;border:1px solid var(--rule)}
+.delta.up{color:var(--good);border-color:color-mix(in srgb,var(--good) 45%,transparent)}
+.delta.down{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 45%,transparent)}
+.delta.st{color:var(--stamp);border-color:var(--stamp)}
+.fade{animation:fade .35s ease both}
+@keyframes fade{from{opacity:.25;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* intro / end */
+.passport{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;font-size:16px}
+.passport dt{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.passport dd{margin:0}
+.stampbox{display:flex;justify-content:center;padding:10px 0 4px}
+.bigstamp{font-family:var(--mono);font-weight:600;font-size:clamp(22px,6vw,32px);letter-spacing:.16em;padding:10px 20px;border:4px double currentColor;border-radius:6px;transform:rotate(-5deg);animation:stamp .45s cubic-bezier(.3,1.6,.5,1) both;text-align:center;line-height:1.2}
+.bigstamp small{display:block;font-size:12px;letter-spacing:.12em}
+@keyframes stamp{from{transform:rotate(-5deg) scale(1.8);opacity:0}to{transform:rotate(-5deg) scale(1);opacity:1}}
+.c-good{color:var(--good)} .c-warn{color:var(--warn)} .c-bad{color:var(--bad)} .c-stamp{color:var(--stamp)} .c-ink{color:var(--ink)}
+.mrz{font-family:var(--mono);font-size:clamp(9.5px,2.4vw,13px);letter-spacing:.08em;background:var(--paper);border:1px solid var(--rule);padding:10px 12px;overflow-x:auto;white-space:pre;line-height:1.5}
+.tally{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tally div{border:1px solid var(--rule);padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.tally b{font-family:var(--display);font-size:24px;font-variant-numeric:tabular-nums}
+.timeline{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:15px}
+.timeline li{display:grid;grid-template-columns:3.4em 1.4em 1fr;gap:6px;align-items:baseline}
+.timeline .y{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.timeline .k{font-family:var(--mono);font-size:12px;font-weight:600}
+.pp{display:flex;flex-direction:column;gap:6px}
+.pprow{display:grid;grid-template-columns:7.5em 1fr 2.6em;gap:8px;align-items:center;font-family:var(--mono);font-size:12.5px}
+.pprow .bar{height:10px}
+.pprow .bar i{background:var(--muted)}
+.pprow.me{font-weight:600;color:var(--stamp)}
+.pprow.me .bar i{background:var(--stamp)}
+.pprow .n{text-align:right;font-variant-numeric:tabular-nums}
+.prompt{font-size:18px;font-style:italic}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap" id="app"></div>
+
+<script>
+/* ---------- data ---------- */
+const PASSPORTS=[["United Kingdom","GBR",186],["Venezuela","VEN",120],["Philippines","PHL",65],["Bangladesh","BGD",38],["Nepal","NPL",37],["Syria","SYR",27]];
+
+const PROFILES={
+syria:{name:"Rana",age:22,from:"Aleppo, Syria",code:"SYR",kind:"Forced to flee",weight:15,
+ blurb:"Nursing student, 22. The war has reached your neighbourhood.",
+ start:{year:2013,money:2500,safety:25,ties:70,status:"Citizen of Syria"},
+ prompt:"Turkey calls you a guest under 'temporary protection'. Germany would call you a refugee. Why do different countries give the same person different labels, and what does each label let you do?",
+ scenes:{
+ start:{year:2013,place:"Aleppo",
+  text:["You are 22 and in your second year of nursing school. The university still opens most days, but the front line moved two streets closer this month.","Your parents keep copies of everyone's ID cards in a plastic folder by the door."],
+  fact:"By 2016 about half of Syria's pre-war population had been forced from their homes, inside or outside the country. (UNHCR)",
+  choices:[
+   {label:"Stay and try to finish the year",roll:{p:45,label:"Your street stays out of the fighting for a few more months",
+     win:{t:"You finish the semester and get your transcript. In spring the fighting returns and your family leaves.",safety:-5,flag:"transcript",next:"border"},
+     lose:{t:"A shell hits your building at night. Everyone gets out, but the flat and most of your savings are gone.",money:-1500,safety:-15,next:"border"}}},
+   {label:"Leave now with your family",t:"You pack one bag each. Your mother sews cash into the lining of a coat.",money:-300,next:"border"}]},
+ border:{year:2013,place:"Öncüpınar crossing, Kilis",
+  text:["The road north is full of cars and people on foot. Turkey is keeping its border open to Syrians, but the queue at the crossing is days long."],
+  fact:"Turkey applies the 1951 Refugee Convention only to people fleeing events in Europe. Syrians receive 'temporary protection' instead: legal stay, school and health care, but not refugee status.",
+  choices:[
+   {label:"Wait at the official crossing",roll:{p:80,label:"The crossing stays open long enough",
+     win:{t:"After three nights in the car you cross. An official writes your names into a register.",status:"Temporary protection · Turkey",next:"antep"},
+     lose:{t:"The crossing closes after shelling nearby. You get through a week later, after spending much of your cash on food and a room.",money:-500,safety:-5,status:"Temporary protection · Turkey",next:"antep"}}},
+   {label:"Pay a smuggler to cross the fields tonight",tag:"Costs $600",roll:{p:85,label:"No one is hurt on the way",
+     win:{t:"You walk for four hours in the dark and reach a Turkish village by dawn. You register in Gaziantep a week later.",money:-600,status:"Temporary protection · Turkey",next:"antep"},
+     lose:{t:"Guards fire warning shots. Your father hurts his ankle running. You make it across, but he limps for months.",money:-600,safety:-15,status:"Temporary protection · Turkey",next:"antep"}}}]},
+ antep:{year:2015,place:"Gaziantep",
+  text:["Two years in. You rent two rooms with your parents and an aunt. You work 11-hour days in a shoe workshop for about half the minimum wage, paid in cash. Syrians cannot get work permits yet.","This summer everyone is talking about the boats to Greece. A cousin messages from Germany: “Come now, before they close the road.”"],
+  fact:"In 2015 about 850,000 people crossed the sea from Turkey to the Greek islands. Most were Syrian. (UNHCR)",
+  choices:[
+   {label:"Stay in Turkey and learn Turkish",t:"You sign up for evening Turkish classes at a community centre. Your neighbours start greeting you by name.",ties:10,flag:"turkish",next:"permit"},
+   {label:"Pay a smuggler for the Aegean crossing",tag:"Costs $1,200",t:"You hand over $1,200 in a café in Izmir. The smuggler's man tells you to wait for a phone call.",money:-1200,next:"aegean"}]},
+ aegean:{year:2015,place:"Coast near Ayvalık, 2 a.m.",
+  text:["The smuggler puts 48 people in a rubber boat built for 15. Lesbos is about 10 km away. Your life jacket came from a shop in Izmir. Later you will read that many of them were fake."],
+  fact:"At least 800 people died or went missing in the Eastern Mediterranean in 2015. (IOM Missing Migrants Project)",
+  choices:[{label:"Get in the boat",roll:{p:70,label:"The boat reaches Greece",
+     win:{t:"Volunteers pull the boat onto a beach on Lesbos. You are soaked and shaking, and alive.",safety:-10,next:"balkan"},
+     lose:{t:"The engine dies halfway. The Turkish coast guard tows the boat back. The smuggler will not refund you.",safety:-10,next:"aegean2"}}}]},
+ aegean2:{year:2015,place:"Izmir",
+  text:["You are back in Izmir with no money. The smuggler offers you a second try for half price if you bring two more passengers."],
+  choices:[
+   {label:"Try the crossing again",tag:"Costs $600",roll:{p:75,label:"The second boat reaches Greece",
+     win:{t:"This time the engine holds. You land on Lesbos at sunrise.",money:-600,safety:-5,next:"balkan"},
+     lose:{t:"The boat takes on water. Rescuers reach you in time, but a child from the boat behind you is lost. You are brought back to Turkey and you do not try again.",money:-600,safety:-25,next:"permit"}}},
+   {label:"Give up and go back to Gaziantep",t:"You take the night bus back. Your old workshop takes you on again at a lower wage.",next:"permit"}]},
+ balkan:{year:2015,place:"Lesbos → Munich",
+  text:["Ferry to Athens, then buses, trains and long walks through North Macedonia, Serbia, Croatia, Hungary and Austria. Borders are open one week and fenced the next.","Twenty-three days after the boat, you arrive in Munich and ask for asylum."],
+  fact:"Germany received more than a million asylum applications in 2015–16. Almost all Syrians were given some form of protection.",
+  choices:[{label:"Wait for your asylum decision",roll:{p:80,label:"You are recognised as a refugee",
+     win:{t:"You receive full refugee status: a three-year permit and the right to bring close family.",status:"Refugee status · Germany",next:"germany"},
+     lose:{t:"You receive 'subsidiary protection' instead: one year at a time, and family reunion suspended for two years.",status:"Subsidiary protection · Germany",ties:-10,next:"germany"}}}]},
+ germany:{year:2018,place:"Leipzig",
+  text:["German classes, a job centre, a residence permit you renew every few years. To work as a nurse you must redo part of your training in German.","Your parents are still in Gaziantep."],
+  fact:"About two in three refugees who arrived in Germany in 2015 were in work eight years later. (IAB, 2024)",
+  choices:[
+   {label:"Start a nursing apprenticeship",roll:{p:65,label:"You pass the B2 German exam and the course",
+     win:{t:"You qualify as a nurse in 2021 and get a permanent contract at a city hospital.",money:4000,ties:5,flag:"nurse",next:"gerEnd"},
+     lose:{t:"You fail the language exam twice and take a warehouse job instead.",money:2000,next:"gerEnd"}}},
+   {label:"Take the first warehouse job and send money to your parents",t:"Night shifts at a parcel depot. Every month you send €200 to Gaziantep.",money:1500,sent:4000,next:"gerEnd"}]},
+ gerEnd:{year:2024,place:"Leipzig, December",
+  text:["On 8 December 2024 the Assad government falls. Within days, German politicians start talking about sending Syrians home."],
+  fact:"Since 2024, people in Germany can apply for citizenship after five years of residence instead of eight.",
+  choices:[
+   {label:"Apply for German citizenship",roll:{p:75,label:"Your application is approved",
+     win:{end:"gerCitizen",status:"German citizen"},
+     lose:{t:"Your application is delayed: the office has a backlog of more than a year.",end:"gerWait"}}},
+   {label:"Travel to Aleppo to see what is left",end:"gerReturn"},
+   {label:"Stay where you are and wait",end:"gerWait"}]},
+ permit:{year:2017,place:"Gaziantep",
+  text:["Since 2016 Syrians in Turkey can get work permits, but the employer has to apply and pay the fee. Few do.","Health authorities, with WHO support, are training Syrian health workers to staff migrant health centres."],
+  fact:"Most Syrians working in Turkey work informally, without a permit or social security.",
+  choices:[
+   {label:"Apply for the health-worker training",roll:{p:s=>s.flags.turkish?(s.flags.transcript?50:40):20,label:"You are selected (better odds if you learned Turkish)",
+     win:{t:"You are selected. After six months of training you work with Syrian patients, on a real contract.",money:2500,flag:"job",status:"Temporary protection + work permit · Turkey",next:"quake"},
+     lose:{t:"Hundreds apply for a few places. You are not chosen and keep working at the workshop.",money:800,next:"quake"}}},
+   {label:"Keep your workshop job and save",t:"You save a little every month in an envelope under the mattress.",money:1200,next:"quake"}]},
+ quake:{year:2023,place:"Gaziantep, 6 February, 04:17",
+  text:["Two earthquakes, magnitude 7.8 and 7.5, hit southern Turkey and northern Syria."],
+  fact:"More than 50,000 people died in Turkey. The 11 affected provinces were home to over 1.7 million Syrians under temporary protection. (AFAD; UNHCR)",
+  choices:[{label:"Hold on",roll:{p:60,label:"Your building stays standing",
+     win:{t:"The walls crack but the building stands. You sleep in a car for three weeks.",safety:-10,next:"tension"},
+     lose:{t:"Your building collapses. You and your parents are pulled out alive after 14 hours. Your aunt is not.",safety:-25,ties:-15,money:-1000,next:"tension"}}}]},
+ tension:{year:2023,place:"Gaziantep",
+  text:["In the election campaign that spring, sending Syrians home is a promise made by several parties. Some neighbours stop speaking to your family."],
+  fact:"Fewer than 1% of the world's refugees are resettled to a third country in a typical year. (UNHCR)",
+  choices:[
+   {label:"Apply for Turkish citizenship",roll:{p:s=>s.flags.job?30:10,label:"Your application is approved (better odds with formal work)",
+     win:{t:"Your ID card arrives with a new number. You are a Turkish citizen.",status:"Turkish citizen",flag:"citizen",next:"fall"},
+     lose:{t:"No answer. You hear of families who have waited for years.",next:"fall"}}},
+   {label:"Ask UNHCR to resettle you to another country",roll:{p:3,label:"You are selected for resettlement",
+     win:{t:"Against all odds, Canada accepts your family for resettlement.",status:"Permanent resident · Canada",end:"resettled"},
+     lose:{t:"Your file is registered. Nobody calls.",next:"fall"}}},
+   {label:"Keep your head down and keep working",t:"You avoid speaking Arabic on the bus.",money:800,next:"fall"}]},
+ fall:{year:2024,place:"Gaziantep, December",
+  text:["On 8 December 2024 the Assad government falls. Turkey opens more border gates and lets Syrians make 'go-and-see' visits."],
+  fact:"Hundreds of thousands of Syrians returned home from neighbouring countries in 2025, many to damaged houses and no work. (UNHCR)",
+  choices:[
+   {label:"Go back to Aleppo for good",end:"turReturn"},
+   {label:"Stay in Turkey",end:"turStay"}]}
+ },
+ endings:{
+  gerCitizen:{stamp:"CITIZEN",tone:"good",title:"German citizen",text:"You take the citizenship oath in 2025. With a German passport you can visit Aleppo and come back. Your Syrian passport opened about 27 countries without a visa; your German one opens about 190."},
+  gerWait:{stamp:"PROTECTED",tone:"stamp",title:"Protected, for now",text:"Your permit is renewed. You are safe, but every renewal letter makes your hands shake. Germany warns that trips to Syria can cost refugees their protection status, so you stay."},
+  gerReturn:{stamp:"BETWEEN",tone:"warn",title:"Between two countries",text:"You fly to Damascus in January. Your street in Aleppo has no electricity and your old flat has no roof. When you return to Germany, an official questions why someone in need of protection went back. Your case is reviewed."},
+  resettled:{stamp:"RESETTLED",tone:"good",title:"Resettled to Canada",text:"You land in Winnipeg in winter. Resettlement is the rarest outcome in this game, and in real life: you were one of very few."},
+  turReturn:{stamp:"RETURNED",tone:"ink",title:"Home, to a damaged city",text:"You go back to Aleppo in spring 2025. Your temporary protection in Turkey ends when you leave. Your nursing skills are needed: the hospital has power four hours a day."},
+  turStay:{stamp:s=>s.flags.citizen?"CITIZEN":"TEMPORARY",tone:s=>s.flags.citizen?"good":"warn",title:s=>s.flags.citizen?"Turkish citizen":"Still 'temporary'",
+   text:s=>s.flags.citizen?"You stay in Gaziantep. As a Turkish citizen you can visit Aleppo and return. Your parents, who never got citizenship, are under pressure to go back.":"You have lived in Turkey for over 11 years under protection called 'temporary'. Your Turkish is fluent. Your status is still not."}
+ }},
+
+nepal:{name:"Bikash",age:26,from:"Dhanusha, Nepal",code:"NPL",kind:"Labour migrant",weight:24,
+ blurb:"Farmer's son, 26. Family debt, one brother already abroad.",
+ start:{year:2018,money:200,safety:70,ties:80,status:"Citizen of Nepal"},
+ prompt:"Nobody forced Bikash to leave. Was his migration voluntary? Where is the line between 'economic migrant' and someone with no real choice?",
+ scenes:{
+ start:{year:2018,place:"Dhanusha district",
+  text:["Your family's land grows enough rice for eight months a year. Your father borrowed 300,000 rupees for your sister's wedding, and the interest grows every month. Your older brother works in Malaysia.","A local agent says a construction company in Qatar is hiring."],
+  fact:"Money sent home by migrants equals about a quarter of Nepal's GDP. (World Bank)",
+  choices:[
+   {label:"Go to Qatar through the agent",tag:"Costs $1,100 in debt",t:"The agent charges 120,000 rupees (about $1,100), although Nepal's rules say employers should pay. You borrow it at 36% interest.",money:-1100,next:"arrive"},
+   {label:"Cross into India and look for work in Delhi",t:"You take a bus to the border at Jaleshwar. Nobody asks for a passport.",next:"india"},
+   {label:"Stay and farm another year",roll:{p:40,label:"A good harvest",
+     win:{t:"The harvest is good, but it pays the interest, not the debt. A year later you go to the agent after all.",money:100,next:"arrive",fee:true},
+     lose:{t:"The monsoon fails. The debt grows. A year later you go to the agent after all.",money:-200,next:"arrive",fee:true}}}]},
+ arrive:{year:2019,place:"Doha, Industrial Area",
+  text:["You land at Hamad International Airport. The company keeps your passport 'for safekeeping'. You share a room with nine men."],
+  fact:"Being handed a worse contract on arrival ('contract substitution') is widely documented for migrant workers in the Gulf. (ILO; Amnesty International)",
+  choices:[{label:"Sign in at the company office",roll:{p:35,label:"The job and salary match what you were promised",
+     win:{t:"Your salary is the 1,200 riyals (about $330) a month you were promised.",next:"heat"},
+     lose:{t:"Your contract said 1,200 riyals a month. The new one says 900. You sign because you owe the loan.",flag:"cut",next:"heat"}}}]},
+ heat:{year:2019,place:"Construction site, Lusail",
+  text:["Ten-hour shifts. In summer the temperature reaches 45°C. Each month you decide how much to send home."],
+  fact:"Qatar bans outdoor work in the middle of summer days. Researchers say heat stress is still a major health risk for migrant workers.",
+  choices:[
+   {label:"Send almost everything home",t:"Your family pays off a third of the loan in a year. You eat rice and lentils every day and lose 6 kg.",sent:2600,safety:-10,next:"covid"},
+   {label:"Send half, keep half",t:"Your family pays the interest. You buy a phone to call home every night.",sent:1300,money:900,ties:5,next:"covid"}]},
+ covid:{year:2020,place:"Doha, lockdown",
+  text:["COVID-19. Part of the Industrial Area is sealed off. Your company stops paying wages for three months.","That summer Qatar changes the law: you can now change employer without your boss's permission."],
+  fact:"In 2020 Qatar ended the rule that workers need their employer's permission to change jobs, and in 2021 it set a minimum wage for all workers. Rights groups say enforcement is uneven. (ILO)",
+  choices:[
+   {label:"Use the new law to move to another company",roll:{p:55,label:"The transfer goes through",
+     win:{t:"You move to a facilities company. Wages arrive on time, and from 2021 you are covered by the minimum wage.",money:1500,sent:1500,next:"cup"},
+     lose:{t:"Your old employer files an 'absconding' case against you. It takes four months to clear your name. No wages.",money:-400,safety:-10,next:"cup"}}},
+   {label:"Stay and wait for your back pay",roll:{p:40,label:"Your wages are paid",
+     win:{t:"The company pays all three months in one go.",money:1100,sent:600,next:"cup"},
+     lose:{t:"You get one month's pay out of three. You cannot afford a lawyer.",money:300,next:"cup"}}}]},
+ cup:{year:2022,place:"Doha, after the World Cup",
+  text:["The stadiums are finished and the tournament is over. Your contract ends next month."],
+  fact:"Romania and Croatia became new destinations for Nepali workers after 2022. Agents charge high fees, and some offers are scams.",
+  choices:[
+   {label:"Go home to Dhanusha",end:"home"},
+   {label:"Renew for two more years",t:"Two more summers.",sent:3000,safety:-5,end:"renew"},
+   {label:"Pay an agent for a work permit in Europe",tag:"Costs $4,000",roll:{p:50,label:"The job in Europe is real",
+     win:{t:"You get a work permit for a delivery company in Bucharest.",money:-4000,status:"Work permit · Romania",end:"europe"},
+     lose:{t:"The agent disappears with your money.",money:-4000,end:"scam"}}}]},
+ india:{year:2018,place:"Paharganj, Delhi",
+  text:["No visa needed: a 1950 treaty lets Nepalis live and work in India. You wash dishes in a hotel kitchen for 9,000 rupees a month and sleep on the kitchen floor."],
+  fact:"Because the Nepal–India border is open, no one knows exactly how many Nepalis work in India. Estimates run from hundreds of thousands to several million.",
+  choices:[{label:"Keep working",t:"You send home what you can, which is not much.",sent:600,next:"india2"}]},
+ india2:{year:2020,place:"Delhi, March",
+  text:["India announces a national lockdown with four hours' notice. The hotel closes. Trains and buses stop."],
+  fact:"Millions of internal and cross-border migrant workers in India lost work overnight in March 2020; many walked hundreds of kilometres home.",
+  choices:[{label:"Walk to the border",roll:{p:75,label:"You reach home safely",
+     win:{t:"Nine days on foot and in the backs of lorries. You reach the border and wait two weeks in a quarantine camp.",safety:-10,end:"indiaHome"},
+     lose:{t:"You collapse from heat and exhaustion on the road and spend a week in a clinic before you reach home.",safety:-25,end:"indiaHome"}}}]}
+ },
+ endings:{
+  home:{stamp:"RETURNED",tone:"ink",title:s=>s.money+s.sent>3000?"Home, debt paid":"Home, still in debt",text:s=>s.money+s.sent>3000?"Your family's loan is paid off and the roof is new. You open a small phone shop in the bazaar. Your younger cousin asks you for the agent's number.":"You come home thinner, with the loan still not paid. Your younger cousin asks you for the agent's number anyway."},
+  renew:{stamp:"RENEWED",tone:"warn",title:"Two more years",text:"You renew. Your daughter, born while you were away, is three before you see her in person. The house in Dhanusha now has a second floor."},
+  europe:{stamp:"EUROPE",tone:"good",title:"Work permit in Romania",text:"You ride a delivery scooter through Bucharest winters. The pay is higher, but the agent's fee will take two years to repay. Some colleagues are already planning to move on to Portugal."},
+  scam:{stamp:"SCAMMED",tone:"bad",title:"Back home, deeper in debt",text:"The 'work permit' never existed. You go home owing more than when you first left in 2018."},
+  indiaHome:{stamp:"RETURNED",tone:"ink",title:"Back in the village",text:"You are home, with no savings. In 2021 you go to the agent for a job in Qatar after all."}
+ }},
+
+philippines:{name:"Joy",age:29,from:"Iloilo City, Philippines",code:"PHL",kind:"Skilled worker",weight:16,
+ blurb:"Staff nurse, 29. Married, one son. Half her class has already left.",
+ start:{year:2019,money:1500,safety:85,ties:80,status:"Citizen of the Philippines"},
+ prompt:"The UK gains a trained nurse; the Philippines paid for her training and loses her. Who should benefit from skilled migration, and should anyone compensate the country of origin?",
+ scenes:{
+ start:{year:2019,place:"Iloilo City",
+  text:["You work 12-hour shifts as a staff nurse in a private hospital for about 15,000 pesos a month (under $300). Half your nursing class has already left the country.","A British recruiter is holding a job fair at a hotel in Manila."],
+  fact:"The Philippines is one of the world's largest sources of nurses. About 2 million Filipinos work overseas, and remittances equal around 8–9% of GDP. (PSA; World Bank)",
+  choices:[
+   {label:"Apply for the NHS job in England",next:"exams"},
+   {label:"Take a faster offer in Riyadh",t:"A Saudi hospital offers a tax-free salary about four times what you earn now, with housing. You fly in six weeks.",status:"Work visa · Saudi Arabia",next:"saudi"},
+   {label:"Stay and apply for a government hospital post",roll:{p:30,label:"You get the government post",
+     win:{t:"You are hired at a public hospital, where a court ruling has nearly doubled nurses' starting pay.",money:1000,end:"stay"},
+     lose:{t:"There are 400 applicants for 12 posts. You go to the NHS job fair after all.",next:"exams"}}}]},
+ exams:{year:2019,place:"Manila",
+  text:["Before you get a job offer you need an English test and the UK nursing council's computer exam."],
+  choices:[{label:"Sit the exams",roll:{p:70,label:"You pass both the first time",
+     win:{t:"You pass both. The hospital pays your visa and flight.",status:"Health & Care visa · UK",next:"arriveUK"},
+     lose:{t:"You miss the writing score by half a band. You pay to retake the test and pass four months later.",money:-400,status:"Health & Care visa · UK",next:"arriveUK"}}}]},
+ arriveUK:{year:2020,place:"A hospital in the English Midlands",
+  text:["You land in February 2020. Your visa is tied to your employer. Until you pass a practical exam (the OSCE), you work as a care assistant on lower pay."],
+  fact:"The Philippines and India are the largest sources of internationally recruited nurses in the UK's NHS. (NMC)",
+  choices:[{label:"Take the OSCE",roll:{p:65,label:"You pass first time",
+     win:{t:"You pass and get your registration number. You are a nurse again.",money:1500,next:"covidUK"},
+     lose:{t:"You fail one station. The resit takes two months and £800 of your own money. You pass.",money:-500,next:"covidUK"}}}]},
+ covidUK:{year:2020,place:"COVID ward, April",
+  text:["COVID-19 arrives. You are moved to an intensive care ward after two weeks of training."],
+  fact:"Filipino nurses made up a disproportionate share of NHS staff who died of COVID-19 in 2020.",
+  choices:[{label:"Work through the first wave",roll:{p:85,label:"You stay healthy",
+     win:{t:"You get through the first wave. A colleague from Cebu does not.",ties:-5,next:"family"},
+     lose:{t:"You are in hospital for ten days. Recovery takes months.",safety:-25,next:"family"}}}]},
+ family:{year:2022,place:"Midlands",
+  text:["Your contract says that if you leave in the first three years you repay £3,000 in training costs. Your husband and son are still in Iloilo."],
+  fact:"A five-year UK visa for a family of three costs well over £10,000 once the Immigration Health Surcharge is included. (UK Home Office)",
+  choices:[
+   {label:"Bring your family over as dependants",t:"Visa fees and health surcharge take all your savings. Your son starts Year 4 at the local primary school.",money:-4500,ties:20,next:"settle"},
+   {label:"Keep sending money home instead",t:"Your son grows up on video calls. Your family builds a concrete house.",sent:9000,ties:-10,next:"settle"}]},
+ settle:{year:2025,place:"Midlands",
+  text:["You reach five years in the UK, the point at which you can apply to settle permanently. In May 2025 the government proposes making most migrants wait ten years instead."],
+  fact:"The UK's 2025 immigration white paper proposed raising the standard qualifying period for settlement from 5 to 10 years. Rules for some groups were still being decided.",
+  choices:[{label:"Apply to settle",roll:{p:60,label:"You qualify before the rules change",
+     win:{t:"Your Indefinite Leave to Remain is granted.",status:"Settled · UK",end:"settled"},
+     lose:{t:"Your route is caught by the new rules. You must keep renewing your visa.",end:"waiting"}}}]},
+ saudi:{year:2022,place:"Riyadh",
+  text:["Three years in. You have saved more than you could in a lifetime at home, but your contract does not let you bring your family, and you cannot become a resident for good."],
+  fact:"Gulf states rarely offer migrant workers a path to permanent residence or citizenship, however long they stay.",
+  choices:[
+   {label:"Renew your contract",sent:12000,ties:-10,end:"saudiStay"},
+   {label:"Use your savings and experience to move to the UK",t:"Your Gulf experience counts. You pass the UK exams and line up an NHS job.",money:6000,status:"Health & Care visa · UK",end:"ukNext"}]}
+ },
+ endings:{
+  stay:{stamp:"STAYED",tone:"ink",title:"Nurse at home",text:"You stay in Iloilo. Your ward is short of staff: every year more of your colleagues leave for the UK, the US or the Gulf."},
+  settled:{stamp:"SETTLED",tone:"good",title:"Settled in the UK",text:"You can now stay in the UK for good. After another year you can apply for citizenship. Your mother asks if your niece can come too."},
+  waiting:{stamp:"PENDING",tone:"warn",title:"Five more years",text:"You have lived and worked in the UK for five years, through a pandemic, and you still can't stay for good. You check the Home Office website every week."},
+  ukNext:{stamp:"ONWARD",tone:"stamp",title:"Second move: England",text:"You land in England in 2023 with savings and four years of Gulf experience. Many nurses move in steps like this, and each country along the way sets different rules about family and settlement. Your five-year count towards settling in the UK starts now."},
+  saudiStay:{stamp:"RENEWED",tone:"warn",title:"Another contract in Riyadh",text:"Your savings built your parents' house. Your son is twelve. You plan to go home 'in two years', as you have for six years."}
+ }},
+
+venezuela:{name:"Daniel",age:31,from:"Maracaibo, Venezuela",code:"VEN",kind:"Displaced across borders",weight:15,
+ blurb:"Physics teacher, 31. Wife and a two-year-old daughter.",
+ start:{year:2018,money:150,safety:45,ties:75,status:"Citizen of Venezuela"},
+ prompt:"Most Venezuelans who left do not fit the legal definition of a refugee, but they could not stay. Should the refugee definition be wider? What did Colombia's temporary protection do that asylum could not?",
+ scenes:{
+ start:{year:2018,place:"Maracaibo",
+  text:["You teach physics at a high school. Your monthly salary buys about one kilo of cheese. Prices double every few weeks. Your daughter's medicine is not in any pharmacy."],
+  fact:"About 7.9 million Venezuelans have left the country since 2014, one of the largest displacements in the world. (R4V, 2024)",
+  choices:[
+   {label:"Try to get passports and fly to Lima",roll:{p:15,label:"The passport office issues your passports",
+     win:{t:"After paying a 'gestor' $300 per passport, they arrive. You fly to Lima.",money:-900,next:"lima"},
+     lose:{t:"Months of waiting and no passports. You take the bus to the border with your ID cards.",next:"cucuta"}}},
+   {label:"Take the bus to the Colombian border",next:"cucuta"}]},
+ cucuta:{year:2018,place:"Simón Bolívar bridge, Cúcuta",
+  text:["Tens of thousands cross the bridge on foot every day. Many keep walking 500 km to Bogotá, over a cold mountain pass. You have no Colombian permit."],
+  choices:[
+   {label:"Walk to Bogotá with your family",roll:{p:80,label:"Your family arrives without serious harm",
+     win:{t:"Twelve days on the road. Truck drivers give you lifts for the hardest part.",safety:-5,next:"informal"},
+     lose:{t:"Your daughter gets pneumonia on the páramo. A Red Cross post treats her. You arrive weeks later.",safety:-20,next:"informal"}}},
+   {label:"Stay in Cúcuta, near the border",t:"You rent a room near the bridge so you can carry food back to your parents.",ties:5,next:"informal"}]},
+ informal:{year:2019,place:"Colombia",
+  text:["You sell coffee from a thermos at traffic lights. Without papers you cannot teach, open a bank account or rent a flat in your own name.","Your daughter goes to a public nursery: Colombia lets migrant children study whatever their status."],
+  choices:[{label:"Keep working",roll:{p:60,label:"A good year at the traffic lights",
+     win:{t:"You earn enough to rent a proper room and send a little to your parents.",money:500,sent:300,next:"etpv"},
+     lose:{t:"Police clear street vendors from the centre. Some customers shout at you to go home.",money:100,safety:-10,next:"etpv"}}}]},
+ etpv:{year:2021,place:"Colombia",
+  text:["Colombia announces a Temporary Protection Statute: 10 years of legal status for Venezuelans who register."],
+  fact:"Colombia hosts about 2.8 million Venezuelans. Its 2021 Temporary Protection Statute is one of the largest regularisation programmes in the world.",
+  choices:[{label:"Register",roll:{p:85,label:"Your registration goes through",
+     win:{t:"Your PPT card arrives. You can now work legally, open a bank account and get health insurance.",status:"Temporary protection (PPT) · Colombia",flag:"ppt",next:"north"},
+     lose:{t:"Your registration gets stuck. Two years later you are still waiting.",next:"north"}}}]},
+ north:{year:2023,place:"Colombia",
+  text:["Friends post videos from the United States. Going overland means crossing the Darién Gap, a roadless jungle between Colombia and Panama."],
+  fact:"In 2023 a record of about 520,000 people crossed the Darién Gap. (Panama migration service)",
+  choices:[
+   {label:"Stay in Colombia",roll:{p:s=>s.flags.ppt?60:20,label:"Your teaching degree is recognised (only possible with papers)",
+     win:{t:"Your degree is recognised. You teach physics again.",money:2000,end:"teacher"},
+     lose:{t:"Recognition is slow and expensive. You keep selling coffee.",end:"colombia"}}},
+   {label:"Cross the Darién with your family",tag:"Costs $1,500",roll:{p:85,label:"Your family crosses without serious injury",
+     win:{t:"Six days in the jungle. You see things you won't talk about.",money:-1500,safety:-15,next:"mexico"},
+     lose:{t:"Armed men rob your group. You lose your money and your phone and reach Panama with nothing.",money:-1500,safety:-30,next:"mexico"}}}]},
+ mexico:{year:2024,place:"Ciudad Juárez",
+  text:["At the US border you wait for an appointment on the CBP One app to ask for asylum. Every morning at 9 you open the app."],
+  choices:[{label:"Keep trying for an appointment",roll:{p:45,label:"You get an appointment before the app is shut down",
+     win:{t:"Your appointment comes up. You enter the US and file for asylum.",status:"Asylum pending · USA",end:"usa"},
+     lose:{t:"In January 2025 the app is shut down and all appointments are cancelled.",status:"No legal status · Mexico",end:"limbo"}}}]},
+ lima:{year:2019,place:"Lima",
+  text:["Peru gives you a temporary permit. You work in a call centre. In mid-2019 Peru starts requiring visas from Venezuelans: your parents can no longer follow."],
+  choices:[{label:"Build a life in Lima",roll:{p:60,label:"Your permit is renewed",
+     win:{t:"You get a residence card and later a job at a private school.",money:2500,status:"Resident · Peru",end:"peru"},
+     lose:{t:"Your permit lapses during the pandemic and the paperwork takes years.",status:"Irregular · Peru",end:"peruLimbo"}}}]}
+ },
+ endings:{
+  teacher:{stamp:s=>s.flags.ppt?"PROTECTED":"LUCKY",tone:"good",title:"Teaching again",text:s=>s.flags.ppt?"You teach physics at a school in Bogotá. Your daughter speaks with a Colombian accent. Your status lasts until 2031. Nobody yet knows what happens after that.":"A private school hires you informally to teach physics, paid in cash. Without papers you have no contract and no health insurance, but you are teaching again."},
+  colombia:{stamp:s=>s.flags.ppt?"PROTECTED":"NO STATUS",tone:s=>s.flags.ppt?"stamp":"bad",title:"Staying in Colombia",text:"You still sell coffee at traffic lights. Your daughter is top of her class. You have not seen your parents in five years."},
+  usa:{stamp:"PENDING",tone:"warn",title:"Asylum pending",text:"You live in Denver and work in construction. Your hearing is scheduled for 2028. In 2025 the US ends Temporary Protected Status for Venezuelans and steps up deportations. You worry every time you drive."},
+  limbo:{stamp:"NO STATUS",tone:"bad",title:"Stuck at the border",text:"You stay in Ciudad Juárez, working in a factory without papers. Going back south means crossing the Darién again."},
+  peru:{stamp:"RESIDENT",tone:"good",title:"Settled in Lima",text:"The passports you paid for changed everything: you flew, you got a permit, you work in your field. Your neighbours from Maracaibo who walked had very different years."},
+  peruLimbo:{stamp:"IRREGULAR",tone:"bad",title:"Out of status in Lima",text:"You still live in Lima, but without valid papers. Every police check is a risk."}
+ }},
+
+bangladesh:{name:"Shahida",age:34,from:"Sirajganj, Bangladesh",code:"BGD",kind:"Displaced by climate (internal)",weight:20,
+ blurb:"Farmer and mother of three, 34. The river is moving towards her house.",
+ start:{year:2019,money:120,safety:50,ties:85,status:"Citizen of Bangladesh"},
+ prompt:"Shahida never crossed a border, so international law doesn't count her as a refugee or international migrant. Should people displaced by climate change have a legal status? Who is responsible?",
+ scenes:{
+ start:{year:2019,place:"A char island on the Jamuna river",
+  text:["You live on a char, a sandy island in the Jamuna river, with your husband and three children. In August the river eats 30 metres of your village in one week. Your house is next."],
+  fact:"Disasters caused a record 45.8 million new internal displacements worldwide in 2024. Most people displaced by climate and disasters never cross a border. (IDMC)",
+  choices:[
+   {label:"Move the house further inland on the char",roll:{p:40,label:"The river spares the new plot",
+     win:{t:"Your neighbours help you carry the tin walls and bamboo frame. For now the river stays away.",money:-60,next:"char2"},
+     lose:{t:"The next monsoon takes the new plot too.",money:-60,safety:-10,next:"dhaka"}}},
+   {label:"Move to Dhaka",t:"You sell your goats to pay for the bus and the first month's rent.",money:-80,ties:-10,next:"dhaka"}]},
+ char2:{year:2020,place:"The char",
+  text:["The 2020 monsoon brings floods that last more than a month."],
+  choices:[{label:"Wait out the floods",roll:{p:50,label:"Your house survives the floods",
+     win:{t:"Water reaches your bed, but the house stands. You stay on the char.",safety:-10,end:"stayChar"},
+     lose:{t:"The house is lost. You leave for Dhaka with what you can carry.",safety:-15,ties:-10,next:"dhaka"}}}]},
+ dhaka:{year:2020,place:"Korail settlement, Dhaka",
+  text:["You rent a tin room beside a lake for 3,000 taka a month. Your husband pulls a rickshaw. The garment factories are hiring women."],
+  fact:"About 4 million people work in Bangladesh's garment industry, most of them women, many from rural areas.",
+  choices:[{label:"Look for a factory job",roll:{p:70,label:"A factory hires you",
+     win:{t:"You sew T-shirt sleeves for a European brand, 10 hours a day.",money:300,flag:"factory",next:"covidBD"},
+     lose:{t:"No vacancies. You clean three flats in Gulshan instead.",money:150,next:"covidBD"}}}]},
+ covidBD:{year:2020,place:"Dhaka, spring",
+  text:["COVID-19. Western brands cancel orders worth billions of dollars."],
+  fact:"In spring 2020 more than a million Bangladeshi garment workers were laid off or sent home without pay as brands cancelled orders. (Worker Rights Consortium)",
+  choices:[{label:"Go to work as usual",roll:{p:s=>s.flags.factory?50:40,label:"You keep your job",
+     win:{t:"Your factory reopens after a month. You get some of your wages.",money:100,next:"school"},
+     lose:{t:"You are let go without pay. You borrow from a moneylender to pay rent.",money:-200,next:"school"}}}]},
+ school:{year:2022,place:"Dhaka",
+  text:["Your eldest daughter is 14. A factory will hire her if she says she is 18. Her wage would pay the rent."],
+  choices:[
+   {label:"Keep her in school",t:"You take extra night shifts. She passes her exams.",money:-300,safety:-5,flag:"school",next:"future"},
+   {label:"Let her work",t:"She starts at a factory on the next street. She stops going to school.",money:600,flag:"childwork",next:"future"}]},
+ future:{year:2024,place:"Dhaka",
+  text:["Your old village is now under the river. Your husband talks about working in Malaysia. An agent wants 500,000 taka (about $4,200)."],
+  choices:[
+   {label:"Stay in Dhaka",end:"dhakaStay"},
+   {label:"Borrow so your husband can go to Malaysia",roll:{p:50,label:"The job in Malaysia is real",
+     win:{t:"He finds work on a palm oil plantation and sends money home.",money:-4200,sent:2500,end:"malaysia"},
+     lose:{t:"He arrives to find no job. He is detained for overstaying and sent home a year later.",money:-4200,end:"malaysiaBad"}}}]}
+ },
+ endings:{
+  stayChar:{stamp:"STAYED",tone:"ink",title:"Still on the char",text:"You stay where your family has always lived. Every monsoon you watch the river. Staying is also a choice, and for many people the only one they can afford."},
+  dhakaStay:{stamp:"INTERNAL",tone:"stamp",title:s=>s.flags.school?"A Dhaka family":"Two incomes in Dhaka",text:s=>s.flags.school?"Your daughter is studying for her exams. Your children now call Dhaka home. In the statistics you are not a 'migrant' at all.":"Your daughter's wage pays the rent. She is 16 and has worked for two years. In the statistics you are not a 'migrant' at all."},
+  malaysia:{stamp:"SPLIT",tone:"warn",title:"A family on two continents",text:"Your husband sends money home from Malaysia. You will repay the loan in about three years, if nothing goes wrong."},
+  malaysiaBad:{stamp:"IN DEBT",tone:"bad",title:"Back to the start, with a loan",text:"Your husband is back in Dhaka, ashamed and in debt. You work two jobs."}
+ }},
+
+uk:{name:"Tom",age:34,from:"Leeds, United Kingdom",code:"GBR",kind:"Lifestyle migrant",weight:10,
+ blurb:"Web designer, 34. Works remotely, wants sunshine.",
+ start:{year:2023,money:22000,safety:95,ties:70,status:"Citizen of the UK"},
+ prompt:"In Spain Tom is called an 'expat'. Bikash in Qatar is called a 'migrant worker'. Both moved for money. Who gets which word, and why?",
+ scenes:{
+ start:{year:2023,place:"Leeds",
+  text:["You design websites for London clients from your flat in Leeds. A friend sends photos from Valencia: sunshine, €1.50 coffee, a flat for half your rent."],
+  fact:"Since Brexit, UK citizens can stay in the Schengen area for only 90 days in any 180 without a visa. Spain's digital nomad visa (2023) requires income of about €2,700 a month.",
+  choices:[
+   {label:"Apply for Spain's digital nomad visa",roll:{p:90,label:"Your application is approved first time",
+     win:{t:"Approved in 20 days. You can stay up to three years and renew.",money:-600,status:"Digital nomad visa · Spain",next:"valencia"},
+     lose:{t:"Your criminal record certificate needs an official stamp. You fix it and are approved two months later.",money:-800,status:"Digital nomad visa · Spain",next:"valencia"}}},
+   {label:"Just go, and leave before 90 days are up",status:"Visitor (90 days) · Spain",next:"valencia"}]},
+ valencia:{year:2023,place:"Valencia",
+  text:["Nobody at the airport asks why you came. You find a furnished flat on a short-term rental site for €1,400 a month, about double what your neighbours pay."],
+  choices:[
+   {label:"Take Spanish classes",t:"Your neighbours start talking to you at the bakery.",money:-400,ties:10,next:"protest"},
+   {label:"Mostly socialise with other English speakers",t:"You join a co-working space and a running club. Everyone there is from somewhere else.",money:-200,next:"protest"}]},
+ protest:{year:2024,place:"Valencia",
+  text:["Graffiti on your street reads “Tourists go home”. Thousands march against tourist flats and rising rents. Your landlord wants 20% more."],
+  fact:"In 2024 tens of thousands of people protested in Spanish cities against tourist flats and rising rents.",
+  choices:[
+   {label:"Pay the higher rent",money:-3400,end:"stay"},
+   {label:"Move to a smaller town inland",t:"You find a village house for €500 a month.",ties:5,end:"village"},
+   {label:"Head back to Leeds",end:"back"}]}
+ },
+ endings:{
+  stay:{stamp:s=>s.status.startsWith("Visitor")?"OVERSTAY?":"WELCOME",tone:s=>s.status.startsWith("Visitor")?"warn":"good",title:"Still in Valencia",
+   text:s=>s.status.startsWith("Visitor")?"You have been coming and going on 90-day stays. A border officer in Madrid counts your passport stamps slowly. Even you can fall out of status, but the consequence is a fine, not a jungle crossing.":"You renew your visa without trouble. You never had to prove you were in danger, or show that your work was needed."},
+  village:{stamp:"WELCOME",tone:"good",title:"A village house",text:"The village school is happy to have new families; the population has halved since 1980. Your neighbours call you 'el inglés'."},
+  back:{stamp:"RETURNED",tone:"ink",title:"Back in Leeds",text:"You go home when it suits you. Your passport works in about 186 countries without a visa."}
+ }}
+};
+
+/* ---------- state ---------- */
+let S=null, view={screen:"home"};
+const fmt=n=>(n<0?"−$":"$")+Math.abs(Math.round(n)).toLocaleString("en-US");
+const clamp=v=>Math.max(0,Math.min(100,v));
+const val=(x,s)=>typeof x==="function"?x(s):x;
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function draw(){const ids=Object.keys(PROFILES);let tot=ids.reduce((a,k)=>a+PROFILES[k].weight,0),r=Math.random()*tot;
+  for(const k of ids){r-=PROFILES[k].weight;if(r<=0)return k}return ids[0]}
+function begin(id){const p=PROFILES[id];S={pid:id,...structuredClone(p.start),startYear:p.start.year,sent:0,flags:{},log:[],scene:"start",choices:0,rolls:0,lucky:0};
+  view={screen:"intro"};render()}
+function scene(){return PROFILES[S.pid].scenes[S.scene]}
+
+function apply(e){const d=[];
+  if(e.fee){S.money-=1100;d.push(["Agent fee −$1,100","down"])}
+  if(e.money){S.money+=e.money;d.push([`Money ${e.money>0?"+":"−"}$${Math.abs(e.money).toLocaleString("en-US")}`,e.money>0?"up":"down"])}
+  if(e.sent){S.sent+=e.sent;d.push([`Sent home +$${e.sent.toLocaleString("en-US")}`,"up"])}
+  if(e.safety){S.safety=clamp(S.safety+e.safety);d.push([`Safety ${e.safety>0?"+":"−"}${Math.abs(e.safety)}`,e.safety>0?"up":"down"])}
+  if(e.ties){S.ties=clamp(S.ties+e.ties);d.push([`Family & ties ${e.ties>0?"+":"−"}${Math.abs(e.ties)}`,e.ties>0?"up":"down"])}
+  if(e.status&&e.status!==S.status){S.status=e.status;d.push([`Status: ${e.status}`,"st"])}
+  if(e.flag)S.flags[e.flag]=true;
+  return d}
+
+function choose(i){const sc=scene(),c=visibleChoices(sc)[i];let eff=c,rollInfo=null;
+  S.choices++;
+  if(c.roll){const p=val(c.roll.p,S),r=1+Math.floor(Math.random()*100),ok=r<=p;S.rolls++;if(ok)S.lucky++;
+    rollInfo={p,r,ok,label:c.roll.label};eff={...c,...(ok?c.roll.win:c.roll.lose)};delete eff.roll}
+  const deltas=apply(eff);
+  S.log.push({year:sc.year,choice:c.label,roll:rollInfo});
+  view={screen:"outcome",text:eff.t||"",roll:rollInfo,deltas,next:eff.next,end:eff.end,choiceLabel:c.label};render()}
+function visibleChoices(sc){return sc.choices.filter(c=>!c.if||c.if(S))}
+function cont(){if(view.end){S.ending=view.end;view={screen:"end"}}else{S.scene=view.next;view={screen:"scene"}}render();window.scrollTo({top:0})}
+
+/* ---------- views ---------- */
+const app=document.getElementById("app");
+function header(){const p=PROFILES[S.pid],sc=S.scene&&view.screen!=="end"?scene():null;const yr=sc?sc.year:Math.max(S.startYear,...S.log.map(l=>l.year));
+  return `<header class="filehead"><div class="idline"><h2>${esc(p.name)}, ${p.age+(yr-S.startYear)}</h2><span class="mono">${yr} · ${esc(sc?sc.place:"Where life led")}</span></div>
+  <div class="meters">
+   <div class="meter"><span class="label">Money</span><span class="v" style="color:${S.money<0?"var(--bad)":"inherit"}">${fmt(S.money)}</span></div>
+   <div class="meter"><span class="label">Sent home</span><span class="v">${fmt(S.sent)}</span></div>
+   <div class="meter"><span class="label">Safety</span><div class="bar"><i style="width:${S.safety}%"></i></div></div>
+   <div class="meter"><span class="label">Family & ties</span><div class="bar"><i style="width:${S.ties}%"></i></div></div>
+  </div><span class="status">${esc(S.status)}</span></header>`}
+
+function homeView(){
+ const lives=Object.entries(PROFILES).map(([k,p])=>`<button class="life" data-pick="${k}"><span class="label">${esc(p.kind)}</span><b>${esc(p.name)} · ${esc(p.from)}</b><span>${esc(p.blurb)}</span></button>`).join("");
+ return `<section class="hero fade">
+  <span class="label">A migration simulation · about 7 minutes per life</span>
+  <h1>The Border <span>Lottery</span></h1>
+  <p class="lede">You don't choose where you are born, which passport you hold, or the year a war or a flood arrives. You do make choices after that. Draw a life and see which parts were up to you.</p>
+  <div class="figs">
+   <div class="fig"><b>304 M</b><small>people live outside their country of birth (UN DESA, 2024)</small></div>
+   <div class="fig"><b>123 M</b><small>people forcibly displaced, end of 2024 (UNHCR)</small></div>
+   <div class="fig"><b>$685 B</b><small>sent home to low- and middle-income countries, 2024 (World Bank)</small></div>
+  </div>
+  <div class="btnrow"><button class="btn" id="drawBtn">Draw a random life</button><a class="btn ghost" href="#lives" style="text-decoration:none">Choose a life</a></div>
+ </section>
+ <section class="sheet" id="lives"><div><span class="label">Six lives</span><h3 style="font-size:24px;margin-top:4px">Choose one, or let chance decide</h3></div>
+  <p style="font-size:15.5px;color:var(--muted)">The random draw is weighted roughly by how common each kind of move is: labour migration and internal displacement come up more often than moving abroad for the sunshine. Teachers can also assign lives so the class covers all six.</p>
+  <div class="lives">${lives}</div></section>
+ ${teacherGuide()}`}
+
+function teacherGuide(){return `<details class="teacher" id="teacher"><summary>Teacher guide: a 20-minute lesson</summary><div class="tbody">
+ <dl class="plan">
+  <dt>0–3 min</dt><dd>Ask: “How many countries can your passport enter without a visa?” Explain the rules: everyone draws one life, reads carefully, and makes decisions as that person. When a choice involves chance, the dice roll shows the odds.</dd>
+  <dt>3–12 min</dt><dd>Students play one life (5–8 minutes) on a phone or laptop, alone or in pairs. Fast finishers draw a second, different life.</dd>
+  <dt>12–15 min</dt><dd>Pair up with someone who had a different life. Compare life cards: the stamp, the passport bar, and how many outcomes were decided by dice.</dd>
+  <dt>15–20 min</dt><dd>Whole-class debrief. Tally the end stamps on the board (Citizen, Protected, Pending, Returned, No status…) and use two or three questions below.</dd>
+ </dl>
+ <div><span class="label">Debrief questions</span></div>
+ <ol>
+  <li>Which moments in your life were choices, and which were luck? Were the choices really free?</li>
+  <li>Which law or policy changed your outcome most? Who made that rule, and who was it designed for?</li>
+  <li>What would a newspaper call your person: refugee, migrant, expat, worker, illegal? Who decides the label, and what does it change?</li>
+  <li>Push and pull factors: did your person fit the model, or did several causes overlap (war, money, family, climate)?</li>
+  <li>Compare passports: how much did your person's passport decide before they made any choice?</li>
+ </ol>
+ <p class="src"><b>About the numbers.</b> Stories are composites, not real individuals. Facts shown in the purple boxes come from the sources named. The odds on dice rolls are teaching estimates informed by those sources, not measured probabilities. Passport figures are approximate visa-free counts from the Henley Passport Index, 2025.
+ Main sources: UN DESA International Migrant Stock 2024; UNHCR Global Trends 2025; IOM World Migration Report and Missing Migrants Project; IDMC Global Report on Internal Displacement 2025; World Bank Migration and Development Briefs; ILO; R4V.</p>
+</div></details>`}
+
+function introView(){const p=PROFILES[S.pid],pp=PASSPORTS.find(x=>x[1]===p.code);
+ return `<section class="sheet fade"><span class="label">Your life has been drawn</span>
+  <h3 style="font-size:clamp(34px,8vw,48px)">You are ${esc(p.name)}.</h3>
+  <dl class="passport">
+   <dt>Born in</dt><dd>${esc(p.from)}</dd>
+   <dt>Age</dt><dd>${p.age} in ${p.start.year}</dd>
+   <dt>Story</dt><dd>${esc(p.blurb)}</dd>
+   <dt>Passport</dt><dd>Visa-free entry to about <b>${pp[2]}</b> countries</dd>
+   <dt>Savings</dt><dd>${fmt(p.start.money)}</dd>
+  </dl>
+  <p style="font-size:16px;color:var(--muted)">Make each decision as ${esc(p.name)} would, with what ${esc(p.name)} knows at the time. Watch four things: money, money sent home, safety, and family ties. Your legal status is the stamp under them.</p>
+  <div class="btnrow"><button class="btn" id="beginBtn">Begin</button><button class="btn ghost" id="homeBtn">Back</button></div></section>`}
+
+function sceneView(){const sc=scene();
+ const ch=visibleChoices(sc).map((c,i)=>`<button class="choice" data-i="${i}"><span class="box"></span><span class="t"><b>${esc(c.label)}</b>${c.roll||c.tag?`<span class="tag">${[c.tag,c.roll?"Chance involved":""].filter(Boolean).join(" · ")}</span>`:""}</span></button>`).join("");
+ return header()+`<section class="sheet scene fade"><span class="label">${sc.year} · ${esc(sc.place)}</span>
+  <div class="story">${sc.text.map(t=>`<p>${esc(t)}</p>`).join("")}</div>
+  ${sc.fact?`<aside class="fact"><span class="label">On the record</span>${esc(sc.fact)}</aside>`:""}
+  <div class="choices">${ch}</div></section>`}
+
+function outcomeView(){const v=view,r=v.roll;
+ const roll=r?`<div class="roll"><span class="label">Chance: ${r.p}% · ${esc(r.label)}</span>
+   <div class="track"><div class="win" style="width:${r.p}%"></div><div class="mark" id="mark" data-n="${r.r}"></div></div>
+   <div class="scale"><span>1</span><span>roll</span><span>100</span></div>
+   <span class="verdict ${r.ok?"ok":"no"}" id="verdict" style="opacity:0">You rolled ${r.r}. ${r.ok?"It went your way.":"It did not go your way."}</span></div>`:"";
+ const d=v.deltas.map(([t,c])=>`<span class="delta ${c}">${esc(t)}</span>`).join("");
+ return header()+`<section class="sheet fade"><span class="label">You chose</span><h3 style="font-size:24px">${esc(v.choiceLabel)}</h3>
+  ${roll}<div class="story" id="otext" ${r?'style="opacity:0;transition:opacity .4s"':""}>${v.text?`<p>${esc(v.text)}</p>`:""}${d?`<div class="deltas">${d}</div>`:""}</div>
+  <div class="btnrow"><button class="btn" id="contBtn" ${r?'style="visibility:hidden"':""}>${v.end?"See how your life turned out":"Continue"}</button></div></section>`}
+
+function endView(){const p=PROFILES[S.pid],e=p.endings[S.ending],tone=val(e.tone,S),stamp=val(e.stamp,S);
+ const lastYear=Math.max(...S.log.map(l=>l.year),S.startYear);
+ const name=p.name.toUpperCase();
+ const l1=("P<"+p.code+name+"<<"+stamp.replace(/[^A-Z]/g,"<")).padEnd(44,"<").slice(0,44);
+ const l2=(p.code+S.startYear+"<"+lastYear+"<"+String(S.rolls).padStart(2,"0")+"R"+String(S.lucky).padStart(2,"0")+"L").padEnd(44,"<").slice(0,44);
+ const tl=S.log.map(l=>`<li><span class="y">${l.year}</span><span class="k ${l.roll?(l.roll.ok?"c-good":"c-bad"):"c-stamp"}" title="${l.roll?"Chance":"Your choice"}">${l.roll?(l.roll.ok?"✓":"✗"):"●"}</span><span>${esc(l.choice)}${l.roll?` <span class="mono" style="font-size:12px;color:var(--muted)">(${l.roll.p}% chance, rolled ${l.roll.r})</span>`:""}</span></li>`).join("");
+ const pp=PASSPORTS.map(([n,c,v])=>`<div class="pprow ${c===p.code?"me":""}"><span>${n}</span><div class="bar"><i style="width:${v/195*100}%"></i></div><span class="n">${v}</span></div>`).join("");
+ return header()+`<section class="sheet fade"><span class="label">${S.startYear}–${lastYear} · Life card</span>
+  <div class="stampbox"><div class="bigstamp c-${tone}">${esc(stamp)}<small>${esc(S.status)}</small></div></div>
+  <h3 style="font-size:clamp(28px,7vw,40px)">${esc(val(e.title,S))}</h3>
+  <div class="story"><p>${esc(val(e.text,S))}</p></div>
+  <div class="mrz" aria-label="Machine-readable summary">${esc(l1)}\n${esc(l2)}</div>
+  <div class="tally">
+   <div><span class="label">Decisions you made</span><b>${S.choices}</b></div>
+   <div><span class="label">Dice rolls that went your way</span><b>${S.lucky} of ${S.rolls}</b></div>
+   <div><span class="label">Money at the end</span><b>${fmt(S.money)}</b></div>
+   <div><span class="label">Sent home</span><b>${fmt(S.sent)}</b></div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:8px"><span class="label">Your path · ● choice · ✓/✗ chance</span><ul class="timeline">${tl}</ul></div>
+  <div class="pp"><span class="label">Before any choice: countries each passport enters visa-free (approx., Henley 2025)</span>${pp}</div>
+  <aside class="fact"><span class="label">Discuss</span><span class="prompt">${esc(p.prompt)}</span></aside>
+  <div class="btnrow"><button class="btn" id="againBtn">Draw another life</button><button class="btn ghost" id="homeBtn">Back to start</button></div></section>`}
+
+function render(){
+ const s=view.screen;
+ app.innerHTML=s==="home"?homeView():s==="intro"?introView():s==="scene"?sceneView():s==="outcome"?outcomeView():endView();
+ const on=(id,f)=>{const el=document.getElementById(id);if(el)el.onclick=f};
+ on("drawBtn",()=>begin(draw()));
+ on("beginBtn",()=>{view={screen:"scene"};render();window.scrollTo({top:0})});
+ on("homeBtn",()=>{S=null;view={screen:"home"};render();window.scrollTo({top:0})});
+ on("againBtn",()=>{const cur=S.pid;let n=draw(),g=0;while(n===cur&&g++<20)n=draw();begin(n);window.scrollTo({top:0})});
+ on("contBtn",cont);
+ app.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{begin(b.dataset.pick);window.scrollTo({top:0})});
+ app.querySelectorAll(".choice").forEach(b=>b.onclick=()=>choose(+b.dataset.i));
+ if(s==="outcome"&&view.roll){const m=document.getElementById("mark"),reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const show=()=>{["verdict","otext"].forEach(id=>{const el=document.getElementById(id);if(el)el.style.opacity=1});const b=document.getElementById("contBtn");if(b)b.style.visibility="visible"};
+  if(reduce){m.style.left=`calc(${view.roll.r}% - 1.5px)`;show()}
+  else{requestAnimationFrame(()=>requestAnimationFrame(()=>{m.style.left=`calc(${view.roll.r}% - 1.5px)`}));setTimeout(show,1150)}}
+}
+
+function boot(data){if(data&&data.S){S=data.S;view=data.view}render()}
+window.claude?.hot?.snapshot?.(()=>({S,view}));
+window.claude?.hot?.ready?window.claude.hot.ready(boot):boot(window.claude?.hot?.data??{});
+</script>
