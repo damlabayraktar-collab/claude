@@ -141,7 +141,7 @@ details.teacher[open]>summary::after{content:"−"}
 
 <script>
 /* ---------- data ---------- */
-const PASSPORTS=[["United Kingdom","GBR",186],["Venezuela","VEN",120],["Philippines","PHL",65],["Bangladesh","BGD",38],["Nepal","NPL",37],["Syria","SYR",27]];
+const PASSPORTS=[["United Kingdom","GBR",186],["Ukraine","UKR",148],["Honduras","HND",130],["Venezuela","VEN",120],["Philippines","PHL",65],["Nigeria","NGA",45],["Bangladesh","BGD",38],["Nepal","NPL",37],["Syria","SYR",27],["Afghanistan","AFG",25]];
 
 const PROFILES={
 syria:{name:"Rana",age:22,from:"Aleppo, Syria",code:"SYR",kind:"Forced to flee",weight:15,
@@ -190,16 +190,32 @@ syria:{name:"Rana",age:22,from:"Aleppo, Syria",code:"SYR",kind:"Forced to flee",
   text:["Ferry to Athens, then buses, trains and long walks through North Macedonia, Serbia, Croatia, Hungary and Austria. Borders are open one week and fenced the next.","Twenty-three days after the boat, you arrive in Munich and ask for asylum."],
   fact:"Germany received more than a million asylum applications in 2015–16. Almost all Syrians were given some form of protection.",
   choices:[{label:"Wait for your asylum decision",roll:{p:80,label:"You are recognised as a refugee",
-     win:{t:"You receive full refugee status: a three-year permit and the right to bring close family.",status:"Refugee status · Germany",next:"germany"},
-     lose:{t:"You receive 'subsidiary protection' instead: one year at a time, and family reunion suspended for two years.",status:"Subsidiary protection · Germany",ties:-10,next:"germany"}}}]},
+     win:{t:"You receive full refugee status: a three-year permit and the right to bring close family.",status:"Refugee status · Germany",next:"reunion"},
+     lose:{t:"You receive 'subsidiary protection' instead: one year at a time, and family reunion suspended for two years.",status:"Subsidiary protection · Germany",ties:-10,next:"reunion"}}}]},
+ reunion:{year:2016,place:"Refugee shelter, Leipzig",
+  text:["You share a converted gym with 200 people. Your parents are still in Gaziantep, and your father's ankle never healed properly.","German family reunion rules cover spouses and children under 18. Adult children cannot bring their parents."],
+  fact:"In 2016 Germany suspended family reunion for people with subsidiary protection for two years. It was later restarted with a cap of 1,000 visas a month.",
+  choices:[
+   {label:"Apply for a humanitarian visa for your parents",roll:{p:5,label:"The visa is granted",
+     win:{t:"A rare yes. Your parents land in Berlin eleven months later.",ties:20,flag:"parents",next:"germany"},
+     lose:{t:"The embassy in Ankara rejects the application. Your parents stay in Turkey.",ties:-5,next:"germany"}}},
+   {label:"Send part of your benefits to your parents every month",t:"You live on less than the minimum so your parents can pay rent.",sent:1500,safety:-5,next:"germany"}]},
  germany:{year:2018,place:"Leipzig",
   text:["German classes, a job centre, a residence permit you renew every few years. To work as a nurse you must redo part of your training in German.","Your parents are still in Gaziantep."],
   fact:"About two in three refugees who arrived in Germany in 2015 were in work eight years later. (IAB, 2024)",
   choices:[
    {label:"Start a nursing apprenticeship",roll:{p:65,label:"You pass the B2 German exam and the course",
-     win:{t:"You qualify as a nurse in 2021 and get a permanent contract at a city hospital.",money:4000,ties:5,flag:"nurse",next:"gerEnd"},
-     lose:{t:"You fail the language exam twice and take a warehouse job instead.",money:2000,next:"gerEnd"}}},
-   {label:"Take the first warehouse job and send money to your parents",t:"Night shifts at a parcel depot. Every month you send €200 to Gaziantep.",money:1500,sent:4000,next:"gerEnd"}]},
+     win:{t:"You qualify as a nurse in 2021 and get a permanent contract at a city hospital.",money:4000,ties:5,flag:"nurse",next:"saxony"},
+     lose:{t:"You fail the language exam twice and take a warehouse job instead.",money:2000,next:"saxony"}}},
+   {label:"Take the first warehouse job and send money to your parents",t:"Night shifts at a parcel depot. Every month you send €200 to Gaziantep.",money:1500,sent:4000,next:"saxony"}]},
+ saxony:{year:2021,place:"Leipzig",
+  text:["On the tram home a man shouts at you to take off your headscarf and go back where you came from. Nobody says anything. A friend from your German class is moving to Cologne, where she says it is easier."],
+  fact:"Far-right parties won their strongest results in eastern German states such as Saxony in the 2020s. Many refugees moved from east to west once they were allowed to choose where to live.",
+  choices:[
+   {label:"Move to Cologne with your friend",t:"You start again in a new city, with a bigger Syrian community and fewer stares.",money:-1500,ties:5,safety:5,next:"gerEnd"},
+   {label:"Stay in Leipzig, where your job and friends are",roll:{p:70,label:"Things stay calm for you",
+     win:{t:"Your colleagues stand up for you when it matters. Leipzig starts to feel like home.",ties:10,next:"gerEnd"},
+     lose:{t:"Someone sprays a swastika on your building's door. You sleep badly for months.",safety:-15,next:"gerEnd"}}}]},
  gerEnd:{year:2024,place:"Leipzig, December",
   text:["On 8 December 2024 the Assad government falls. Within days, German politicians start talking about sending Syrians home."],
   fact:"Since 2024, people in Germany can apply for citizenship after five years of residence instead of eight.",
@@ -214,9 +230,23 @@ syria:{name:"Rana",age:22,from:"Aleppo, Syria",code:"SYR",kind:"Forced to flee",
   fact:"Most Syrians working in Turkey work informally, without a permit or social security.",
   choices:[
    {label:"Apply for the health-worker training",roll:{p:s=>s.flags.turkish?(s.flags.transcript?50:40):20,label:"You are selected (better odds if you learned Turkish)",
-     win:{t:"You are selected. After six months of training you work with Syrian patients, on a real contract.",money:2500,flag:"job",status:"Temporary protection + work permit · Turkey",next:"quake"},
-     lose:{t:"Hundreds apply for a few places. You are not chosen and keep working at the workshop.",money:800,next:"quake"}}},
-   {label:"Keep your workshop job and save",t:"You save a little every month in an envelope under the mattress.",money:1200,next:"quake"}]},
+     win:{t:"You are selected. After six months of training you work with Syrian patients, on a real contract.",money:2500,flag:"job",status:"Temporary protection + work permit · Turkey",next:"istanbul"},
+     lose:{t:"Hundreds apply for a few places. You are not chosen and keep working at the workshop.",money:800,next:"istanbul"}}},
+   {label:"Keep your workshop job and save",t:"You save a little every month in an envelope under the mattress.",money:1200,next:"istanbul"}]},
+ istanbul:{year:2019,place:"Gaziantep",
+  text:["A friend in Istanbul says a clinic there pays twice what you earn. But under temporary protection you must live in the province where you registered, Gaziantep, and you need permission to travel."],
+  fact:"In summer 2019 Istanbul authorities began removing Syrians registered in other provinces. Rights groups reported that some were sent to Syria.",
+  choices:[
+   {label:"Take the job in Istanbul anyway",roll:{p:55,label:"You are not stopped at an ID check",
+     win:{t:"You work in Istanbul for a year, quietly, and save more than in three years in Gaziantep. Then you go back before your luck runs out.",money:3000,next:"brother"},
+     lose:{t:"Police check your ID on a ferry. You are detained for a week and sent back to Gaziantep. You hear of others who were taken to the Syrian border.",money:-300,safety:-20,next:"brother"}}},
+   {label:"Stay in Gaziantep",t:"Less money, but you can walk to the market without your heart racing.",ties:5,next:"brother"}]},
+ brother:{year:2021,place:"Gaziantep",
+  text:["Your brother Omar is 15. A furniture workshop offers him 1,500 lira a week. He wants to help the family. Your mother wants him to finish school."],
+  fact:"Hundreds of thousands of Syrian children in Turkey were out of school in the early 2020s, often because their families needed their wages. (UNICEF)",
+  choices:[
+   {label:"Keep Omar in school",t:"You take on extra shifts. Omar is bored and angry, but he passes his exams in Turkish.",money:-800,ties:5,flag:"omarSchool",next:"quake"},
+   {label:"Let Omar go to work",t:"The family rent gets easier. Omar comes home with sawdust in his hair and stops talking about university.",money:1500,next:"quake"}]},
  quake:{year:2023,place:"Gaziantep, 6 February, 04:17",
   text:["Two earthquakes, magnitude 7.8 and 7.5, hit southern Turkey and northern Syria."],
   fact:"More than 50,000 people died in Turkey. The 11 affected provinces were home to over 1.7 million Syrians under temporary protection. (AFAD; UNHCR)",
@@ -260,11 +290,19 @@ nepal:{name:"Bikash",age:26,from:"Dhanusha, Nepal",code:"NPL",kind:"Labour migra
   text:["Your family's land grows enough rice for eight months a year. Your father borrowed 300,000 rupees for your sister's wedding, and the interest grows every month. Your older brother works in Malaysia.","A local agent says a construction company in Qatar is hiring."],
   fact:"Money sent home by migrants equals about a quarter of Nepal's GDP. (World Bank)",
   choices:[
-   {label:"Go to Qatar through the agent",tag:"Costs $1,100 in debt",t:"The agent charges 120,000 rupees (about $1,100), although Nepal's rules say employers should pay. You borrow it at 36% interest.",money:-1100,next:"arrive"},
+   {label:"Go to Qatar through the agent",tag:"Costs $1,100 in debt",t:"The agent charges 120,000 rupees (about $1,100), although Nepal's rules say employers should pay. You borrow it at 36% interest.",money:-1100,next:"kathmandu"},
    {label:"Cross into India and look for work in Delhi",t:"You take a bus to the border at Jaleshwar. Nobody asks for a passport.",next:"india"},
    {label:"Stay and farm another year",roll:{p:40,label:"A good harvest",
-     win:{t:"The harvest is good, but it pays the interest, not the debt. A year later you go to the agent after all.",money:100,next:"arrive",fee:true},
-     lose:{t:"The monsoon fails. The debt grows. A year later you go to the agent after all.",money:-200,next:"arrive",fee:true}}}]},
+     win:{t:"The harvest is good, but it pays the interest, not the debt. A year later you go to the agent after all.",money:100,next:"kathmandu",fee:true},
+     lose:{t:"The monsoon fails. The debt grows. A year later you go to the agent after all.",money:-200,next:"kathmandu",fee:true}}}]},
+ kathmandu:{year:2019,place:"Kathmandu",
+  text:["Medical check, a two-day pre-departure orientation, a labour permit sticker in your passport. At the airport the agent hands you your papers. Your job title says 'helper', not 'mason' as he promised."],
+  fact:"Nepal requires workers to take an orientation course and get a labour permit before leaving. Agents often promise higher-paid job titles than the ones on the final visa.",
+  choices:[
+   {label:"Board the plane anyway",t:"You tell yourself a helper's wage is better than nothing.",next:"arrive"},
+   {label:"Refuse and demand your money back",roll:{p:15,label:"The agent refunds you",
+     win:{t:"After a week of arguing at his office, with a lawyer friend of your uncle's, he gives back 80%. You find a better agency and leave three months later.",money:900,next:"arrive",fee:true},
+     lose:{t:"The agent stops answering your calls. With the loan to repay, you take the next flight he offers.",safety:-5,next:"arrive"}}}]},
  arrive:{year:2019,place:"Doha, Industrial Area",
   text:["You land at Hamad International Airport. The company keeps your passport 'for safekeeping'. You share a room with nine men."],
   fact:"Being handed a worse contract on arrival ('contract substitution') is widely documented for migrant workers in the Gulf. (ILO; Amnesty International)",
@@ -282,11 +320,26 @@ nepal:{name:"Bikash",age:26,from:"Dhanusha, Nepal",code:"NPL",kind:"Labour migra
   fact:"In 2020 Qatar ended the rule that workers need their employer's permission to change jobs, and in 2021 it set a minimum wage for all workers. Rights groups say enforcement is uneven. (ILO)",
   choices:[
    {label:"Use the new law to move to another company",roll:{p:55,label:"The transfer goes through",
-     win:{t:"You move to a facilities company. Wages arrive on time, and from 2021 you are covered by the minimum wage.",money:1500,sent:1500,next:"cup"},
-     lose:{t:"Your old employer files an 'absconding' case against you. It takes four months to clear your name. No wages.",money:-400,safety:-10,next:"cup"}}},
+     win:{t:"You move to a facilities company. Wages arrive on time, and from 2021 you are covered by the minimum wage.",money:1500,sent:1500,next:"injury"},
+     lose:{t:"Your old employer files an 'absconding' case against you. It takes four months to clear your name. No wages.",money:-400,safety:-10,next:"injury"}}},
    {label:"Stay and wait for your back pay",roll:{p:40,label:"Your wages are paid",
-     win:{t:"The company pays all three months in one go.",money:1100,sent:600,next:"cup"},
-     lose:{t:"You get one month's pay out of three. You cannot afford a lawyer.",money:300,next:"cup"}}}]},
+     win:{t:"The company pays all three months in one go.",money:1100,sent:600,next:"injury"},
+     lose:{t:"You get one month's pay out of three. You cannot afford a lawyer.",money:300,next:"injury"}}}]},
+ injury:{year:2021,place:"Doha",
+  text:["Ramesh, who sleeps in the bunk above yours, does not wake up one morning. He was 31. The death certificate says 'cardiac arrest, natural causes'. His family in Jhapa receives no compensation.","A week later, carrying pipes in the afternoon heat, you feel dizzy."],
+  fact:"Many deaths of young migrant workers in the Gulf are recorded as 'natural causes' without investigation, so families often receive no compensation. (ILO; Amnesty International)",
+  choices:[
+   {label:"Stop and go to the clinic",roll:{p:70,label:"Your supervisor lets you rest",
+     win:{t:"The clinic gives you fluids and two days off. You come back more careful.",safety:-5,next:"visit"},
+     lose:{t:"Your supervisor docks a day's pay for leaving the site. You go anyway.",money:-30,safety:-5,next:"visit"}}},
+   {label:"Keep working to the end of the shift",roll:{p:60,label:"Nothing serious happens",
+     win:{t:"You make it to the bus. That night your head pounds.",safety:-10,next:"visit"},
+     lose:{t:"You collapse. You spend three days in hospital. Your kidneys are damaged.",safety:-30,money:-200,next:"visit"}}}]},
+ visit:{year:2022,place:"Dhanusha, on leave",
+  text:["Your first home leave in three years. Your parents have built a brick room with your money. Your mother has found a bride for you."],
+  choices:[
+   {label:"Get married on this trip",t:"The wedding costs more than you planned. You fly back to Doha a married man.",money:-800,ties:15,flag:"married",next:"cup"},
+   {label:"Wait until you have saved more",t:"Your mother is disappointed. You promise to marry next time.",ties:-5,next:"cup"}]},
  cup:{year:2022,place:"Doha, after the World Cup",
   text:["The stadiums are finished and the tournament is over. Your contract ends next month."],
   fact:"Romania and Croatia became new destinations for Nepali workers after 2022. Agents charge high fees, and some offers are scams.",
@@ -299,7 +352,15 @@ nepal:{name:"Bikash",age:26,from:"Dhanusha, Nepal",code:"NPL",kind:"Labour migra
  india:{year:2018,place:"Paharganj, Delhi",
   text:["No visa needed: a 1950 treaty lets Nepalis live and work in India. You wash dishes in a hotel kitchen for 9,000 rupees a month and sleep on the kitchen floor."],
   fact:"Because the Nepal–India border is open, no one knows exactly how many Nepalis work in India. Estimates run from hundreds of thousands to several million.",
-  choices:[{label:"Keep working",t:"You send home what you can, which is not much.",sent:600,next:"india2"}]},
+  choices:[{label:"Keep working",t:"You send home what you can, which is not much.",sent:600,next:"india1b"}]},
+ india1b:{year:2019,place:"Delhi",
+  text:["A friend from your district offers you a job as a security guard in Gurgaon: better pay, 12-hour night shifts. A Nepali Gurkha regiment is also recruiting in India."],
+  fact:"Under a 1947 agreement, Nepali citizens serve in the Indian Army's Gorkha regiments. Many Nepali families have served for generations.",
+  choices:[
+   {label:"Take the security guard job",t:"You guard an office tower at night. The pay is 14,000 rupees a month.",sent:900,money:300,next:"india2"},
+   {label:"Try out for the Gorkha regiment",roll:{p:15,label:"You are selected",
+     win:{t:"You pass the physical tests. You will start training next year.",money:500,next:"india2",flag:"army"},
+     lose:{t:"You fail the run by eight seconds. You go back to the hotel kitchen.",next:"india2"}}}]},
  india2:{year:2020,place:"Delhi, March",
   text:["India announces a national lockdown with four hours' notice. The hotel closes. Trains and buses stop."],
   fact:"Millions of internal and cross-border migrant workers in India lost work overnight in March 2020; many walked hundreds of kilometres home.",
@@ -312,7 +373,7 @@ nepal:{name:"Bikash",age:26,from:"Dhanusha, Nepal",code:"NPL",kind:"Labour migra
   renew:{stamp:"RENEWED",tone:"warn",title:"Two more years",text:"You renew. Your daughter, born while you were away, is three before you see her in person. The house in Dhanusha now has a second floor."},
   europe:{stamp:"EUROPE",tone:"good",title:"Work permit in Romania",text:"You ride a delivery scooter through Bucharest winters. The pay is higher, but the agent's fee will take two years to repay. Some colleagues are already planning to move on to Portugal."},
   scam:{stamp:"SCAMMED",tone:"bad",title:"Back home, deeper in debt",text:"The 'work permit' never existed. You go home owing more than when you first left in 2018."},
-  indiaHome:{stamp:"RETURNED",tone:"ink",title:"Back in the village",text:"You are home, with no savings. In 2021 you go to the agent for a job in Qatar after all."}
+  indiaHome:{stamp:"RETURNED",tone:"ink",title:"Back in the village",text:s=>s.flags.army?"You wait out the pandemic at home. In 2022 the Indian Army changes its recruitment rules and Nepal halts Gorkha recruitment. Your place is gone. You go to the agent for a job in Qatar after all.":"You are home, with no savings. In 2021 you go to the agent for a job in Qatar after all."}
  }},
 
 philippines:{name:"Joy",age:29,from:"Iloilo City, Philippines",code:"PHL",kind:"Skilled worker",weight:16,
@@ -325,9 +386,9 @@ philippines:{name:"Joy",age:29,from:"Iloilo City, Philippines",code:"PHL",kind:"
   fact:"The Philippines is one of the world's largest sources of nurses. About 2 million Filipinos work overseas, and remittances equal around 8–9% of GDP. (PSA; World Bank)",
   choices:[
    {label:"Apply for the NHS job in England",next:"exams"},
-   {label:"Take a faster offer in Riyadh",t:"A Saudi hospital offers a tax-free salary about four times what you earn now, with housing. You fly in six weeks.",status:"Work visa · Saudi Arabia",next:"saudi"},
+   {label:"Take a faster offer in Riyadh",t:"A Saudi hospital offers a tax-free salary about four times what you earn now, with housing. You fly in six weeks.",status:"Work visa · Saudi Arabia",next:"saudi0"},
    {label:"Stay and apply for a government hospital post",roll:{p:30,label:"You get the government post",
-     win:{t:"You are hired at a public hospital, where a court ruling has nearly doubled nurses' starting pay.",money:1000,end:"stay"},
+     win:{t:"You are hired at a public hospital, where a court ruling has nearly doubled nurses' starting pay.",money:1000,next:"phCovid"},
      lose:{t:"There are 400 applicants for 12 posts. You go to the NHS job fair after all.",next:"exams"}}}]},
  exams:{year:2019,place:"Manila",
   text:["Before you get a job offer you need an English test and the UK nursing council's computer exam."],
@@ -344,20 +405,54 @@ philippines:{name:"Joy",age:29,from:"Iloilo City, Philippines",code:"PHL",kind:"
   text:["COVID-19 arrives. You are moved to an intensive care ward after two weeks of training."],
   fact:"Filipino nurses made up a disproportionate share of NHS staff who died of COVID-19 in 2020.",
   choices:[{label:"Work through the first wave",roll:{p:85,label:"You stay healthy",
-     win:{t:"You get through the first wave. A colleague from Cebu does not.",ties:-5,next:"family"},
-     lose:{t:"You are in hospital for ten days. Recovery takes months.",safety:-25,next:"family"}}}]},
+     win:{t:"You get through the first wave. A colleague from Cebu does not.",ties:-5,next:"ward"},
+     lose:{t:"You are in hospital for ten days. Recovery takes months.",safety:-25,next:"ward"}}}]},
+ ward:{year:2021,place:"Midlands",
+  text:["A patient's son tells you he wants “a proper English nurse” for his father. Your manager is watching. A Band 6 post, a promotion, is coming up next month."],
+  fact:"NHS staff surveys show that staff from ethnic minority backgrounds report more harassment and discrimination than white staff. (NHS Workforce Race Equality Standard)",
+  choices:[
+   {label:"Report the incident formally",roll:{p:55,label:"Your manager backs you",
+     win:{t:"Your manager speaks to the family. You are shortlisted for the Band 6 post and get it.",money:2500,ties:5,next:"family"},
+     lose:{t:"The complaint goes nowhere, and a colleague says you are 'difficult'. You don't get the promotion this time.",safety:-5,next:"family"}}},
+   {label:"Let it go and swap patients",t:"You swap with a colleague and say nothing. Later you apply for the Band 6 post and get it.",money:2500,ties:-5,next:"family"}]},
  family:{year:2022,place:"Midlands",
   text:["Your contract says that if you leave in the first three years you repay £3,000 in training costs. Your husband and son are still in Iloilo."],
   fact:"A five-year UK visa for a family of three costs well over £10,000 once the Immigration Health Surcharge is included. (UK Home Office)",
   choices:[
-   {label:"Bring your family over as dependants",t:"Visa fees and health surcharge take all your savings. Your son starts Year 4 at the local primary school.",money:-4500,ties:20,next:"settle"},
-   {label:"Keep sending money home instead",t:"Your son grows up on video calls. Your family builds a concrete house.",sent:9000,ties:-10,next:"settle"}]},
+   {label:"Bring your family over as dependants",t:"Visa fees and health surcharge take all your savings. Your son starts Year 4 at the local primary school.",money:-4500,ties:20,next:"mother"},
+   {label:"Keep sending money home instead",t:"Your son grows up on video calls. Your family builds a concrete house.",sent:9000,ties:-10,next:"mother"}]},
+ mother:{year:2024,place:"Midlands",
+  text:["Your sister calls at 3 a.m.: your mother has had a stroke in Iloilo. Flights are £1,200. Your ward is short-staffed, and you've used most of your leave."],
+  fact:"Migrant care workers often provide care in two countries at once: paid care where they work, and unpaid care for family at home. Researchers call this the 'global care chain'.",
+  choices:[
+   {label:"Fly home for three weeks, unpaid",t:"You hold your mother's hand in the hospital. She recognises you. Back in England, your savings are gone.",money:-2500,ties:15,next:"settle"},
+   {label:"Stay and pay for a full-time carer",t:"You pay a carer from your wages and watch your mother's recovery on video calls.",sent:3000,ties:-10,next:"settle"}]},
  settle:{year:2025,place:"Midlands",
   text:["You reach five years in the UK, the point at which you can apply to settle permanently. In May 2025 the government proposes making most migrants wait ten years instead."],
   fact:"The UK's 2025 immigration white paper proposed raising the standard qualifying period for settlement from 5 to 10 years. Rules for some groups were still being decided.",
   choices:[{label:"Apply to settle",roll:{p:60,label:"You qualify before the rules change",
      win:{t:"Your Indefinite Leave to Remain is granted.",status:"Settled · UK",end:"settled"},
      lose:{t:"Your route is caught by the new rules. You must keep renewing your visa.",end:"waiting"}}}]},
+ phCovid:{year:2020,place:"Iloilo, public hospital",
+  text:["COVID-19 fills your ward. In April the Philippine government stops nurses from leaving the country to work abroad, so that they stay to fight the pandemic at home."],
+  fact:"In 2020 the Philippines temporarily banned and then capped the deployment of nurses abroad, while many of its nurses were already working in foreign hospitals.",
+  choices:[{label:"Work through the pandemic",roll:{p:80,label:"You stay healthy",
+     win:{t:"Double shifts for months. Your hazard pay arrives a year late.",money:300,next:"phStay"},
+     lose:{t:"You catch COVID and spend two weeks in your own hospital's isolation ward.",safety:-20,next:"phStay"}}}]},
+ phStay:{year:2023,place:"Iloilo",
+  text:["The ban is long gone. Your ward has lost eight nurses to the UK, the US and Saudi Arabia in a year. You now do the work of two people. A recruiter messages you again."],
+  fact:"Philippine hospitals report serious nurse shortages, while the country remains one of the world's biggest exporters of nurses. (WHO; Philippine Nurses Association)",
+  choices:[
+   {label:"Stay: you are needed here",end:"stay"},
+   {label:"Say yes this time",t:"You pass the exams and line up an NHS job, four years later than your classmates.",money:-400,status:"Health & Care visa · UK",end:"lateLeaver"}]},
+ saudi0:{year:2020,place:"Riyadh",
+  text:["You live in a staff compound with other Filipino nurses and need permission to leave it after dark. During the pandemic, flights home are cancelled for months. Your son's seventh birthday is on a video call."],
+  fact:"Until recent reforms, the Gulf's kafala (sponsorship) system tied workers' visas to their employer, limiting their freedom to change jobs or leave the country.",
+  choices:[
+   {label:"Volunteer for the COVID ward for extra pay",roll:{p:80,label:"You stay healthy",
+     win:{t:"Hazard pay doubles your savings this year.",money:4000,sent:2000,next:"saudi"},
+     lose:{t:"You fall ill and spend two weeks in isolation, far from anyone you love.",money:1500,safety:-20,next:"saudi"}}},
+   {label:"Stay on your regular ward",t:"Steady pay. You send money home every payday.",money:2000,sent:2000,next:"saudi"}]},
  saudi:{year:2022,place:"Riyadh",
   text:["Three years in. You have saved more than you could in a lifetime at home, but your contract does not let you bring your family, and you cannot become a resident for good."],
   fact:"Gulf states rarely offer migrant workers a path to permanent residence or citizenship, however long they stay.",
@@ -369,6 +464,7 @@ philippines:{name:"Joy",age:29,from:"Iloilo City, Philippines",code:"PHL",kind:"
   stay:{stamp:"STAYED",tone:"ink",title:"Nurse at home",text:"You stay in Iloilo. Your ward is short of staff: every year more of your colleagues leave for the UK, the US or the Gulf."},
   settled:{stamp:"SETTLED",tone:"good",title:"Settled in the UK",text:"You can now stay in the UK for good. After another year you can apply for citizenship. Your mother asks if your niece can come too."},
   waiting:{stamp:"PENDING",tone:"warn",title:"Five more years",text:"You have lived and worked in the UK for five years, through a pandemic, and you still can't stay for good. You check the Home Office website every week."},
+  lateLeaver:{stamp:"ONWARD",tone:"stamp",title:"Leaving, late",text:"You land in England in 2024. Your old ward in Iloilo is short another nurse. You stayed when it was hardest, and you leave now because you have to think about your son's future too."},
   ukNext:{stamp:"ONWARD",tone:"stamp",title:"Second move: England",text:"You land in England in 2023 with savings and four years of Gulf experience. Many nurses move in steps like this, and each country along the way sets different rules about family and settlement. Your five-year count towards settling in the UK starts now."},
   saudiStay:{stamp:"RENEWED",tone:"warn",title:"Another contract in Riyadh",text:"Your savings built your parents' house. Your son is twelve. You plan to go home 'in two years', as you have for six years."}
  }},
@@ -396,8 +492,18 @@ venezuela:{name:"Daniel",age:31,from:"Maracaibo, Venezuela",code:"VEN",kind:"Dis
  informal:{year:2019,place:"Colombia",
   text:["You sell coffee from a thermos at traffic lights. Without papers you cannot teach, open a bank account or rent a flat in your own name.","Your daughter goes to a public nursery: Colombia lets migrant children study whatever their status."],
   choices:[{label:"Keep working",roll:{p:60,label:"A good year at the traffic lights",
-     win:{t:"You earn enough to rent a proper room and send a little to your parents.",money:500,sent:300,next:"etpv"},
-     lose:{t:"Police clear street vendors from the centre. Some customers shout at you to go home.",money:100,safety:-10,next:"etpv"}}}]},
+     win:{t:"You earn enough to rent a proper room and send a little to your parents.",money:500,sent:300,next:"pandemic"},
+     lose:{t:"Police clear street vendors from the centre. Some customers shout at you to go home.",money:100,safety:-10,next:"pandemic"}}}]},
+ pandemic:{year:2020,place:"Colombia, lockdown",
+  text:["COVID-19 lockdown. Nobody buys coffee at empty traffic lights. Your landlord says pay or leave by Friday. Thousands of Venezuelans are walking back home along the highways."],
+  fact:"In 2020 more than 100,000 Venezuelans returned home from Colombia during the pandemic, and many came back again once borders reopened. (Migración Colombia)",
+  choices:[
+   {label:"Walk back to Venezuela until it is over",roll:{p:60,label:"You get through the border quarantine without trouble",
+     win:{t:"You spend months with your parents in Maracaibo, then come back to Colombia in 2021, starting from zero.",money:-200,ties:10,next:"etpv"},
+     lose:{t:"At the border you are held for weeks in an overcrowded quarantine centre. You come back to Colombia in 2021 more broke than before.",money:-300,safety:-15,next:"etpv"}}},
+   {label:"Stay and ask for help from an aid group",roll:{p:55,label:"You get cash assistance",
+     win:{t:"An aid group gives you three months of rent money. You stay.",money:300,next:"etpv"},
+     lose:{t:"The list is full. You are evicted and sleep at a church hall for two weeks.",safety:-15,next:"etpv"}}}]},
  etpv:{year:2021,place:"Colombia",
   text:["Colombia announces a Temporary Protection Statute: 10 years of legal status for Venezuelans who register."],
   fact:"Colombia hosts about 2.8 million Venezuelans. Its 2021 Temporary Protection Statute is one of the largest regularisation programmes in the world.",
@@ -412,8 +518,18 @@ venezuela:{name:"Daniel",age:31,from:"Maracaibo, Venezuela",code:"VEN",kind:"Dis
      win:{t:"Your degree is recognised. You teach physics again.",money:2000,end:"teacher"},
      lose:{t:"Recognition is slow and expensive. You keep selling coffee.",end:"colombia"}}},
    {label:"Cross the Darién with your family",tag:"Costs $1,500",roll:{p:85,label:"Your family crosses without serious injury",
-     win:{t:"Six days in the jungle. You see things you won't talk about.",money:-1500,safety:-15,next:"mexico"},
-     lose:{t:"Armed men rob your group. You lose your money and your phone and reach Panama with nothing.",money:-1500,safety:-30,next:"mexico"}}}]},
+     win:{t:"Six days in the jungle. You see things you won't talk about.",money:-1500,safety:-15,next:"mexicoRoute"},
+     lose:{t:"Armed men rob your group. You lose your money and your phone and reach Panama with nothing.",money:-1500,safety:-30,next:"mexicoRoute"}}}]},
+ mexicoRoute:{year:2023,place:"Southern Mexico",
+  text:["Central America by bus, then Mexico. Without a Mexican permit you cannot buy a bus ticket north. People ride freight trains, or pay smugglers for a place in a truck."],
+  fact:"Kidnapping and extortion of migrants crossing Mexico are widely documented. Organised crime groups make money from people on the move. (Human Rights Watch; MSF)",
+  choices:[
+   {label:"Ride the freight train north",roll:{p:70,label:"Nobody in your family is hurt",
+     win:{t:"Five days on the roof of a train car, holding your daughter between your knees.",safety:-10,next:"mexico"},
+     lose:{t:"Men stop the train and demand $100 per person. Your wife hurts her wrist jumping down.",money:-300,safety:-20,next:"mexico"}}},
+   {label:"Pay a smuggler for a truck",tag:"Costs $1,200",roll:{p:75,label:"The smuggler is not part of a kidnapping ring",
+     win:{t:"You arrive in Ciudad Juárez in a truck full of people, thirsty but safe.",money:-1200,next:"mexico"},
+     lose:{t:"You are held in a house for nine days until your parents send $1,500 for your release.",money:-2700,safety:-30,ties:-5,next:"mexico"}}}]},
  mexico:{year:2024,place:"Ciudad Juárez",
   text:["At the US border you wait for an appointment on the CBP One app to ask for asylum. Every morning at 9 you open the app."],
   choices:[{label:"Keep trying for an appointment",roll:{p:45,label:"You get an appointment before the app is shut down",
@@ -422,8 +538,14 @@ venezuela:{name:"Daniel",age:31,from:"Maracaibo, Venezuela",code:"VEN",kind:"Dis
  lima:{year:2019,place:"Lima",
   text:["Peru gives you a temporary permit. You work in a call centre. In mid-2019 Peru starts requiring visas from Venezuelans: your parents can no longer follow."],
   choices:[{label:"Build a life in Lima",roll:{p:60,label:"Your permit is renewed",
-     win:{t:"You get a residence card and later a job at a private school.",money:2500,status:"Resident · Peru",end:"peru"},
-     lose:{t:"Your permit lapses during the pandemic and the paperwork takes years.",status:"Irregular · Peru",end:"peruLimbo"}}}]}
+     win:{t:"You get a residence card and a job teaching maths at a private school.",money:2500,status:"Resident · Peru",next:"lima2"},
+     lose:{t:"Your permit lapses during the pandemic and the paperwork takes years.",status:"Irregular · Peru",next:"lima2"}}}]},
+ lima2:{year:2023,place:"Lima",
+  text:["Peru's politics turn against Venezuelans. Politicians blame them for crime. On a bus, a woman hears your accent and moves seats. Your parents in Maracaibo are getting older."],
+  fact:"Peru hosts about 1.5 million Venezuelans, the second most after Colombia. Surveys show rising hostility towards them since 2019. (R4V; IOP-PUCP)",
+  choices:[
+   {label:"Stay in Lima",end:s=>s.status.startsWith("Resident")?"peru":"peruLimbo"},
+   {label:"Go back to Maracaibo to care for your parents",end:"backHome"}]}
  },
  endings:{
   teacher:{stamp:s=>s.flags.ppt?"PROTECTED":"LUCKY",tone:"good",title:"Teaching again",text:s=>s.flags.ppt?"You teach physics at a school in Bogotá. Your daughter speaks with a Colombian accent. Your status lasts until 2031. Nobody yet knows what happens after that.":"A private school hires you informally to teach physics, paid in cash. Without papers you have no contract and no health insurance, but you are teaching again."},
@@ -431,6 +553,7 @@ venezuela:{name:"Daniel",age:31,from:"Maracaibo, Venezuela",code:"VEN",kind:"Dis
   usa:{stamp:"PENDING",tone:"warn",title:"Asylum pending",text:"You live in Denver and work in construction. Your hearing is scheduled for 2028. In 2025 the US ends Temporary Protected Status for Venezuelans and steps up deportations. You worry every time you drive."},
   limbo:{stamp:"NO STATUS",tone:"bad",title:"Stuck at the border",text:"You stay in Ciudad Juárez, working in a factory without papers. Going back south means crossing the Darién again."},
   peru:{stamp:"RESIDENT",tone:"good",title:"Settled in Lima",text:"The passports you paid for changed everything: you flew, you got a permit, you work in your field. Your neighbours from Maracaibo who walked had very different years."},
+  backHome:{stamp:"RETURNED",tone:"ink",title:"Back in Maracaibo",text:"You go home to care for your parents. Prices are still high, but you have savings and you speak some English from Lima. Many Venezuelans go back and forth like you, and those journeys rarely show up in the statistics."},
   peruLimbo:{stamp:"IRREGULAR",tone:"bad",title:"Out of status in Lima",text:"You still live in Lima, but without valid papers. Every police check is a risk."}
  }},
 
@@ -450,8 +573,21 @@ bangladesh:{name:"Shahida",age:34,from:"Sirajganj, Bangladesh",code:"BGD",kind:"
  char2:{year:2020,place:"The char",
   text:["The 2020 monsoon brings floods that last more than a month."],
   choices:[{label:"Wait out the floods",roll:{p:50,label:"Your house survives the floods",
-     win:{t:"Water reaches your bed, but the house stands. You stay on the char.",safety:-10,end:"stayChar"},
+     win:{t:"Water reaches your bed, but the house stands. You stay on the char.",safety:-10,next:"char3"},
      lose:{t:"The house is lost. You leave for Dhaka with what you can carry.",safety:-15,ties:-10,next:"dhaka"}}}]},
+ char3:{year:2022,place:"The char",
+  text:["An aid group offers to raise your house on an earth plinth above flood level, if you contribute labour. A microcredit group offers a loan for goats."],
+  fact:"Adapting where people live, such as raising homes above flood level, helps many people stay put. But adaptation has limits when the land itself disappears.",
+  choices:[
+   {label:"Raise the house and take the goat loan",roll:{p:65,label:"The goats thrive",
+     win:{t:"Your house is above the 2022 floods. The goats have kids. For the first time in years, you save.",money:250,ties:5,next:"char4"},
+     lose:{t:"Two goats die of disease. You still owe the loan.",money:-150,next:"char4"}}},
+   {label:"Send your eldest son to work in Dhaka",t:"He sends 2,000 taka a month. You miss him terribly.",sent:600,ties:-10,next:"char4"}]},
+ char4:{year:2024,place:"The char",
+  text:["The river channel shifts again. Engineers say this char may disappear in five to ten years. Your neighbours are leaving one by one."],
+  choices:[
+   {label:"Stay as long as the land lasts",end:"stayChar"},
+   {label:"Move to Dhaka while you still have some savings",t:"You arrive in Dhaka with savings, which most people from the chars do not have.",end:"lateDhaka"}]},
  dhaka:{year:2020,place:"Korail settlement, Dhaka",
   text:["You rent a tin room beside a lake for 3,000 taka a month. Your husband pulls a rickshaw. The garment factories are hiring women."],
   fact:"About 4 million people work in Bangladesh's garment industry, most of them women, many from rural areas.",
@@ -467,8 +603,26 @@ bangladesh:{name:"Shahida",age:34,from:"Sirajganj, Bangladesh",code:"BGD",kind:"
  school:{year:2022,place:"Dhaka",
   text:["Your eldest daughter is 14. A factory will hire her if she says she is 18. Her wage would pay the rent."],
   choices:[
-   {label:"Keep her in school",t:"You take extra night shifts. She passes her exams.",money:-300,safety:-5,flag:"school",next:"future"},
-   {label:"Let her work",t:"She starts at a factory on the next street. She stops going to school.",money:600,flag:"childwork",next:"future"}]},
+   {label:"Keep her in school",t:"You take extra night shifts. She passes her exams.",money:-300,safety:-5,flag:"school",next:"dengue"},
+   {label:"Let her work",t:"She starts at a factory on the next street. She stops going to school.",money:600,flag:"childwork",next:"dengue"}]},
+ dengue:{year:2023,place:"Dhaka, monsoon",
+  text:["Dengue fever spreads through the settlement. Mosquitoes breed in the standing water between the houses. Your youngest son, Rafi, has a high fever."],
+  fact:"2023 was Bangladesh's worst dengue year on record, with over 1,700 deaths. Hotter, wetter seasons are spreading the disease. (DGHS Bangladesh; WHO)",
+  choices:[
+   {label:"Take Rafi to a private clinic",tag:"Costs $150",roll:{p:85,label:"Rafi recovers",
+     win:{t:"A drip and a week of care. Rafi recovers. You owe the moneylender again.",money:-150,next:"wage"},
+     lose:{t:"Rafi is moved to a crowded government hospital. He recovers after two frightening weeks.",money:-250,ties:-5,next:"wage"}}},
+   {label:"Wait in line at the government hospital",roll:{p:70,label:"Rafi recovers",
+     win:{t:"You wait all day, sleep on the floor of the corridor, and Rafi recovers.",money:-30,next:"wage"},
+     lose:{t:"The wait is long and Rafi gets worse before he gets better. You miss a week of work.",money:-100,safety:-10,next:"wage"}}}]},
+ wage:{year:2023,place:"Dhaka, November",
+  text:["Garment workers march for a higher minimum wage. They are asking for 23,000 taka a month. The government offers 12,500."],
+  fact:"In late 2023 Bangladeshi garment workers protested for higher wages. The new minimum was set at 12,500 taka a month, about $113. Several workers were killed in the protests.",
+  choices:[
+   {label:"Join the protest",roll:{p:65,label:"You are not hurt or fired",
+     win:{t:"You march with thousands of women. The raise is smaller than you wanted, but it is a raise.",money:150,ties:5,next:"future"},
+     lose:{t:"Police use tear gas. Your factory fires workers it says were 'troublemakers', including you.",money:-100,safety:-15,next:"future"}}},
+   {label:"Keep your head down and keep working",t:"You get the new wage without the risk. Your friend Rokeya, who marched, is fired.",money:100,next:"future"}]},
  future:{year:2024,place:"Dhaka",
   text:["Your old village is now under the river. Your husband talks about working in Malaysia. An agent wants 500,000 taka (about $4,200)."],
   choices:[
@@ -479,6 +633,7 @@ bangladesh:{name:"Shahida",age:34,from:"Sirajganj, Bangladesh",code:"BGD",kind:"
  },
  endings:{
   stayChar:{stamp:"STAYED",tone:"ink",title:"Still on the char",text:"You stay where your family has always lived. Every monsoon you watch the river. Staying is also a choice, and for many people the only one they can afford."},
+  lateDhaka:{stamp:"INTERNAL",tone:"stamp",title:"Moving, on your own terms",text:"You move to Dhaka in 2024 with savings and a plan, not in a panic after a flood. Researchers call this 'planned' or 'managed' migration. It often goes better, but few people get the chance."},
   dhakaStay:{stamp:"INTERNAL",tone:"stamp",title:s=>s.flags.school?"A Dhaka family":"Two incomes in Dhaka",text:s=>s.flags.school?"Your daughter is studying for her exams. Your children now call Dhaka home. In the statistics you are not a 'migrant' at all.":"Your daughter's wage pays the rent. She is 16 and has worked for two years. In the statistics you are not a 'migrant' at all."},
   malaysia:{stamp:"SPLIT",tone:"warn",title:"A family on two continents",text:"Your husband sends money home from Malaysia. You will repay the loan in about three years, if nothing goes wrong."},
   malaysiaBad:{stamp:"IN DEBT",tone:"bad",title:"Back to the start, with a loan",text:"Your husband is back in Dhaka, ashamed and in debt. You work two jobs."}
@@ -500,8 +655,21 @@ uk:{name:"Tom",age:34,from:"Leeds, United Kingdom",code:"GBR",kind:"Lifestyle mi
  valencia:{year:2023,place:"Valencia",
   text:["Nobody at the airport asks why you came. You find a furnished flat on a short-term rental site for €1,400 a month, about double what your neighbours pay."],
   choices:[
-   {label:"Take Spanish classes",t:"Your neighbours start talking to you at the bakery.",money:-400,ties:10,next:"protest"},
-   {label:"Mostly socialise with other English speakers",t:"You join a co-working space and a running club. Everyone there is from somewhere else.",money:-200,next:"protest"}]},
+   {label:"Take Spanish classes",t:"Your neighbours start talking to you at the bakery.",money:-400,ties:10,next:"tax"},
+   {label:"Mostly socialise with other English speakers",t:"You join a co-working space and a running club. Everyone there is from somewhere else.",money:-200,next:"tax"}]},
+ tax:{year:2024,place:"Valencia",
+  text:["You have spent more than 183 days in Spain, so you are now a Spanish tax resident. A friend says plenty of people just keep paying tax in the UK and say nothing."],
+  fact:"People who spend more than 183 days a year in Spain are usually tax resident there. Spain's digital nomad visa offers a reduced tax rate for some newcomers.",
+  choices:[
+   {label:"Register with a Spanish accountant",t:"The paperwork is painful, but you get the reduced tax rate for new residents.",money:-1200,ties:5,next:"mum"},
+   {label:"Keep paying only UK tax and say nothing",roll:{p:80,label:"Nobody checks",
+     win:{t:"Nobody checks. You save money this year.",money:800,next:"mum"},
+     lose:{t:"The tax office writes to you. You pay the back tax plus a fine.",money:-3500,next:"mum"}}}]},
+ mum:{year:2024,place:"Valencia",
+  text:["Your mum in Leeds falls and breaks her hip. There are four flights a day from Valencia to the UK."],
+  choices:[
+   {label:"Fly home for a week",t:"You book a €90 flight that afternoon, work from her kitchen table, and fly back when she's settled.",money:-400,ties:5,next:"protest"},
+   {label:"Ask your brother to handle it",t:"Your brother is annoyed. You send flowers and call every day.",ties:-10,next:"protest"}]},
  protest:{year:2024,place:"Valencia",
   text:["Graffiti on your street reads “Tourists go home”. Thousands march against tourist flats and rising rents. Your landlord wants 20% more."],
   fact:"In 2024 tens of thousands of people protested in Spanish cities against tourist flats and rising rents.",
@@ -515,6 +683,369 @@ uk:{name:"Tom",age:34,from:"Leeds, United Kingdom",code:"GBR",kind:"Lifestyle mi
    text:s=>s.status.startsWith("Visitor")?"You have been coming and going on 90-day stays. A border officer in Madrid counts your passport stamps slowly. Even you can fall out of status, but the consequence is a fine, not a jungle crossing.":"You renew your visa without trouble. You never had to prove you were in danger, or show that your work was needed."},
   village:{stamp:"WELCOME",tone:"good",title:"A village house",text:"The village school is happy to have new families; the population has halved since 1980. Your neighbours call you 'el inglés'."},
   back:{stamp:"RETURNED",tone:"ink",title:"Back in Leeds",text:"You go home when it suits you. Your passport works in about 186 countries without a visa."}
+ }},
+
+afghanistan:{name:"Murtaza",age:19,from:"Herat, Afghanistan",code:"AFG",kind:"Forced to flee",weight:12,
+ blurb:"English teacher and NGO translator, 19. His sister is 14.",
+ start:{year:2021,money:700,safety:40,ties:80,status:"Citizen of Afghanistan"},
+ prompt:"Murtaza crossed four borders, most of them without permission. At which point did he become a 'refugee': when he fled, when he crossed, or when a German official said so?",
+ scenes:{
+ start:{year:2021,place:"Herat, August",
+  text:["You are 19. You teach English at a private course and translate for a foreign NGO two days a week.","On 15 August Kabul falls to the Taliban. Your NGO boss deletes the staff WhatsApp group. Your sister Zainab, 14, is told not to come back to school."],
+  fact:"Afghans are one of the largest refugee populations in the world. Most live in neighbouring Iran and Pakistan, not in Europe. (UNHCR)",
+  choices:[
+   {label:"Go to Kabul airport and try to get on an evacuation flight",roll:{p:10,label:"You get through the gate and onto a plane",
+     win:{t:"Your NGO's name on a printed email gets you through the gate. You fly to Qatar, then to a military base in Virginia.",status:"Humanitarian parole · USA",next:"usBase"},
+     lose:{t:"For three days you stand in the crowd at the airport. On 26 August a suicide bomber kills about 170 people at Abbey Gate. You go home.",safety:-25,next:"hide"}}},
+   {label:"Lie low in Herat",next:"hide"},
+   {label:"Pay a smuggler to take you to Iran now",tag:"Costs $400",t:"You leave before dawn with one backpack. Your mother gives you her gold earrings to sell.",money:-400,ties:-10,next:"iran"}]},
+ usBase:{year:2021,place:"Fort Pickett, Virginia",
+  text:["You live in a military barracks with thousands of other Afghans. You have 'humanitarian parole': two years of permission to stay, but not refugee status. Your family is still in Herat."],
+  fact:"About 76,000 Afghans were brought to the US in 2021 under Operation Allies Welcome, most on temporary humanitarian parole. (US Department of Homeland Security)",
+  choices:[
+   {label:"Go wherever the resettlement agency sends you",t:"You are sent to Sacramento, where there is already a large Afghan community.",ties:5,next:"sacramento"},
+   {label:"Ask to go to a cousin in Virginia",t:"You move in with your cousin's family. Six people in a two-bedroom flat.",ties:10,next:"sacramento"}]},
+ sacramento:{year:2023,place:"California",
+  text:["You drive for a delivery app 60 hours a week and send money home. Your parole is running out. You can apply for asylum, but the backlog is years long and a lawyer costs $5,000."],
+  choices:[
+   {label:"Pay a lawyer and apply for asylum",roll:{p:50,label:"Your asylum case is decided in time",
+     win:{t:"Your NGO work proves you were in danger. Asylum granted in 2024.",money:-5000,status:"Asylee · USA",end:"evacuated"},
+     lose:{t:"Your case joins a backlog of more than a million. You wait.",money:-5000,status:"Asylum pending · USA",end:"evacuated"}}},
+   {label:"Send the money to your family instead",t:"Your family uses it to pay a smuggler to get Zainab's teacher out to Pakistan.",sent:5000,status:"Parole expiring · USA",end:"evacuated"}]},
+ hide:{year:2021,place:"Herat, autumn",
+  text:["You delete photos of yourself with foreigners and burn your NGO ID card. Taliban fighters are visiting the homes of people who worked with foreign organisations."],
+  choices:[{label:"Stay inside and wait",roll:{p:70,label:"Nobody comes to your door",
+     win:{t:"Weeks pass. Nobody comes. But there is no work, and Zainab cries every morning when she sees the boys walk to school.",money:-200,next:"decide"},
+     lose:{t:"Two armed men come to question your father. They take your phone. You know you cannot stay.",safety:-25,next:"decide"}}}]},
+ decide:{year:2021,place:"Herat, winter",
+  text:["Your family has spent most of its savings. Prices are rising and the banks limit withdrawals. Friends are leaving for Iran every week."],
+  fact:"After August 2021 Afghanistan's economy collapsed as foreign aid stopped and assets were frozen. Over half the population needed humanitarian aid in 2022. (UN OCHA)",
+  choices:[
+   {label:"Pay a smuggler to take you to Iran",tag:"Costs $400",t:"Your mother sells her gold earrings to pay for it.",money:-400,ties:-10,next:"iran"},
+   {label:"Stay in Herat with your family",end:"herat"}]},
+ iran:{year:2022,place:"Tehran",
+  text:["You cross through the Nimruz desert and into Iran on foot at night. In Tehran you carry cement bags on building sites, without papers. Police check Afghans in the street every week."],
+  fact:"Iran hosts millions of Afghans, many without documents. In 2025 more than a million Afghans were deported from Iran or pushed to return. (IOM; UNHCR)",
+  choices:[
+   {label:"Stay in Iran and save money",roll:{p:55,label:"You avoid deportation for a year",
+     win:{t:"A year of work without being caught. You send money home and save for the next step.",money:1800,sent:600,next:"onward"},
+     lose:{t:"You are stopped at a checkpoint, held in a camp and put on a bus to the Afghan border.",money:-300,safety:-15,next:"islamQala"}}},
+   {label:"Go on to Turkey now",next:"van"}]},
+ islamQala:{year:2022,place:"Islam Qala border crossing",
+  text:["You get off the bus at the border with a plastic bag and a few toman. An aid group gives you a hot meal and a SIM card. Your family in Herat is two hours away."],
+  fact:"Aid agencies at Islam Qala receive thousands of deported Afghans a day at peak times. Many try to leave again within months. (IOM)",
+  choices:[
+   {label:"Go home to Herat",end:"deportedIran"},
+   {label:"Borrow money and try again, this time to Turkey",t:"Your uncle lends you $2,000. You cross into Iran again two weeks later and head straight for the Turkish border.",money:-2000,next:"van"}]},
+ onward:{year:2023,place:"Tehran",
+  text:["You have been in Iran for over a year. Your boss pays late, and anti-Afghan feeling is rising. A smuggler offers to take you over the mountains to Turkey for $1,500."],
+  choices:[
+   {label:"Go to Turkey",next:"van"},
+   {label:"Stay in Iran",end:"iranStay"}]},
+ van:{year:2023,place:"Iran–Turkey border, near Van",
+  text:["The smuggler walks your group over the mountains at night. Turkey has built a wall along much of this border, and soldiers patrol it."],
+  fact:"Turkey built a wall about 3 metres high along much of its border with Iran. Rights groups have documented pushbacks of Afghans there. (Human Rights Watch)",
+  choices:[{label:"Climb",roll:{p:55,label:"You cross without being caught",
+     win:{t:"You walk for 14 hours. At dawn a minibus takes your group towards Istanbul.",money:-1500,safety:-10,next:"istanbulA"},
+     lose:{t:"Soldiers catch your group and push you back into Iran. Two weeks later you try again and get through.",money:-2000,safety:-25,next:"istanbulA"}}}]},
+ istanbulA:{year:2023,place:"Zeytinburnu, Istanbul",
+  text:["You work 12 hours a day in a basement textile workshop and sleep on the floor with six other men. Istanbul is not registering new applicants for international protection. Police stop Afghans in the street."],
+  fact:"Turkey deported tens of thousands of Afghans in 2022 and 2023. (Turkish Interior Ministry; Human Rights Watch)",
+  choices:[
+   {label:"Keep working in Istanbul for now",roll:{p:55,label:"You are not stopped by police",
+     win:{t:"Six months without trouble. You save enough to choose your next step.",money:1500,next:"bulgaria"},
+     lose:{t:"Police raid the workshop. You are held in a removal centre and put on a charter flight to Kabul.",safety:-20,end:"deportedTr"}}},
+   {label:"Go straight on to Bulgaria",next:"bulgaria"}]},
+ bulgaria:{year:2023,place:"Turkish–Bulgarian border, Strandzha forest",
+  text:["A smuggler wants €3,000 to take you through Bulgaria to Serbia, walking for days through the forest. It is October and the nights are cold."],
+  fact:"Rights groups and the Council of Europe have documented violent pushbacks at the Bulgarian–Turkish border.",
+  choices:[
+   {label:"Go with the smuggler",roll:{p:50,label:"You get through Bulgaria",
+     win:{t:"Nine days walking and in the back of cars. You reach Serbia.",money:-3000,safety:-10,next:"germanyA"},
+     lose:{t:"Border police take your phone and shoes and push you back into Turkey. You try again a month later and get through.",money:-3500,safety:-25,next:"germanyA"}}},
+   {label:"Stay in Istanbul after all",end:"istanbulStay"}]},
+ germanyA:{year:2023,place:"Serbia → Hungary → Austria → Germany",
+  text:["Through Serbia, a hidden ride across Hungary, a train through Austria. In Passau you walk up to a police officer and say the word you have practised: “Asyl.”"],
+  fact:"In 2023 most Afghans who applied for asylum in Germany received some form of protection.",
+  choices:[{label:"Wait for your asylum decision",roll:{p:70,label:"You are given protection",
+     win:{t:"Your interview goes well. You receive protection.",status:"Protection · Germany",next:"bavaria"},
+     lose:{t:"Your asylum claim is refused, but Germany does not deport you either. You get a 'Duldung', a tolerated stay that can end at any time.",status:"Tolerated stay (Duldung) · Germany",next:"bavaria"}}}]},
+ bavaria:{year:2024,place:"A small town in Bavaria",
+  text:["German classes in the morning, a kitchen job at night. Zainab is now 17 and has been out of school for three years. In August 2024 Germany sends its first deportation flight to Afghanistan since the Taliban took power."],
+  fact:"Since 2021 the Taliban have banned girls from school after the sixth grade and women from universities. Afghanistan is the only country in the world with such a ban. (UNESCO)",
+  choices:[
+   {label:"Apply for an apprenticeship as an electrician",roll:{p:s=>s.status.startsWith("Protection")?65:40,label:"You are accepted (harder with a Duldung)",
+     win:{t:"A local firm takes you on. In Germany, an apprenticeship can protect you from deportation while you train.",money:1500,flag:"training",end:"germanyEnd"},
+     lose:{t:"The firm says your papers are 'too uncertain'. You keep washing dishes.",end:"germanyEnd"}}},
+   {label:"Work double shifts to pay for Zainab's online classes",t:"Every month you send money for a secret online school. Zainab is learning English, like you once did.",sent:2000,ties:10,end:"germanyEnd"}]}
+ },
+ endings:{
+  evacuated:{stamp:s=>s.status.startsWith("Asylee")?"ASYLEE":"PAROLE",tone:s=>s.status.startsWith("Asylee")?"good":"warn",title:"Evacuated to the United States",text:s=>s.status.startsWith("Asylee")?"You were one of about 76,000 Afghans flown to the US in 2021, and one of the lucky ones whose asylum case was decided quickly. You can apply for a green card. Your family is still in Herat.":"You were one of about 76,000 Afghans flown to the US in 2021. Your status is still not settled, and in 2025 US policy towards Afghans hardened sharply. Your luck at the airport gate has not yet turned into security."},
+  herat:{stamp:"STAYED",tone:"ink",title:"Staying in Herat",text:"You stay with your family. You teach Zainab English at home in secret. Many people cannot leave, and many choose not to."},
+  deportedIran:{stamp:"DEPORTED",tone:"bad",title:"Sent back to Afghanistan",text:"You are back in Herat with nothing, owing money for the journey. Many of the men on the deportation bus say they will try again."},
+  iranStay:{stamp:"NO STATUS",tone:"bad",title:"Undocumented in Iran",text:"You stay in Tehran, working without papers. In 2025 deportations of Afghans from Iran reach record numbers. Every police car makes you stop breathing."},
+  deportedTr:{stamp:"DEPORTED",tone:"bad",title:"Deported to Kabul",text:"You land in Kabul with a plastic bag of belongings, two years and $4,000 after you first left. The journey cost your family everything they had."},
+  istanbulStay:{stamp:"NO STATUS",tone:"bad",title:"Undocumented in Istanbul",text:"You stay in Istanbul, working in the same basement. You learn enough Turkish to joke with your boss. One police check could end it all."},
+  germanyEnd:{stamp:s=>s.status.startsWith("Protection")?"PROTECTED":"TOLERATED",tone:s=>s.status.startsWith("Protection")?"good":"warn",title:s=>s.status.startsWith("Protection")?"Protected in Germany":"Tolerated, not accepted",
+   text:s=>s.status.startsWith("Protection")?"You have protection in Germany and a future you can plan for. Zainab, in Herat, cannot study past sixth grade. Your lives are now on two very different paths.":"You live on a Duldung, renewed every few months. "+(s.flags.training?"Your apprenticeship protects you for now.":"Every letter from the immigration office could be a deportation order.")}
+ }},
+
+ukraine:{name:"Olena",age:38,from:"Kharkiv, Ukraine",code:"UKR",kind:"Temporary protection",weight:12,
+ blurb:"Accountant, 38. Two children; her husband must stay in Ukraine.",
+ start:{year:2022,money:3000,safety:80,ties:85,status:"Citizen of Ukraine"},
+ prompt:"Ukrainians in the EU had the right to live, work and study within days. Syrians in 2015 waited months or years. Why did Europe respond so differently, and what does that tell us about refugee policy?",
+ scenes:{
+ start:{year:2022,place:"Kharkiv, 24 February, 5 a.m.",
+  text:["Explosions wake you. Russia has invaded. Your children, Sasha (10) and Mila (6), are in your bed. Your husband Andriy is 40: men aged 18 to 60 are not allowed to leave the country."],
+  fact:"Within weeks of the invasion, millions of Ukrainians fled abroad, the fastest refugee movement in Europe since the Second World War. (UNHCR)",
+  choices:[
+   {label:"Leave with the children today",t:"Andriy drives you to the station. You don't know when you'll see him again.",ties:-15,next:"train"},
+   {label:"Shelter in the metro and wait",roll:{p:50,label:"Your district avoids heavy shelling",
+     win:{t:"Two weeks underground. Mila draws pictures of the trains. Then you decide to leave.",safety:-10,next:"train"},
+     lose:{t:"A missile hits the next block. Your windows are blown in. You leave the next morning.",safety:-25,money:-500,next:"train"}}}]},
+ train:{year:2022,place:"Lviv → Przemyśl, Poland",
+  text:["A free evacuation train, standing room only, 20 hours to the Polish border. At Przemyśl station, volunteers hand out soup, SIM cards and toys."],
+  fact:"In March 2022 the EU used its Temporary Protection Directive for the first time. Ukrainians got the right to live, work, study and see a doctor anywhere in the EU immediately, without an asylum process.",
+  choices:[
+   {label:"Stay in Poland, close to home",status:"Temporary protection · Poland",next:"krakow"},
+   {label:"Take a free train on to Berlin",t:"A family in Berlin offers you their spare room. Germany pays higher benefits, but it is further from home and the language is harder.",status:"Temporary protection · Germany",flag:"germany",next:"krakow"}]},
+ krakow:{year:2022,place:"Your new city",
+  text:["You get your registration number in one day and can work immediately. Your accounting degree needs the local language, so you take a job cleaning hotel rooms. The children can go to the local school in the morning and Ukrainian online school at night."],
+  fact:"Poland and Germany each registered more than a million Ukrainians for temporary protection. (Eurostat)",
+  choices:[
+   {label:"Enrol the children in the local school",t:"Sasha comes home crying in a language he doesn't understand. By spring he is translating for you.",ties:5,flag:"localSchool",next:"andriy"},
+   {label:"Keep them in Ukrainian online school only",t:"They keep their grades and their friends from home, but they sit at a laptop all day and don't learn the local language.",ties:-5,next:"andriy"}]},
+ andriy:{year:2023,place:"Calls from the front",
+  text:["Andriy has been called up. He is at the front near Bakhmut. He calls when he can, sometimes not for a week."],
+  choices:[{label:"Wait for news",roll:{p:70,label:"Andriy comes through the year unhurt",
+     win:{t:"He calls on Mila's birthday and sings to her over a bad line. He is alive.",next:"returnQ"},
+     lose:{t:"Andriy is wounded by shrapnel. He recovers in a hospital in Dnipro, and you travel back to see him for a week.",ties:-10,money:-600,flag:"wounded",next:"returnQ"}}}]},
+ returnQ:{year:2023,place:"Summer",
+  text:["Kharkiv is calmer this summer. Many people you know are going home. Your mother is alone in the flat."],
+  fact:"By 2023 hundreds of thousands of Ukrainians had gone home, while others came and went between Ukraine and the EU. Temporary protection let them move back and forth.",
+  choices:[
+   {label:"Go back to Kharkiv",next:"kharkiv2"},
+   {label:"Stay where you are",next:"stay24"}]},
+ kharkiv2:{year:2024,place:"Kharkiv, May",
+  text:["In May 2024 Russia opens a new offensive north of Kharkiv. Glide bombs hit the city. Sasha's school moves classes into the metro."],
+  choices:[
+   {label:"Stay in Kharkiv",roll:{p:70,label:"Your family is not hurt",
+     win:{t:"You stay. Life goes on underground and above ground. You work for a firm that pays in hryvnias, not euros.",end:"kharkiv"},
+     lose:{t:"A blast shatters Mila's classroom window while she is inside. She is cut but recovers. You leave again for the West.",safety:-30,end:"leftAgain"}}},
+   {label:"Leave again for the West",end:"leftAgain"}]},
+ stay24:{year:2024,place:"Your new city",
+  text:s=>s.flags.germany?["Germany is debating cutting benefits for Ukrainians. You've passed the B1 German exam. An accounting firm says it might hire you if your Ukrainian degree is recognised."]:["Poland now pays its 800-zloty monthly child benefit to Ukrainian families only if the children attend Polish school. An accounting firm says it might hire you if your Ukrainian degree is recognised."],
+  fact:"Host countries have gradually linked support for Ukrainians to work and school attendance, as 'temporary' protection has stretched into years.",
+  choices:[
+   {label:"Apply to have your degree recognised",roll:{p:50,label:"Your degree is recognised",
+     win:{t:"Your degree is recognised. You start as a junior accountant, earning twice your cleaning wage.",money:5000,flag:"career",next:"y2025"},
+     lose:{t:"The authority wants documents from a university office in Kharkiv that was bombed. You keep cleaning hotel rooms.",next:"y2025"}}},
+   {label:"Keep the cleaning job and send money to Andriy",t:"Money for a drone, a sleeping bag, a car for his unit.",sent:2500,next:"y2025"}]},
+ y2025:{year:2025,place:"Your new city",
+  text:s=>[(s.flags.localSchool?"Sasha speaks the local language like a native and has a girlfriend. ":"The children never learned the local language and want to go home. ")+"The EU extends temporary protection until March 2027. After that, nobody knows."],
+  fact:"About 4.3 million people from Ukraine had temporary protection in the EU in 2025. (Eurostat)",
+  choices:[
+   {label:"Apply for long-term residence where you are",end:"settle"},
+   {label:"Plan to go home when the war ends",end:"waiting"}]}
+ },
+ endings:{
+  kharkiv:{stamp:"RETURNED",tone:"ink",title:"Back in Kharkiv",text:"You live under the air-raid sirens, in your own flat, near your mother. Andriy comes home on leave twice a year. Returning was your choice, and the risk is yours too."},
+  leftAgain:{stamp:"PROTECTED",tone:"stamp",title:"Leaving a second time",text:"You go back west. Your temporary protection is still valid, so you are allowed in the same day. Few refugees in history have been able to move back and forth like this."},
+  settle:{stamp:s=>s.flags.career?"SETTLING":"TEMPORARY",tone:s=>s.flags.career?"good":"warn",title:s=>s.flags.career?"Building a life":"Temporary, for now",text:s=>s.flags.career?"With a job as an accountant, you qualify for long-term residence. Your children are growing up between two languages. Andriy says, 'We'll decide when the war is over.'":"Without a qualified job, long-term residence is hard to get. You stay on temporary protection and wait to see what happens in 2027."},
+  waiting:{stamp:"WAITING",tone:"warn",title:"Waiting for peace",text:"You keep a suitcase packed in the hall. Your status is temporary. So is your flat, and so, you hope, is the war."}
+ }},
+
+honduras:{name:"Luis",age:16,from:"San Pedro Sula, Honduras",code:"HND",kind:"Unaccompanied minor",weight:10,
+ blurb:"High school student, 16. A gang wants him as a lookout.",
+ start:{year:2018,money:80,safety:30,ties:75,status:"Citizen of Honduras"},
+ prompt:"Luis left because of gang violence, but most gang-violence asylum claims in the US fail, because gangs are not 'the state'. Should people fleeing gangs count as refugees?",
+ scenes:{
+ start:{year:2018,place:"Chamelecón, San Pedro Sula",
+  text:["You are 16. Members of a gang (mara) tell you to start working as a lookout. Your cousin Kevin said no last year. He was shot outside his house.","Your mother works in a textile factory. Your father has lived in the United States without papers since you were four."],
+  fact:"In the 2010s Honduras had one of the highest murder rates in the world. Gang violence is a major reason people flee northern Central America. (UNODC)",
+  choices:[
+   {label:"Join the caravan leaving for the US",t:"In October, thousands of people set off together from the bus station. Travelling in a big group feels safer than paying a smuggler.",ties:-10,next:"caravan"},
+   {label:"Go to your grandmother's village in Olancho",next:"olancho"},
+   {label:"Let your mother borrow $8,000 for a smuggler",tag:"$8,000 debt",t:"Your mother borrows from your father in Houston and a moneylender in town. The smuggler takes you north by bus and truck.",money:-8000,ties:-10,next:"tijuana"}]},
+ olancho:{year:2018,place:"Olancho, countryside",
+  text:["Your grandmother grows maize and beans. There is no gang in the village, but there is little work and no secondary school nearby."],
+  fact:"Many people displaced by violence in Central America move inside their own country first. Honduras has hundreds of thousands of internally displaced people. (IDMC)",
+  choices:[{label:"Settle in and help on the farm",roll:{p:50,label:"The gang does not come after you",
+     win:{t:"You plant and harvest. Nobody comes. You start to relax.",ties:5,next:"eta"},
+     lose:{t:"A motorbike with two men you recognise from Chamelecón stops at the village shop asking for you. You leave that night and join the caravan.",safety:-20,next:"caravan"}}}]},
+ eta:{year:2020,place:"Olancho, November",
+  text:["Two hurricanes, Eta and Iota, hit Honduras two weeks apart. The floods destroy your grandmother's maize, and her house loses its roof."],
+  fact:"Hurricanes Eta and Iota in 2020 affected millions of people in Central America. Disasters and violence often push people to move at the same time.",
+  choices:[
+   {label:"Stay and rebuild",t:"You and your grandmother rebuild with sheets of zinc from an aid group.",ties:10,next:"olancho2"},
+   {label:"Go north",t:"You take a bus to the Guatemalan border with two friends.",next:"caravan"}]},
+ olancho2:{year:2022,place:"Olancho",
+  text:["You are 20. Your father in Houston sends money for fertiliser. A seasonal farm job programme recruits Hondurans for legal temporary work in the US, on H-2A visas."],
+  fact:"Temporary work visas, such as the US H-2A programme for farm workers, offer legal routes but tie workers to one employer and one season.",
+  choices:[
+   {label:"Apply for a seasonal farm visa",roll:{p:30,label:"You are selected",
+     win:{t:"You spend eight months picking blueberries in Georgia, legally. You come home with $7,000.",money:7000,end:"seasonal"},
+     lose:{t:"Thousands apply for a few hundred places. You are not chosen.",end:"olanchoStay"}}},
+   {label:"Stay and farm",end:"olanchoStay"}]},
+ caravan:{year:2018,place:"Tapachula, southern Mexico",
+  text:["You cross into Mexico. People along the road hand out water and tortillas. Mexico offers to let some people apply for asylum or a humanitarian visa here."],
+  fact:"In 2018 'migrant caravans' of thousands of Central Americans travelled north through Mexico together. Mexico has since become one of the world's largest receivers of asylum claims.",
+  choices:[
+   {label:"Apply for asylum in Mexico",roll:{p:60,label:"Mexico grants you protection",
+     win:{t:"After months of waiting in Tapachula, you get refugee status in Mexico.",status:"Refugee status · Mexico",next:"mexicoLife"},
+     lose:{t:"Your case drags on. After a year you lose patience.",next:"tijuana"}}},
+   {label:"Keep going to Tijuana",roll:{p:80,label:"You reach Tijuana safely",
+     win:{t:"Six weeks of walking, buses and hitchhiking. You reach the border.",safety:-10,next:"tijuana"},
+     lose:{t:"Men with guns rob a group of you in Sinaloa. You arrive in Tijuana with nothing.",money:-80,safety:-20,next:"tijuana"}}}]},
+ mexicoLife:{year:2020,place:"Monterrey",
+  text:["A UN programme helps you move to Monterrey, where factories need workers. You are 18 now."],
+  choices:[{label:"Work at an auto parts factory",roll:{p:70,label:"You settle in",
+     win:{t:"You earn a steady wage. You send money to your mother.",money:1500,sent:1500,end:"mexico"},
+     lose:{t:"Your boss underpays you because you are Honduran. You keep going anyway.",money:600,sent:600,end:"mexico"}}}]},
+ tijuana:{year:2018,place:"Tijuana",
+  text:["Thousands are waiting here. The US only lets in a few asylum seekers a day. You are 16: a child who arrives alone must be handed to a children's shelter, not held in adult detention."],
+  fact:"US law gives special protections to unaccompanied children. About 76,000 unaccompanied children were stopped at the US southern border in 2019. (CBP)",
+  choices:[
+   {label:"Climb the border fence and hand yourself in as a minor",roll:{p:85,label:"You are treated as a minor",
+     win:{t:"Border Patrol takes you to a holding cell, then a children's shelter in Texas.",status:"Unaccompanied minor · USA",next:"shelter"},
+     lose:{t:"Officers doubt your age. You spend four nights in a freezing cell before your birth certificate is accepted.",safety:-15,status:"Unaccompanied minor · USA",next:"shelter"}}},
+   {label:"Wait in Tijuana for an asylum appointment",t:"In 2019 the US starts sending asylum seekers back to Mexico to wait for their hearings.",next:"mpp"}]},
+ mpp:{year:2019,place:"Tijuana",
+  text:["Under 'Remain in Mexico', you must wait in Tijuana for your US court date, months away. Tijuana is dangerous for migrants."],
+  choices:[{label:"Wait for your court date",roll:{p:20,label:"You win your asylum case",
+     win:{t:"Against the odds, a volunteer lawyer helps you win your case.",status:"Asylee · USA",end:"asylum"},
+     lose:{t:"You lose your case without a lawyer. Your family tells you not to come home.",next:"tijuana2"}}}]},
+ tijuana2:{year:2021,place:"Tijuana",
+  text:["You have been waiting in Tijuana for two years. You work at a taco stand and sleep at a shelter run by a church. You are 19. A smuggler offers to take you across the desert in Arizona for $6,000."],
+  fact:"Hundreds of people die every year crossing the US–Mexico border, many from heat in the desert. (IOM Missing Migrants Project)",
+  choices:[
+   {label:"Cross the desert",tag:"Costs $6,000",roll:{p:60,label:"You make it across",
+     win:{t:"Three nights walking. You reach Phoenix and take a bus to your father in Houston. You have no papers.",money:-6000,safety:-20,status:"Undocumented · USA",next:"y2025H"},
+     lose:{t:"Border Patrol finds your group on the second night. You are deported to Honduras.",money:-6000,safety:-15,status:"Deported to Honduras",end:"deported"}}},
+   {label:"Apply for a Mexican work permit and stay",roll:{p:60,label:"You get a permit",
+     win:{t:"You get a humanitarian visa and a factory job.",status:"Humanitarian visa · Mexico",money:1000,end:"mexico"},
+     lose:{t:"No permit. You stay anyway.",end:"mexicoLimbo"}}}]},
+ shelter:{year:2019,place:"A children's shelter in Texas",
+  text:["Forty days in a shelter. Then you are released to your father in Houston. A court date for your deportation case arrives in the post."],
+  choices:[{label:"Move in with your father",t:"Your father is a stranger to you. He works in roofing and comes home at 9 p.m.",ties:15,next:"houston"}]},
+ houston:{year:2020,place:"Houston",
+  text:["You go to high school by day and wash dishes at night. A teacher tells you about Special Immigrant Juvenile Status, a route to a green card for young people abused, abandoned or neglected by a parent."],
+  fact:"Special Immigrant Juvenile Status can lead to permanent residence, but long backlogs mean many young people wait years for a green card. (USCIS)",
+  choices:[
+   {label:"Find a free lawyer and apply",roll:{p:50,label:"Your application is approved",
+     win:{t:"SIJS approved. You are on a waiting list for a green card.",status:"SIJS approved · USA",next:"y2025H"},
+     lose:{t:"Your 18th birthday arrives before your case is filed in the right court.",next:"y2025H"}}},
+   {label:"Drop out of school and work full time",t:"You earn $2,000 a month on construction sites and send half home.",money:3000,sent:5000,next:"y2025H"}]},
+ y2025H:{year:2025,place:"Houston",
+  text:["You are 23. Immigration enforcement in the US expands: raids on workplaces, arrests at courthouses."],
+  fact:"In 2025 the US government expanded immigration arrests and deportations, including at immigration court hearings.",
+  choices:[{label:"Keep going to work",roll:{p:s=>s.status.startsWith("SIJS")?85:60,label:"You are not detained",
+     win:{t:"You keep your head down. Every day without a raid is a good day.",end:"houstonEnd"},
+     lose:{t:"Immigration agents detain you at a building site. You are deported to San Pedro Sula, a city you left at 16.",status:"Deported to Honduras",end:"deported"}}}]}
+ },
+ endings:{
+  olanchoStay:{stamp:"STAYED",tone:"ink",title:"Rebuilding in Olancho",text:"You stay and rebuild your grandmother's house. You never left Honduras, but you were still displaced: by a gang first, then by a storm."},
+  seasonal:{stamp:"SEASONAL",tone:"good",title:"A legal, temporary route",text:"You go to the US and come back home, legally, every year. Your savings build a house in Olancho. You never got permanent status, but you never had to cross a desert either."},
+  mexico:{stamp:"PROTECTED",tone:"good",title:"A life in Mexico",text:"You live in Monterrey with refugee status. Mexico was never your plan, but it is where you are safe and can work legally."},
+  mexicoLimbo:{stamp:"NO STATUS",tone:"bad",title:"Stuck in Tijuana",text:"You stay in Tijuana without papers, working at a taco stand. The US is a few hundred metres away."},
+  asylum:{stamp:"ASYLEE",tone:"good",title:"Granted asylum in the US",text:"You won, one of the few. Most gang-violence asylum claims fail. Without a lawyer, your chances would have been very small."},
+  houstonEnd:{stamp:s=>s.status.startsWith("SIJS")?"PENDING":"NO STATUS",tone:s=>s.status.startsWith("SIJS")?"warn":"bad",title:s=>s.status.startsWith("SIJS")?"Waiting for a green card":"Undocumented in Houston",text:s=>s.status.startsWith("SIJS")?"You have SIJS but no green card yet: the waiting list for Hondurans is years long. You have lived in the US for more than a quarter of your life.":"You have no legal status. Houston is home, but it could be taken away any day."},
+  deported:{stamp:"DEPORTED",tone:"bad",title:"Back in San Pedro Sula",text:"Seven years after you left, you are back in the city you fled. The gang members you ran from know your face."}
+ }},
+
+nigeria:{name:"Chiamaka",age:23,from:"Enugu, Nigeria",code:"NGA",kind:"International student",weight:8,
+ blurb:"Microbiology graduate, 23. First-class degree, no job.",
+ start:{year:2021,money:4000,safety:75,ties:85,status:"Citizen of Nigeria"},
+ prompt:"Chiamaka moved legally, as a student. Her outcome still depended on visa rules that changed several times while she was there. Who are these rules designed for, and who do they leave out?",
+ scenes:{
+ start:{year:2021,place:"Enugu",
+  text:["You finished a microbiology degree with first-class honours and did your year of national service. Since then: no job. Everyone on WhatsApp is talking about 'japa', leaving the country."],
+  fact:"In 2022 Nigerians received about 59,000 UK study visas, among the most of any nationality. (UK Home Office)",
+  choices:[
+   {label:"Apply for a master's in the UK",t:"Your father agrees to sell a plot of land to pay the £16,000 fees.",next:"naira"},
+   {label:"Apply for a college program in Canada",roll:{p:40,label:"Your Canadian study permit is approved",
+     win:{t:"Approved! You will study for a postgraduate diploma in Halifax.",money:-12000,status:"Study permit · Canada",next:"canada0"},
+     lose:{t:"Refused: the officer is 'not satisfied you will leave Canada at the end of your stay'. You apply to the UK instead.",money:-300,next:"naira"}}},
+   {label:"Stay and look for work in Lagos",roll:{p:30,label:"You get a lab job",
+     win:{t:"A pharmaceutical company in Lagos hires you as a quality control analyst.",money:2000,next:"lagos1"},
+     lose:{t:"Six months of applications, no job. You apply to the UK after all.",next:"naira"}}}]},
+ lagos1:{year:2022,place:"Lagos",
+  text:["Your commute is three hours a day in traffic. Your rent takes almost half your salary. Your cousin in Manchester posts photos of her new car. Your mother says, “Stay, we need you near us.”"],
+  choices:[
+   {label:"Move closer to work and share a flat",t:"You move to a shared flat near the factory. Less time in traffic, less money saved.",money:-500,ties:-5,next:"lagos2"},
+   {label:"Take an evening MBA course",roll:{p:60,label:"Your company pays half",
+     win:{t:"The company pays half. You are promoted to supervisor.",money:1000,next:"lagos2"},
+     lose:{t:"You pay it all yourself and fall behind on rent.",money:-1500,next:"lagos2"}}}]},
+ lagos2:{year:2024,place:"Lagos",
+  text:["The naira has crashed. Your salary is worth less than half what it was when you started. Two of your team leaders have left for the UK and Canada. A foreign company offers you a remote job paid in dollars."],
+  fact:"When skilled workers leave, their countries lose people they trained. When those workers send money home, start businesses or return, origin countries can also gain. Researchers argue about which effect is bigger.",
+  choices:[
+   {label:"Take the remote job and stay in Lagos",roll:{p:60,label:"The remote job is stable",
+     win:{t:"You earn in dollars and live in Lagos. Your friends abroad are jealous of your rent.",money:6000,end:"lagos"},
+     lose:{t:"The company cuts its Nigerian contractors after six months. You go back to your old job.",money:1500,end:"lagos"}}},
+   {label:"Start applying for jobs abroad",t:"You start the Canadian application process. It will take at least two years.",end:"lagosLeaving"}]},
+ naira:{year:2022,place:"Enugu",
+  text:["The naira keeps falling, so your fees cost more in naira every month. The visa needs proof that your family can cover fees and living costs."],
+  fact:"The naira lost more than two-thirds of its value against the pound between 2022 and 2024, making study abroad much more expensive for Nigerian families.",
+  choices:[{label:"Gather the money",roll:{p:60,label:"Your family raises enough in time",
+     win:{t:"The land sale covers it. Your visa is approved.",money:-14000,status:"Student visa · UK",next:"coventry"},
+     lose:{t:"You borrow the rest from an uncle at high interest. Your visa is approved.",money:-17000,ties:-5,status:"Student visa · UK",next:"coventry"}}}]},
+ coventry:{year:2022,place:"Coventry",
+  text:["You may work up to 20 hours a week during term. Rent is £550 a month. You need to start paying your uncle back."],
+  fact:"Since January 2024 most international master's students in the UK can no longer bring family members as dependants.",
+  choices:[
+   {label:"Work 20 hours and focus on your studies",t:"You work in a care home at weekends and get a distinction.",money:3000,flag:"distinction",next:"blackTax"},
+   {label:"Take extra cash-in-hand hours",roll:{p:80,label:"Nobody finds out",
+     win:{t:"The extra shifts pay your uncle back faster. Your grades suffer.",money:6000,next:"blackTax"},
+     lose:{t:"Your employer is raided. Your university is told you broke your visa conditions, and your visa is cancelled.",status:"Visa cancelled",end:"curtailed"}}}]},
+ blackTax:{year:2023,place:"Coventry",
+  text:["Your younger brother needs ₦600,000 for his university fees. Your mother says, “You are in the UK now.” Your rent is due the same week."],
+  fact:"Many migrants support relatives at home even while they struggle themselves. Some call this pressure 'black tax'. Remittances to Nigeria were about $20 billion in 2023. (World Bank)",
+  choices:[
+   {label:"Send the fees",t:"You skip meals for a month and pick up night shifts. Your brother starts university.",sent:800,money:-800,ties:10,next:"graduate"},
+   {label:"Say you can't this time",t:"Your mother goes quiet on the phone. Your brother defers for a year.",ties:-15,next:"graduate"}]},
+ graduate:{year:2023,place:"Coventry",
+  text:["The Graduate Route lets you stay and work for two years. To stay longer you need a Skilled Worker visa: an employer has to sponsor you. In April 2024 the minimum salary for most jobs rises to £38,700."],
+  fact:"In 2024 the UK sharply raised the salary threshold for skilled worker visas, and it closed the care worker route to new overseas recruits in 2025.",
+  choices:[
+   {label:"Hunt for a lab job with visa sponsorship",roll:{p:s=>s.flags.distinction?35:20,label:"A lab sponsors you (better odds with a distinction)",
+     win:{t:"A diagnostics company sponsors your Skilled Worker visa.",money:5000,status:"Skilled Worker visa · UK",end:"skilled"},
+     lose:{t:"Two hundred applications. Employers say they 'can't sponsor at the moment'.",next:"care"}}},
+   {label:"Switch to a care worker visa",next:"care"},
+   {label:"Go home with your UK degree",end:"home"}]},
+ care:{year:2024,place:"Midlands",
+  text:["A care agency offers to sponsor you as a care worker. The pay is low and your visa depends on the agency keeping its sponsor licence."],
+  fact:"The UK revoked hundreds of care sponsors' licences between 2023 and 2025, leaving many migrant care workers with 60 days to find a new sponsor. (UK Home Office)",
+  choices:[
+   {label:"Take the care job",roll:{p:60,label:"The agency is honest",
+     win:{t:"Long shifts, but a steady visa. You start counting towards five years.",money:3000,status:"Health & Care visa · UK",end:"care"},
+     lose:{t:"The agency loses its licence. You have 60 days to find another sponsor.",status:"60 days to find a sponsor",end:"limboUK"}}},
+   {label:"Go home with your UK degree",end:"home"}]},
+ canada0:{year:2022,place:"Halifax, first winter",
+  text:["Your first winter. The college is in a converted office block. Most of your classmates are from India and Nigeria. Food prices shock you, and you find out the campus has a food bank."],
+  fact:"Some Canadian private colleges grew rapidly on international student fees. Students reported overcrowded housing and growing food bank use. (Canadian government reviews, 2023–24)",
+  choices:[
+   {label:"Use the food bank and save",t:"You swallow your pride. You save enough to pay back part of your father's land.",money:1500,sent:500,next:"canada"},
+   {label:"Work extra hours at a warehouse",roll:{p:75,label:"Your studies don't suffer",
+     win:{t:"You manage both. Barely.",money:3000,next:"canada"},
+     lose:{t:"You fail a course and pay to retake it.",money:-500,next:"canada"}}}]},
+ canada:{year:2023,place:"Halifax",
+  text:["Rent is high and there are not many jobs. You share a two-bedroom flat with five other international students. After graduating you can work in Canada for up to three years."],
+  fact:"In 2024 Canada capped international student permits and made it harder to get permanent residence, after years of rapid growth.",
+  choices:[{label:"Graduate and apply for permanent residence",roll:{p:45,label:"You receive an invitation for permanent residence",
+     win:{t:"Your work experience and French course bring your points up. You are invited to apply for permanent residence.",status:"Permanent resident · Canada",end:"canadaPR"},
+     lose:{t:"Your points score is too low. Your work permit runs out in 2026.",status:"Work permit · Canada",end:"canadaWait"}}}]}
+ },
+ endings:{
+  lagos:{stamp:"STAYED",tone:"ink",title:"A career in Lagos",text:"You stay. Half your university friends have gone abroad. Your company is always short of qualified staff."},
+  lagosLeaving:{stamp:"APPLYING",tone:"warn",title:"Planning to leave",text:"You have a good job, and you are still planning to leave. Nigerians call it 'japa'. The reason is not that you can't survive at home. You want a future you can plan."},
+  curtailed:{stamp:"CANCELLED",tone:"bad",title:"Visa cancelled",text:"You fly home without finishing your degree, still owing your uncle. A small rule broken under money pressure cost you everything you had invested."},
+  skilled:{stamp:"SPONSORED",tone:"good",title:"Skilled Worker in the UK",text:"You work in a lab doing the job you trained for. If the rules don't change again, you can settle in the UK in a few years."},
+  care:{stamp:"SPONSORED",tone:"warn",title:"Care worker in the UK",text:"You have a first-class science degree and a master's, and you work night shifts in a care home. Your visa depends on your employer."},
+  limboUK:{stamp:"60 DAYS",tone:"bad",title:"Sixty days",text:"You are looking for a new sponsor, fast. Without one you must leave the UK, with nothing to show for the debt except a degree."},
+  home:{stamp:"RETURNED",tone:"ink",title:"Back home with a UK degree",text:"You go back to Nigeria. Your UK degree helps you get a job at an NGO in Abuja. Your family is still paying off the land sale."},
+  canadaPR:{stamp:"RESIDENT",tone:"good",title:"Permanent resident of Canada",text:"You become a permanent resident. In three more years you can apply for citizenship. Your younger sister is already filling in the study permit form."},
+  canadaWait:{stamp:"PENDING",tone:"warn",title:"Running out of time",text:"Your work permit ends next year. Canada's rules have tightened just as you finished. You check your points score every week."}
  }}
 };
 
@@ -547,7 +1078,7 @@ function choose(i){const sc=scene(),c=visibleChoices(sc)[i];let eff=c,rollInfo=n
     rollInfo={p,r,ok,label:c.roll.label};eff={...c,...(ok?c.roll.win:c.roll.lose)};delete eff.roll}
   const deltas=apply(eff);
   S.log.push({year:sc.year,choice:c.label,roll:rollInfo});
-  view={screen:"outcome",text:eff.t||"",roll:rollInfo,deltas,next:eff.next,end:eff.end,choiceLabel:c.label};render()}
+  view={screen:"outcome",text:eff.t||"",roll:rollInfo,deltas,next:eff.next,end:val(eff.end,S),choiceLabel:c.label};render()}
 function visibleChoices(sc){return sc.choices.filter(c=>!c.if||c.if(S))}
 function cont(){if(view.end){S.ending=view.end;view={screen:"end"}}else{S.scene=view.next;view={screen:"scene"}}render();window.scrollTo({top:0})}
 
@@ -565,7 +1096,7 @@ function header(){const p=PROFILES[S.pid],sc=S.scene&&view.screen!=="end"?scene(
 function homeView(){
  const lives=Object.entries(PROFILES).map(([k,p])=>`<button class="life" data-pick="${k}"><span class="label">${esc(p.kind)}</span><b>${esc(p.name)} · ${esc(p.from)}</b><span>${esc(p.blurb)}</span></button>`).join("");
  return `<section class="hero fade">
-  <span class="label">A migration simulation · about 7 minutes per life</span>
+  <span class="label">A migration simulation · ten lives · about 10 minutes each</span>
   <h1>The Border <span>Lottery</span></h1>
   <p class="lede">You don't choose where you are born, which passport you hold, or the year a war or a flood arrives. You do make choices after that. Draw a life and see which parts were up to you.</p>
   <div class="figs">
@@ -575,16 +1106,17 @@ function homeView(){
   </div>
   <div class="btnrow"><button class="btn" id="drawBtn">Draw a random life</button><a class="btn ghost" href="#lives" style="text-decoration:none">Choose a life</a></div>
  </section>
- <section class="sheet" id="lives"><div><span class="label">Six lives</span><h3 style="font-size:24px;margin-top:4px">Choose one, or let chance decide</h3></div>
-  <p style="font-size:15.5px;color:var(--muted)">The random draw is weighted roughly by how common each kind of move is: labour migration and internal displacement come up more often than moving abroad for the sunshine. Teachers can also assign lives so the class covers all six.</p>
+ <section class="sheet" id="lives"><div><span class="label">Ten lives</span><h3 style="font-size:24px;margin-top:4px">Choose one, or let chance decide</h3></div>
+  <p style="font-size:15.5px;color:var(--muted)">The random draw is weighted roughly by how common each kind of move is: labour migration and internal displacement come up more often than moving abroad for the sunshine. Teachers can also assign lives so the class covers all ten.</p>
   <div class="lives">${lives}</div></section>
  ${teacherGuide()}`}
 
 function teacherGuide(){return `<details class="teacher" id="teacher"><summary>Teacher guide: a 20-minute lesson</summary><div class="tbody">
  <dl class="plan">
+  <dt>Tip</dt><dd>If you have a longer class, play two lives with contrasting passports (for example Ukraine and Syria, or the UK and Nepal) and compare them.</dd>
   <dt>0–3 min</dt><dd>Ask: “How many countries can your passport enter without a visa?” Explain the rules: everyone draws one life, reads carefully, and makes decisions as that person. When a choice involves chance, the dice roll shows the odds.</dd>
-  <dt>3–12 min</dt><dd>Students play one life (5–8 minutes) on a phone or laptop, alone or in pairs. Fast finishers draw a second, different life.</dd>
-  <dt>12–15 min</dt><dd>Pair up with someone who had a different life. Compare life cards: the stamp, the passport bar, and how many outcomes were decided by dice.</dd>
+  <dt>3–13 min</dt><dd>Students play one life (8–12 minutes) on a phone or laptop, alone or in pairs. Assign lives so the class covers all ten; pairs reading together tend to discuss more.</dd>
+  <dt>13–15 min</dt><dd>Pair up with someone who had a different life. Compare life cards: the stamp, the passport bar, and how many outcomes were decided by dice.</dd>
   <dt>15–20 min</dt><dd>Whole-class debrief. Tally the end stamps on the board (Citizen, Protected, Pending, Returned, No status…) and use two or three questions below.</dd>
  </dl>
  <div><span class="label">Debrief questions</span></div>
@@ -615,7 +1147,7 @@ function introView(){const p=PROFILES[S.pid],pp=PASSPORTS.find(x=>x[1]===p.code)
 function sceneView(){const sc=scene();
  const ch=visibleChoices(sc).map((c,i)=>`<button class="choice" data-i="${i}"><span class="box"></span><span class="t"><b>${esc(c.label)}</b>${c.roll||c.tag?`<span class="tag">${[c.tag,c.roll?"Chance involved":""].filter(Boolean).join(" · ")}</span>`:""}</span></button>`).join("");
  return header()+`<section class="sheet scene fade"><span class="label">${sc.year} · ${esc(sc.place)}</span>
-  <div class="story">${sc.text.map(t=>`<p>${esc(t)}</p>`).join("")}</div>
+  <div class="story">${val(sc.text,S).map(t=>`<p>${esc(t)}</p>`).join("")}</div>
   ${sc.fact?`<aside class="fact"><span class="label">On the record</span>${esc(sc.fact)}</aside>`:""}
   <div class="choices">${ch}</div></section>`}
 
