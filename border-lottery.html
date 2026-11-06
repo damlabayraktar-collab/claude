@@ -134,6 +134,17 @@ details.teacher[open]>summary::after{content:"−"}
 .pprow.me .bar i{background:var(--stamp)}
 .pprow .n{text-align:right;font-variant-numeric:tabular-nums}
 .prompt{font-size:18px;font-style:italic}
+.quadwrap{display:flex;flex-direction:column;gap:10px}
+.quad{display:grid;grid-template-columns:4.8em minmax(0,1fr) minmax(0,1fr);gap:6px}
+.quad .ax{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.3}
+.qcell{border:1.5px solid var(--rule);background:var(--sheet);border-radius:3px;padding:12px 10px;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:3px;min-height:4.6em;min-width:0}
+.qcell b{font-family:var(--display);font-size:clamp(13.5px,3.6vw,16px);line-height:1.15;overflow-wrap:anywhere}
+.qcell small{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.qcell:hover{border-color:var(--stamp)}
+.qcell.sel{border-color:var(--stamp);background:var(--stamp-soft)}
+.qcell.reading{box-shadow:inset 0 0 0 2px var(--good)}
+.qout{font-size:15.5px;display:flex;flex-direction:column;gap:6px}
+.qout .r{border-left:3px solid var(--good);padding-left:10px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -141,7 +152,7 @@ details.teacher[open]>summary::after{content:"−"}
 
 <script>
 /* ---------- data ---------- */
-const PASSPORTS=[["United Kingdom","GBR",186],["Ukraine","UKR",148],["Honduras","HND",130],["Venezuela","VEN",120],["Philippines","PHL",65],["Nigeria","NGA",45],["Bangladesh","BGD",38],["Nepal","NPL",37],["Syria","SYR",27],["Afghanistan","AFG",25]];
+const PASSPORTS=[["United Kingdom","GBR",186],["Ukraine","UKR",148],["Honduras","HND",130],["Venezuela","VEN",120],["Türkiye","TUR",116],["Philippines","PHL",65],["Tajikistan","TJK",60],["Niger","NER",48],["Nigeria","NGA",45],["Bangladesh","BGD",38],["Nepal","NPL",37],["Syria","SYR",27],["Afghanistan","AFG",25]];
 
 const PROFILES={
 syria:{name:"Rana",age:22,from:"Aleppo, Syria",code:"SYR",kind:"Forced to flee",weight:15,
@@ -461,7 +472,7 @@ philippines:{name:"Joy",age:29,from:"Iloilo City, Philippines",code:"PHL",kind:"
    {label:"Use your savings and experience to move to the UK",t:"Your Gulf experience counts. You pass the UK exams and line up an NHS job.",money:6000,status:"Health & Care visa · UK",end:"ukNext"}]}
  },
  endings:{
-  stay:{stamp:"STAYED",tone:"ink",title:"Nurse at home",text:"You stay in Iloilo. Your ward is short of staff: every year more of your colleagues leave for the UK, the US or the Gulf."},
+  stay:{mob:{q:"voluntary",note:"Joy could have left, with good offers and a skill in demand, but she stayed."},stamp:"STAYED",tone:"ink",title:"Nurse at home",text:"You stay in Iloilo. Your ward is short of staff: every year more of your colleagues leave for the UK, the US or the Gulf."},
   settled:{stamp:"SETTLED",tone:"good",title:"Settled in the UK",text:"You can now stay in the UK for good. After another year you can apply for citizenship. Your mother asks if your niece can come too."},
   waiting:{stamp:"PENDING",tone:"warn",title:"Five more years",text:"You have lived and worked in the UK for five years, through a pandemic, and you still can't stay for good. You check the Home Office website every week."},
   lateLeaver:{stamp:"ONWARD",tone:"stamp",title:"Leaving, late",text:"You land in England in 2024. Your old ward in Iloilo is short another nurse. You stayed when it was hardest, and you leave now because you have to think about your son's future too."},
@@ -551,7 +562,7 @@ venezuela:{name:"Daniel",age:31,from:"Maracaibo, Venezuela",code:"VEN",kind:"Dis
   teacher:{stamp:s=>s.flags.ppt?"PROTECTED":"LUCKY",tone:"good",title:"Teaching again",text:s=>s.flags.ppt?"You teach physics at a school in Bogotá. Your daughter speaks with a Colombian accent. Your status lasts until 2031. Nobody yet knows what happens after that.":"A private school hires you informally to teach physics, paid in cash. Without papers you have no contract and no health insurance, but you are teaching again."},
   colombia:{stamp:s=>s.flags.ppt?"PROTECTED":"NO STATUS",tone:s=>s.flags.ppt?"stamp":"bad",title:"Staying in Colombia",text:"You still sell coffee at traffic lights. Your daughter is top of her class. You have not seen your parents in five years."},
   usa:{stamp:"PENDING",tone:"warn",title:"Asylum pending",text:"You live in Denver and work in construction. Your hearing is scheduled for 2028. In 2025 the US ends Temporary Protected Status for Venezuelans and steps up deportations. You worry every time you drive."},
-  limbo:{stamp:"NO STATUS",tone:"bad",title:"Stuck at the border",text:"You stay in Ciudad Juárez, working in a factory without papers. Going back south means crossing the Darién again."},
+  limbo:{mob:{q:"involuntary",note:"Daniel is stuck in transit: he cannot go forward and cannot easily go back."},stamp:"NO STATUS",tone:"bad",title:"Stuck at the border",text:"You stay in Ciudad Juárez, working in a factory without papers. Going back south means crossing the Darién again."},
   peru:{stamp:"RESIDENT",tone:"good",title:"Settled in Lima",text:"The passports you paid for changed everything: you flew, you got a permit, you work in your field. Your neighbours from Maracaibo who walked had very different years."},
   backHome:{stamp:"RETURNED",tone:"ink",title:"Back in Maracaibo",text:"You go home to care for your parents. Prices are still high, but you have savings and you speak some English from Lima. Many Venezuelans go back and forth like you, and those journeys rarely show up in the statistics."},
   peruLimbo:{stamp:"IRREGULAR",tone:"bad",title:"Out of status in Lima",text:"You still live in Lima, but without valid papers. Every police check is a risk."}
@@ -632,9 +643,9 @@ bangladesh:{name:"Shahida",age:34,from:"Sirajganj, Bangladesh",code:"BGD",kind:"
      lose:{t:"He arrives to find no job. He is detained for overstaying and sent home a year later.",money:-4200,end:"malaysiaBad"}}}]}
  },
  endings:{
-  stayChar:{stamp:"STAYED",tone:"ink",title:"Still on the char",text:"You stay where your family has always lived. Every monsoon you watch the river. Staying is also a choice, and for many people the only one they can afford."},
+  stayChar:{mob:{q:"involuntary",note:"Shahida stayed partly because moving costs money her family did not have. Her choice was real, but narrow."},stamp:"STAYED",tone:"ink",title:"Still on the char",text:"You stay where your family has always lived. Every monsoon you watch the river. Staying is also a choice, and for many people the only one they can afford."},
   lateDhaka:{stamp:"INTERNAL",tone:"stamp",title:"Moving, on your own terms",text:"You move to Dhaka in 2024 with savings and a plan, not in a panic after a flood. Researchers call this 'planned' or 'managed' migration. It often goes better, but few people get the chance."},
-  dhakaStay:{stamp:"INTERNAL",tone:"stamp",title:s=>s.flags.school?"A Dhaka family":"Two incomes in Dhaka",text:s=>s.flags.school?"Your daughter is studying for her exams. Your children now call Dhaka home. In the statistics you are not a 'migrant' at all.":"Your daughter's wage pays the rent. She is 16 and has worked for two years. In the statistics you are not a 'migrant' at all."},
+  dhakaStay:{mob:{q:"acquiescent",note:"After moving once, the family stays in Dhaka. Nobody really decided to stay; there was no money or plan to go further."},stamp:"INTERNAL",tone:"stamp",title:s=>s.flags.school?"A Dhaka family":"Two incomes in Dhaka",text:s=>s.flags.school?"Your daughter is studying for her exams. Your children now call Dhaka home. In the statistics you are not a 'migrant' at all.":"Your daughter's wage pays the rent. She is 16 and has worked for two years. In the statistics you are not a 'migrant' at all."},
   malaysia:{stamp:"SPLIT",tone:"warn",title:"A family on two continents",text:"Your husband sends money home from Malaysia. You will repay the loan in about three years, if nothing goes wrong."},
   malaysiaBad:{stamp:"IN DEBT",tone:"bad",title:"Back to the start, with a loan",text:"Your husband is back in Dhaka, ashamed and in debt. You work two jobs."}
  }},
@@ -781,11 +792,11 @@ afghanistan:{name:"Murtaza",age:19,from:"Herat, Afghanistan",code:"AFG",kind:"Fo
  },
  endings:{
   evacuated:{stamp:s=>s.status.startsWith("Asylee")?"ASYLEE":"PAROLE",tone:s=>s.status.startsWith("Asylee")?"good":"warn",title:"Evacuated to the United States",text:s=>s.status.startsWith("Asylee")?"You were one of about 76,000 Afghans flown to the US in 2021, and one of the lucky ones whose asylum case was decided quickly. You can apply for a green card. Your family is still in Herat.":"You were one of about 76,000 Afghans flown to the US in 2021. Your status is still not settled, and in 2025 US policy towards Afghans hardened sharply. Your luck at the airport gate has not yet turned into security."},
-  herat:{stamp:"STAYED",tone:"ink",title:"Staying in Herat",text:"You stay with your family. You teach Zainab English at home in secret. Many people cannot leave, and many choose not to."},
+  herat:{mob:{q:"involuntary",note:"Murtaza had reasons to leave, but the journey costs money and puts his family at risk. Some would read his staying as voluntary: he chose family over escape."},stamp:"STAYED",tone:"ink",title:"Staying in Herat",text:"You stay with your family. You teach Zainab English at home in secret. Many people cannot leave, and many choose not to."},
   deportedIran:{stamp:"DEPORTED",tone:"bad",title:"Sent back to Afghanistan",text:"You are back in Herat with nothing, owing money for the journey. Many of the men on the deportation bus say they will try again."},
-  iranStay:{stamp:"NO STATUS",tone:"bad",title:"Undocumented in Iran",text:"You stay in Tehran, working without papers. In 2025 deportations of Afghans from Iran reach record numbers. Every police car makes you stop breathing."},
+  iranStay:{mob:{q:"involuntary",note:"Murtaza wanted to go further but stayed in Iran: he was stuck partway along the route."},stamp:"NO STATUS",tone:"bad",title:"Undocumented in Iran",text:"You stay in Tehran, working without papers. In 2025 deportations of Afghans from Iran reach record numbers. Every police car makes you stop breathing."},
   deportedTr:{stamp:"DEPORTED",tone:"bad",title:"Deported to Kabul",text:"You land in Kabul with a plastic bag of belongings, two years and $4,000 after you first left. The journey cost your family everything they had."},
-  istanbulStay:{stamp:"NO STATUS",tone:"bad",title:"Undocumented in Istanbul",text:"You stay in Istanbul, working in the same basement. You learn enough Turkish to joke with your boss. One police check could end it all."},
+  istanbulStay:{mob:{q:"involuntary",note:"Murtaza was stuck in transit: unable to go back, and too afraid to go on."},stamp:"NO STATUS",tone:"bad",title:"Undocumented in Istanbul",text:"You stay in Istanbul, working in the same basement. You learn enough Turkish to joke with your boss. One police check could end it all."},
   germanyEnd:{stamp:s=>s.status.startsWith("Protection")?"PROTECTED":"TOLERATED",tone:s=>s.status.startsWith("Protection")?"good":"warn",title:s=>s.status.startsWith("Protection")?"Protected in Germany":"Tolerated, not accepted",
    text:s=>s.status.startsWith("Protection")?"You have protection in Germany and a future you can plan for. Zainab, in Herat, cannot study past sixth grade. Your lives are now on two very different paths.":"You live on a Duldung, renewed every few months. "+(s.flags.training?"Your apprenticeship protects you for now.":"Every letter from the immigration office could be a deportation order.")}
  }},
@@ -849,7 +860,7 @@ ukraine:{name:"Olena",age:38,from:"Kharkiv, Ukraine",code:"UKR",kind:"Temporary 
    {label:"Plan to go home when the war ends",end:"waiting"}]}
  },
  endings:{
-  kharkiv:{stamp:"RETURNED",tone:"ink",title:"Back in Kharkiv",text:"You live under the air-raid sirens, in your own flat, near your mother. Andriy comes home on leave twice a year. Returning was your choice, and the risk is yours too."},
+  kharkiv:{mob:{q:"voluntary",note:"Olena had legal protection abroad and chose to go home to a war zone. Returning is also a kind of mobility, and staying there is a choice with real risks."},stamp:"RETURNED",tone:"ink",title:"Back in Kharkiv",text:"You live under the air-raid sirens, in your own flat, near your mother. Andriy comes home on leave twice a year. Returning was your choice, and the risk is yours too."},
   leftAgain:{stamp:"PROTECTED",tone:"stamp",title:"Leaving a second time",text:"You go back west. Your temporary protection is still valid, so you are allowed in the same day. Few refugees in history have been able to move back and forth like this."},
   settle:{stamp:s=>s.flags.career?"SETTLING":"TEMPORARY",tone:s=>s.flags.career?"good":"warn",title:s=>s.flags.career?"Building a life":"Temporary, for now",text:s=>s.flags.career?"With a job as an accountant, you qualify for long-term residence. Your children are growing up between two languages. Andriy says, 'We'll decide when the war is over.'":"Without a qualified job, long-term residence is hard to get. You stay on temporary protection and wait to see what happens in 2027."},
   waiting:{stamp:"WAITING",tone:"warn",title:"Waiting for peace",text:"You keep a suitcase packed in the hall. Your status is temporary. So is your flat, and so, you hope, is the war."}
@@ -944,10 +955,10 @@ honduras:{name:"Luis",age:16,from:"San Pedro Sula, Honduras",code:"HND",kind:"Un
      lose:{t:"Immigration agents detain you at a building site. You are deported to San Pedro Sula, a city you left at 16.",status:"Deported to Honduras",end:"deported"}}}]}
  },
  endings:{
-  olanchoStay:{stamp:"STAYED",tone:"ink",title:"Rebuilding in Olancho",text:"You stay and rebuild your grandmother's house. You never left Honduras, but you were still displaced: by a gang first, then by a storm."},
+  olanchoStay:{mob:{q:"voluntary",note:"Luis had already moved once, inside Honduras. Staying with his grandmother was a choice, made with few alternatives."},stamp:"STAYED",tone:"ink",title:"Rebuilding in Olancho",text:"You stay and rebuild your grandmother's house. You never left Honduras, but you were still displaced: by a gang first, then by a storm."},
   seasonal:{stamp:"SEASONAL",tone:"good",title:"A legal, temporary route",text:"You go to the US and come back home, legally, every year. Your savings build a house in Olancho. You never got permanent status, but you never had to cross a desert either."},
   mexico:{stamp:"PROTECTED",tone:"good",title:"A life in Mexico",text:"You live in Monterrey with refugee status. Mexico was never your plan, but it is where you are safe and can work legally."},
-  mexicoLimbo:{stamp:"NO STATUS",tone:"bad",title:"Stuck in Tijuana",text:"You stay in Tijuana without papers, working at a taco stand. The US is a few hundred metres away."},
+  mexicoLimbo:{mob:{q:"involuntary",note:"Luis is stuck at the border: the US is a few hundred metres away and closed to him."},stamp:"NO STATUS",tone:"bad",title:"Stuck in Tijuana",text:"You stay in Tijuana without papers, working at a taco stand. The US is a few hundred metres away."},
   asylum:{stamp:"ASYLEE",tone:"good",title:"Granted asylum in the US",text:"You won, one of the few. Most gang-violence asylum claims fail. Without a lawyer, your chances would have been very small."},
   houstonEnd:{stamp:s=>s.status.startsWith("SIJS")?"PENDING":"NO STATUS",tone:s=>s.status.startsWith("SIJS")?"warn":"bad",title:s=>s.status.startsWith("SIJS")?"Waiting for a green card":"Undocumented in Houston",text:s=>s.status.startsWith("SIJS")?"You have SIJS but no green card yet: the waiting list for Hondurans is years long. You have lived in the US for more than a quarter of your life.":"You have no legal status. Houston is home, but it could be taken away any day."},
   deported:{stamp:"DEPORTED",tone:"bad",title:"Back in San Pedro Sula",text:"Seven years after you left, you are back in the city you fled. The gang members you ran from know your face."}
@@ -1037,7 +1048,7 @@ nigeria:{name:"Chiamaka",age:23,from:"Enugu, Nigeria",code:"NGA",kind:"Internati
      lose:{t:"Your points score is too low. Your work permit runs out in 2026.",status:"Work permit · Canada",end:"canadaWait"}}}]}
  },
  endings:{
-  lagos:{stamp:"STAYED",tone:"ink",title:"A career in Lagos",text:"You stay. Half your university friends have gone abroad. Your company is always short of qualified staff."},
+  lagos:{mob:{q:"voluntary",note:"Chiamaka could imagine leaving and had options, but chose to build a career at home."},stamp:"STAYED",tone:"ink",title:"A career in Lagos",text:"You stay. Half your university friends have gone abroad. Your company is always short of qualified staff."},
   lagosLeaving:{stamp:"APPLYING",tone:"warn",title:"Planning to leave",text:"You have a good job, and you are still planning to leave. Nigerians call it 'japa'. The reason is not that you can't survive at home. You want a future you can plan."},
   curtailed:{stamp:"CANCELLED",tone:"bad",title:"Visa cancelled",text:"You fly home without finishing your degree, still owing your uncle. A small rule broken under money pressure cost you everything you had invested."},
   skilled:{stamp:"SPONSORED",tone:"good",title:"Skilled Worker in the UK",text:"You work in a lab doing the job you trained for. If the rules don't change again, you can settle in the UK in a few years."},
@@ -1046,6 +1057,174 @@ nigeria:{name:"Chiamaka",age:23,from:"Enugu, Nigeria",code:"NGA",kind:"Internati
   home:{stamp:"RETURNED",tone:"ink",title:"Back home with a UK degree",text:"You go back to Nigeria. Your UK degree helps you get a job at an NGO in Abuja. Your family is still paying off the land sale."},
   canadaPR:{stamp:"RESIDENT",tone:"good",title:"Permanent resident of Canada",text:"You become a permanent resident. In three more years you can apply for citizenship. Your younger sister is already filling in the study permit form."},
   canadaWait:{stamp:"PENDING",tone:"warn",title:"Running out of time",text:"Your work permit ends next year. Canada's rules have tightened just as you finished. You check your points score every week."}
+ }},
+
+turkey:{name:"Zeynep",age:27,from:"Ankara, Türkiye",code:"TUR",kind:"Could leave, might stay",weight:8,
+ blurb:"Junior doctor, 27. Her friends are learning German. Her parents are getting older.",
+ start:{year:2022,money:2500,safety:80,ties:90,status:"Citizen of Türkiye"},
+ prompt:"Zeynep's story is about whether to leave, not how. What keeps people in place when they could go? Is staying a decision that needs explaining, just like leaving?",
+ scenes:{
+ start:{year:2022,place:"A public hospital, Ankara",
+  text:["You are in the first year of your residency in internal medicine. Shifts last up to 36 hours. Inflation is over 80%, so your salary buys less every month. Last month a patient's relative attacked a colleague in the emergency room.","Half your medical school WhatsApp group is studying German."],
+  fact:"Turkish doctors applying for the certificate needed to work abroad rose from about 60 in 2012 to about 2,700 in 2022. (Turkish Medical Association)",
+  choices:[
+   {label:"Start German lessons, just in case",t:"Three evenings a week after work. You are always tired.",money:-600,safety:-5,flag:"german",next:"quakeZ"},
+   {label:"Focus on your residency",t:"You tell your friends that someone has to stay. You are not sure you believe it.",next:"quakeZ"}]},
+ quakeZ:{year:2023,place:"Malatya, February",
+  text:["The 6 February earthquakes destroy much of Malatya, where your grandmother lives. She survives, but her house does not. She moves in with your parents in Ankara and needs daily care."],
+  fact:"Thousands of health workers volunteered in the earthquake zone in the first weeks. Turkish doctors abroad also organised aid and medical teams.",
+  choices:[
+   {label:"Volunteer for two weeks in the earthquake zone",t:"You treat crush injuries in a tent hospital in Malatya. You come back changed, and very clear about why you became a doctor.",safety:-10,ties:10,flag:"rooted",next:"offer"},
+   {label:"Stay in Ankara and help care for your grandmother",t:"You do night shifts at the hospital and morning shifts at home.",ties:10,next:"offer"}]},
+ offer:{year:2023,place:"Ankara",
+  text:["A recruiter offers you a job at a clinic in Bavaria: about €4,500 a month, 48-hour weeks, a flat near the hospital. You need a B2 German certificate and must pass a medical language exam."],
+  fact:"Germany actively recruits foreign doctors to fill shortages. About one in seven doctors working in Germany trained abroad. (German Medical Association)",
+  choices:[
+   {label:"Go for it: register for the exams",roll:{p:s=>s.flags.german?65:30,label:"You pass the language exams (much easier if you started German early)",
+     win:{t:"You pass. The clinic sends a contract. You could leave in six months.",money:-800,flag:"canGo",next:"decision"},
+     lose:{t:"You fail the medical language exam. Next sitting: in eight months.",money:-800,flag:"wanted",next:"decision"}}},
+   {label:"Decline: your family needs you here",t:"You tell the recruiter 'not now'. Your mother hugs you longer than usual.",ties:5,flag:"declined",next:"decision"}]},
+ decision:{year:2024,place:"Ankara",
+  text:s=>s.flags.canGo?["The contract is on your desk. Your grandmother asks, “Will you come back for Bayram?” A senior doctor tells you, “Go. You only live once.” Your best friend has already left."]:s.flags.wanted?["You still want to go, but another exam means another year. Your savings are running low. Your friends post photos from Munich."]:["You finish your residency. Your friends abroad send you job ads every week. You keep closing the tabs."],
+  choices:[
+   {label:"Sign the contract and go",if:s=>s.flags.canGo,t:"You give your notice. Your colleagues throw you a farewell dinner, and one of them asks for your recruiter's number.",status:"Work permit · Germany",next:"germanyZ"},
+   {label:"Tear up the contract and stay",if:s=>s.flags.canGo,next:"stayZ"},
+   {label:"Try the exam one more time",if:s=>s.flags.wanted,roll:{p:50,label:"You pass this time",
+     win:{t:"You pass. You leave for Bavaria in the spring.",status:"Work permit · Germany",flag:"canGo",next:"germanyZ"},
+     lose:{t:"You fail again by two points. You stop trying, for now.",next:"stayZ"}}},
+   {label:"Give up on Germany",if:s=>s.flags.wanted,next:"stayZ"},
+   {label:"Stay and build your career in Türkiye",if:s=>s.flags.declined,next:"stayZ"}]},
+ germanyZ:{year:2025,place:"Rosenheim, Bavaria",
+  text:["Your salary is four times what you earned in Ankara. Your patients are mostly elderly Germans, and some ask where you are 'really' from. On video calls your grandmother looks smaller."],
+  choices:[
+   {label:"Settle in Germany",end:"leftZ"},
+   {label:"Plan to go back to Türkiye in a few years",end:"circularZ"}]},
+ stayZ:{year:2025,place:"Ankara",
+  text:["You finish your residency and become a specialist. A private hospital offers you twice your public salary. You know every street of this city, and your grandmother lives ten minutes away."],
+  choices:[
+   {label:"Take the private hospital job",money:4000,end:s=>s.flags.wanted&&!s.flags.canGo?"stuckZ":"stayedZ"},
+   {label:"Stay in the public hospital",t:"Lower pay, but the patients who need you most.",ties:5,end:s=>s.flags.wanted&&!s.flags.canGo?"stuckZ":"stayedZ"}]}
+ },
+ endings:{
+  leftZ:{stamp:"EMIGRATED",tone:"stamp",title:"A doctor in Bavaria",text:"You become one of the doctors Türkiye trained and Germany employs. You send money for your grandmother's care and fly home twice a year.",mob:{q:"mobility",note:"Zeynep wanted to go and could go: she had a valuable skill, money for exams and a country that wanted her."}},
+  circularZ:{stamp:"FOR NOW",tone:"warn",title:"Abroad, for now",text:"You tell everyone it is temporary. Many migrants plan to return 'in a few years'. Some do.",mob:{q:"mobility",note:"Zeynep moved, but plans to return. Migration is often imagined as temporary, even when it turns out not to be."}},
+  stayedZ:{stamp:"STAYED",tone:"good",title:s=>s.flags.canGo?"Chose to stay":"Staying, by choice",text:s=>s.flags.canGo?"You had the contract, the exam and the ticket, and you stayed. Your reasons were family, patients and a sense of belonging. Nobody writes news stories about people like you.":"You never really tried to leave. Your friends call it brave, or naive. You call it home.",mob:{q:"voluntary",note:"Zeynep could have left but chose to stay. Researchers call this voluntary immobility. Staying is also a decision with reasons: family care, attachment to place, professional meaning."}},
+  stuckZ:{stamp:"STAYED",tone:"warn",title:"Staying, not by choice",text:"You wanted to go and you tried. One exam stood between you and a different life. You make the best of staying, but you still check job ads at night.",mob:{q:"involuntary",note:"Zeynep wanted to move but could not meet the requirements. Even a well-off professional can experience involuntary immobility when a visa or exam blocks the way."}}
+ }},
+
+niger:{name:"Fatouma",age:29,from:"Tillabéri region, Niger",code:"NER",kind:"Wants to move, can't",weight:10,
+ blurb:"Farmer and mother of three, 29. Drought and armed groups, but no money to leave.",
+ start:{year:2019,money:60,safety:40,ties:85,status:"Citizen of Niger"},
+ prompt:"Fatouma faced more danger than most people in this game, and she moved the least. Why are the poorest and most vulnerable people often the least able to move? Who is responsible for 'trapped populations'?",
+ scenes:{
+ start:{year:2019,place:"A village near Tillabéri",
+  text:["You are 29, with three children. The millet harvest has failed for the second time in three years. Armed groups have attacked two villages in your district. Your husband Moussa sells his last goat to buy grain."],
+  fact:"Most people in the world never move across a border: only about 3.7% of people are international migrants. The poorest households often cannot afford to move at all. (UN DESA; Foresight report, 2011)",
+  choices:[
+   {label:"Ask Moussa to look for work in Algeria",t:"Moussa leaves with a group of men from the village. He has done seasonal work in Algeria before.",ties:-10,next:"agadez"},
+   {label:"Ask to move the whole family to Niamey",roll:{p:20,label:"You can raise enough for the journey and a room",
+     win:{t:"Your brother in Niamey agrees to take you in. But first you must sell your land, and nobody is buying.",money:-40,next:"agadez"},
+     lose:{t:"Bus fare for five people and a room in the city: you don't have it, and nobody can lend it. You stay.",next:"agadez"}}},
+   {label:"Stay and plant again",t:"You plant drought-resistant millet from an aid group and pray for rain.",next:"agadez"}]},
+ agadez:{year:2020,place:"Agadez",
+  text:["The road north through Agadez used to be busy with buses and trucks taking workers to Algeria and Libya. Since 2015 a law backed by the European Union makes it a crime to transport migrants north. Drivers have been arrested, prices have tripled, and the routes have moved into the open desert."],
+  fact:"Niger's Law 2015-36, supported by EU funding, criminalised transporting migrants through the north. Researchers found it made journeys more dangerous and hit the local economy. Niger's military government repealed it in November 2023.",
+  choices:[{label:"Wait for news from Moussa",roll:{p:50,label:"Moussa gets through to Algeria",
+     win:{t:"Moussa reaches Tamanrasset and finds work on a building site. He sends money twice in six months.",sent:250,next:"attack"},
+     lose:{t:"Moussa's driver is stopped. The men are left in Agadez, owing the smuggler. Moussa comes home three months later with nothing.",money:-30,ties:5,next:"attack"}}}]},
+ attack:{year:2021,place:"Your village, March",
+  text:["Armed men on motorbikes attack a neighbouring village and kill dozens of people. Your village elders say everyone should leave."],
+  fact:"In 2021 attacks by armed groups in Niger's Tillabéri region killed hundreds of civilians and forced tens of thousands from their homes. (ACLED; UNHCR)",
+  choices:[
+   {label:"Flee to the nearest town, Ouallam",t:"You walk 40 km with your children and a donkey cart. You are now an 'internally displaced person'.",safety:5,ties:-10,status:"Internally displaced · Niger",next:"camp"},
+   {label:"Stay: the fields are all you have",roll:{p:50,label:"Your village is not attacked",
+     win:{t:"The men don't come. But nobody dares go to the far fields, so the harvest is half what it should be.",money:-20,next:"camp2"},
+     lose:{t:"They come at night. You hide in the millet with your children. You leave for Ouallam at dawn.",safety:-30,status:"Internally displaced · Niger",next:"camp"}}}]},
+ camp:{year:2022,place:"Displacement site, Ouallam",
+  text:["You live in a shelter made of plastic sheeting and millet stalks. An aid group distributes food once a month, until funding is cut by half."],
+  fact:"People displaced by conflict and disasters usually move only short distances, often to the nearest town. Most never reach another country.",
+  choices:[
+   {label:"Find work as a cleaner in town",roll:{p:50,label:"You find regular work",
+     win:{t:"You clean for a government official's family. Little money, but regular.",money:60,next:"coup"},
+     lose:{t:"Too many people are looking for the same jobs. You sell firewood instead.",money:20,next:"coup"}}},
+   {label:"Send your 15-year-old son to Niamey to work",t:"He sends a little money. You lie awake thinking about him.",sent:100,ties:-15,flag:"sonGone",next:"coup"}]},
+ camp2:{year:2022,place:"Your village",
+  text:["Most of your neighbours have left. The school has closed because the teacher fled. You stay with the old people who would not leave."],
+  choices:[
+   {label:"Keep farming the near fields",t:"You grow just enough to eat, most months.",next:"coup"},
+   {label:"Send your 15-year-old son to Niamey to work",t:"He sends a little money. You lie awake thinking about him.",sent:100,ties:-15,flag:"sonGone",next:"coup"}]},
+ coup:{year:2023,place:"Niger, July",
+  text:["The army takes power in Niamey. West African neighbours close their borders and impose sanctions. Food prices rise sharply. In November the new government repeals the law against transporting migrants."],
+  fact:"After the 2023 coup, ECOWAS sanctions and border closures cut off trade, pushing up food prices in Niger. Many Western donors suspended aid. (WFP)",
+  choices:[{label:"Get through the year",roll:{p:45,label:"Your family has enough to eat",
+     win:{t:"Thin months, but nobody in your family goes hungry.",next:"y2024N"},
+     lose:{t:"Your youngest is diagnosed with malnutrition at a clinic. She recovers on emergency food paste.",safety:-15,next:"y2024N"}}}]},
+ y2024N:{year:2024,place:"Niger",
+  text:s=>[(s.flags.sonGone?"Your son, now 17, calls from Niamey: he wants to go to Algeria. ":"")+"With the 2015 law gone, buses to the north are running openly again. But Algeria regularly rounds up and expels migrants, dropping them in the desert near the border at Assamaka."],
+  fact:"Algeria expelled tens of thousands of people to Niger's border in 2023 and 2024, many left to walk 15 km through the desert to Assamaka. (MSF; Alarme Phone Sahara)",
+  choices:[
+   {label:"Save everything so the family can move to Niamey",roll:{p:30,label:"You get to Niamey",
+     win:{t:"After two years of saving, you move into one room in a Niamey neighbourhood. Your children go back to school.",money:-60,end:"niamey"},
+     lose:{t:"Prices rise faster than you can save. You stay.",end:"trapped"}}},
+   {label:"Let your son try for Algeria",if:s=>s.flags.sonGone,roll:{p:45,label:"Your son finds work and avoids expulsion",
+     win:{t:"Your son works on a farm in southern Algeria and sends money home.",sent:300,end:"sonAbroad"},
+     lose:{t:"Your son is arrested in a raid and dumped at the border near Assamaka. He walks for a day to reach the town.",end:"sonExpelled"}}},
+   {label:"Stay where you are",end:"trapped"}]}
+ },
+ endings:{
+  niamey:{stamp:"INTERNAL",tone:"stamp",title:"To the capital",text:"You moved 120 km in five years. In the statistics you are a tiny dot. For you, it was everything.",mob:{q:"mobility",note:"Fatouma moved, but only a short distance and only after years of trying. For the poorest people, even internal migration takes resources."}},
+  trapped:{stamp:"TRAPPED",tone:"bad",title:"Unable to leave",text:"You wanted to leave and you had every reason to. You did not have the money, the documents, the contacts, or someone to look after the children while you went. You are still there.",mob:{q:"involuntary",note:"Fatouma had strong reasons to move (aspiration) but not the means (capability). Researchers call this involuntary immobility; the 2011 Foresight report called such groups 'trapped populations'."}},
+  sonAbroad:{stamp:"STAYED",tone:"warn",title:"Your son went instead",text:"You stayed. Your son moved, and his money keeps the family going. Families often choose one person to move, and that person is rarely the mother of young children.",mob:{q:"involuntary",note:"Fatouma stayed while her son moved. Within one household, some people are mobile and others are not. Gender, age and care responsibilities shape who goes."}},
+  sonExpelled:{stamp:"EXPELLED",tone:"bad",title:"Back at the start",text:"Your son is home, thinner and silent. The family is poorer than before. He says he'll try again next year.",mob:{q:"involuntary",note:"Fatouma could not move, and her son's attempt was reversed by an expulsion. Policies that block movement can make people more stuck, not less."}}
+ }},
+
+tajikistan:{name:"Dilnoza",age:24,from:"Khatlon, Tajikistan",code:"TJK",kind:"Stays behind",weight:8,
+ blurb:"Young wife and mother, 24. Her husband works in Moscow nine months a year.",
+ start:{year:2019,money:300,safety:75,ties:70,status:"Citizen of Tajikistan"},
+ prompt:"Dilnoza never migrated, but migration shaped every year of her life. Should people 'left behind' be part of what we study as migration? Who in your own family stayed while someone else moved?",
+ scenes:{
+ start:{year:2019,place:"A village in Khatlon",
+  text:["You are 24. Your husband Farrukh works on building sites in Moscow nine months of the year. You live with his parents, as is the custom, and look after your two children and your mother-in-law, who has diabetes.","Almost every family on your street has a man in Russia."],
+  fact:"Money sent home by migrants equals almost half of Tajikistan's GDP, one of the highest shares in the world. (World Bank)",
+  choices:[
+   {label:"Ask Farrukh if you can join him in Moscow",roll:{p:25,label:"Your in-laws agree",
+     win:{t:"Your in-laws reluctantly agree you can go next year, if your sister-in-law takes over the housework.",flag:"maybeGo",next:"covidT"},
+     lose:{t:"Your mother-in-law refuses: who will look after her and the children? Farrukh does not argue with his mother.",ties:-5,next:"covidT"}}},
+   {label:"Use Farrukh's money to start a sewing business",t:"You buy a sewing machine and make dresses for weddings in the village.",money:-200,flag:"sewing",next:"covidT"}]},
+ covidT:{year:2020,place:"Khatlon",
+  text:["COVID-19. Russia closes its borders. Farrukh is stuck in Moscow with no work, and no money comes home for four months."],
+  fact:"Remittances to Central Asia fell sharply in 2020 as migrants in Russia lost work, then recovered. Families who depended on them had few other options. (World Bank)",
+  choices:[{label:"Manage without his money",roll:{p:s=>s.flags.sewing?70:40,label:"Your family gets by (easier with your own income)",
+     win:{t:s=>s.flags.sewing?"Your sewing keeps food on the table. Your father-in-law looks at you differently now.":"Your parents help, and the garden feeds you.",ties:5,next:"war"},
+     lose:{t:"You borrow from a neighbour and sell your wedding gold.",money:-150,next:"war"}}}]},
+ war:{year:2022,place:"Khatlon",
+  text:["Russia invades Ukraine. The rouble crashes, then recovers. Farrukh hears that the Russian army is offering migrants fast-track citizenship and big payments if they sign a contract to fight."],
+  fact:"Russia offered foreign migrant workers money and fast-track citizenship to join its army in Ukraine. Central Asian governments warned their citizens against it.",
+  choices:[
+   {label:"Beg him to come home",roll:{p:60,label:"He listens",
+     win:{t:"Farrukh says no to the recruiters and stays on the building site.",next:"crocus"},
+     lose:{t:"Farrukh says he will 'think about it'. You don't sleep for a week. In the end he does not sign, but a man from your village does.",safety:-10,next:"crocus"}}},
+   {label:"Leave it to him",t:"He doesn't sign. A man from the next village does. His family receives a coffin in 2023.",safety:-5,next:"crocus"}]},
+ crocus:{year:2024,place:"Khatlon, March",
+  text:["Gunmen attack the Crocus City Hall concert hall near Moscow and kill more than 140 people. The suspects are Tajik citizens. Police in Russia raid migrant hostels and building sites. Farrukh is stopped four times in one week."],
+  fact:"After the March 2024 attack, Tajik migrants in Russia faced raids, detentions, expulsions and stricter rules. Many began looking for work in other countries. (Human Rights Watch)",
+  choices:[{label:"Wait for news",roll:{p:55,label:"Farrukh keeps his job and permit",
+     win:{t:"Farrukh keeps his head down and his job. He sends less money home because he's paying bribes at checkpoints.",sent:600,next:"choiceT"},
+     lose:{t:"Farrukh is deported and banned from entering Russia for five years. He comes home angry and without work.",flag:"banned",ties:5,next:"choiceT"}}}]},
+ choiceT:{year:2025,place:"Khatlon",
+  text:s=>[s.flags.banned?"Farrukh is home and can't go back to Russia. He talks about South Korea or Europe, but you need a lot of money for that.":"Farrukh is still in Moscow. Your children are 8 and 6 and barely know their father.","A recruitment agency in Dushanbe is hiring women for seasonal fruit picking in the UK. You have never been further than Dushanbe."],
+  fact:"More and more Central Asian women are migrating for work, including on seasonal visa schemes in the UK and South Korea. (IOM)",
+  choices:[
+   {label:"Apply for the UK seasonal worker visa yourself",roll:{p:35,label:"You are selected",
+     win:{t:"You fly to Kent in May to pick strawberries for six months. Your in-laws look after the children.",status:"Seasonal worker visa · UK",end:"sheGoes"},
+     lose:{t:"The agency wants a $1,500 'fee'. You realise it is not legal, and you don't go.",end:"stayT"}}},
+   {label:"Stay with the children",end:"stayT"},
+   {label:s=>s.flags.banned?"Save for Farrukh to try South Korea":"Ask Farrukh to come home for good",end:"homeT"}]}
+ },
+ endings:{
+  sheGoes:{stamp:"SEASONAL",tone:"stamp",title:"Your turn to move",text:"For the first time, you are the one who migrates. You send money home to your husband. Your mother-in-law tells everyone in the village you are 'visiting relatives'.",mob:{q:"mobility",note:"Dilnoza moved when an opportunity came. Her aspiration to move was there all along; she lacked the means and the family's permission."}},
+  stayT:{stamp:"STAYED",tone:"ink",title:"The one who stays",text:s=>"You stayed in the village, as you did every year. "+(s.flags.sewing?"Your sewing business now employs two other women whose husbands are in Russia. ":"")+"Your life was shaped by migration at every turn, though you never crossed a border.",mob:{q:"acquiescent",note:"Dilnoza stayed. Did she want to? Was she able to? When people neither strongly want to move nor can, Kerilyn Schewel calls it 'acquiescent immobility'. Others would say her wishes were never asked."}},
+  homeT:{stamp:"TOGETHER",tone:"good",title:"Together, for now",text:"Farrukh comes home. Your family is together, and poorer. The children have to get used to their father. Within a year, he is talking about leaving again.",mob:{q:"voluntary",note:"The family chose to stay together rather than depend on migration. But without other jobs nearby, this voluntary immobility is fragile."}}
  }}
 };
 
@@ -1077,8 +1256,8 @@ function choose(i){const sc=scene(),c=visibleChoices(sc)[i];let eff=c,rollInfo=n
   if(c.roll){const p=val(c.roll.p,S),r=1+Math.floor(Math.random()*100),ok=r<=p;S.rolls++;if(ok)S.lucky++;
     rollInfo={p,r,ok,label:c.roll.label};eff={...c,...(ok?c.roll.win:c.roll.lose)};delete eff.roll}
   const deltas=apply(eff);
-  S.log.push({year:sc.year,choice:c.label,roll:rollInfo});
-  view={screen:"outcome",text:eff.t||"",roll:rollInfo,deltas,next:eff.next,end:val(eff.end,S),choiceLabel:c.label};render()}
+  S.log.push({year:sc.year,choice:val(c.label,S),roll:rollInfo});
+  view={screen:"outcome",text:val(eff.t,S)||"",roll:rollInfo,deltas,next:eff.next,end:val(eff.end,S),choiceLabel:val(c.label,S)};render()}
 function visibleChoices(sc){return sc.choices.filter(c=>!c.if||c.if(S))}
 function cont(){if(view.end){S.ending=view.end;view={screen:"end"}}else{S.scene=view.next;view={screen:"scene"}}render();window.scrollTo({top:0})}
 
@@ -1096,7 +1275,7 @@ function header(){const p=PROFILES[S.pid],sc=S.scene&&view.screen!=="end"?scene(
 function homeView(){
  const lives=Object.entries(PROFILES).map(([k,p])=>`<button class="life" data-pick="${k}"><span class="label">${esc(p.kind)}</span><b>${esc(p.name)} · ${esc(p.from)}</b><span>${esc(p.blurb)}</span></button>`).join("");
  return `<section class="hero fade">
-  <span class="label">A migration simulation · ten lives · about 10 minutes each</span>
+  <span class="label">A migration simulation · thirteen lives · about 10 minutes each</span>
   <h1>The Border <span>Lottery</span></h1>
   <p class="lede">You don't choose where you are born, which passport you hold, or the year a war or a flood arrives. You do make choices after that. Draw a life and see which parts were up to you.</p>
   <div class="figs">
@@ -1106,8 +1285,8 @@ function homeView(){
   </div>
   <div class="btnrow"><button class="btn" id="drawBtn">Draw a random life</button><a class="btn ghost" href="#lives" style="text-decoration:none">Choose a life</a></div>
  </section>
- <section class="sheet" id="lives"><div><span class="label">Ten lives</span><h3 style="font-size:24px;margin-top:4px">Choose one, or let chance decide</h3></div>
-  <p style="font-size:15.5px;color:var(--muted)">The random draw is weighted roughly by how common each kind of move is: labour migration and internal displacement come up more often than moving abroad for the sunshine. Teachers can also assign lives so the class covers all ten.</p>
+ <section class="sheet" id="lives"><div><span class="label">Thirteen lives</span><h3 style="font-size:24px;margin-top:4px">Choose one, or let chance decide</h3></div>
+  <p style="font-size:15.5px;color:var(--muted)">The random draw is weighted roughly by how common each kind of move is: labour migration and internal displacement come up more often than moving abroad for the sunshine. Three lives (Zeynep, Fatouma and Dilnoza) are about staying rather than leaving. Teachers can assign lives so the class covers all of them.</p>
   <div class="lives">${lives}</div></section>
  ${teacherGuide()}`}
 
@@ -1115,7 +1294,7 @@ function teacherGuide(){return `<details class="teacher" id="teacher"><summary>T
  <dl class="plan">
   <dt>Tip</dt><dd>If you have a longer class, play two lives with contrasting passports (for example Ukraine and Syria, or the UK and Nepal) and compare them.</dd>
   <dt>0–3 min</dt><dd>Ask: “How many countries can your passport enter without a visa?” Explain the rules: everyone draws one life, reads carefully, and makes decisions as that person. When a choice involves chance, the dice roll shows the odds.</dd>
-  <dt>3–13 min</dt><dd>Students play one life (8–12 minutes) on a phone or laptop, alone or in pairs. Assign lives so the class covers all ten; pairs reading together tend to discuss more.</dd>
+  <dt>3–13 min</dt><dd>Students play one life (8–12 minutes) on a phone or laptop, alone or in pairs. Assign lives so the class covers different kinds of moves and stays; pairs reading together tend to discuss more.</dd>
   <dt>13–15 min</dt><dd>Pair up with someone who had a different life. Compare life cards: the stamp, the passport bar, and how many outcomes were decided by dice.</dd>
   <dt>15–20 min</dt><dd>Whole-class debrief. Tally the end stamps on the board (Citizen, Protected, Pending, Returned, No status…) and use two or three questions below.</dd>
  </dl>
@@ -1126,7 +1305,12 @@ function teacherGuide(){return `<details class="teacher" id="teacher"><summary>T
   <li>What would a newspaper call your person: refugee, migrant, expat, worker, illegal? Who decides the label, and what does it change?</li>
   <li>Push and pull factors: did your person fit the model, or did several causes overlap (war, money, family, climate)?</li>
   <li>Compare passports: how much did your person's passport decide before they made any choice?</li>
+  <li>Use the aspiration–capability grid on the life card: was your person mobile, or voluntarily, involuntarily or acquiescently immobile? Do classmates agree?</li>
+  <li>Most people never cross a border. Why do migration studies focus on people who move? What do we miss when we ignore people who stay?</li>
  </ol>
+ <div><span class="label">Key concept: immobility</span></div>
+ <p>Migration theory now asks why people stay as well as why they move. The <b>aspiration–capability</b> approach separates whether a person wants to move from whether they can (Carling, 2002; de Haas, 2021). That gives four outcomes: mobility, <b>involuntary immobility</b> (wants to, can't), <b>voluntary immobility</b> (can, doesn't want to) and <b>acquiescent immobility</b> (neither; Schewel, 2020). Every life card ends with this grid. Zeynep (could leave, might stay), Fatouma (trapped by poverty and danger) and Dilnoza (stays behind while her husband migrates) were written around it.</p>
+ <p class="src">Carling, J. (2002) Migration in the age of involuntary immobility, <i>Journal of Ethnic and Migration Studies</i> 28(1). Schewel, K. (2020) Understanding immobility, <i>International Migration Review</i> 54(2). de Haas, H. (2021) A theory of migration: the aspirations-capabilities framework, <i>Comparative Migration Studies</i> 9. Foresight (2011) <i>Migration and Global Environmental Change</i>, UK Government Office for Science.</p>
  <p class="src"><b>About the numbers.</b> Stories are composites, not real individuals. Facts shown in the purple boxes come from the sources named. The odds on dice rolls are teaching estimates informed by those sources, not measured probabilities. Passport figures are approximate visa-free counts from the Henley Passport Index, 2025.
  Main sources: UN DESA International Migrant Stock 2024; UNHCR Global Trends 2025; IOM World Migration Report and Missing Migrants Project; IDMC Global Report on Internal Displacement 2025; World Bank Migration and Development Briefs; ILO; R4V.</p>
 </div></details>`}
@@ -1145,7 +1329,7 @@ function introView(){const p=PROFILES[S.pid],pp=PASSPORTS.find(x=>x[1]===p.code)
   <div class="btnrow"><button class="btn" id="beginBtn">Begin</button><button class="btn ghost" id="homeBtn">Back</button></div></section>`}
 
 function sceneView(){const sc=scene();
- const ch=visibleChoices(sc).map((c,i)=>`<button class="choice" data-i="${i}"><span class="box"></span><span class="t"><b>${esc(c.label)}</b>${c.roll||c.tag?`<span class="tag">${[c.tag,c.roll?"Chance involved":""].filter(Boolean).join(" · ")}</span>`:""}</span></button>`).join("");
+ const ch=visibleChoices(sc).map((c,i)=>`<button class="choice" data-i="${i}"><span class="box"></span><span class="t"><b>${esc(val(c.label,S))}</b>${c.roll||c.tag?`<span class="tag">${[c.tag,c.roll?"Chance involved":""].filter(Boolean).join(" · ")}</span>`:""}</span></button>`).join("");
  return header()+`<section class="sheet scene fade"><span class="label">${sc.year} · ${esc(sc.place)}</span>
   <div class="story">${val(sc.text,S).map(t=>`<p>${esc(t)}</p>`).join("")}</div>
   ${sc.fact?`<aside class="fact"><span class="label">On the record</span>${esc(sc.fact)}</aside>`:""}
@@ -1161,6 +1345,12 @@ function outcomeView(){const v=view,r=v.roll;
   ${roll}<div class="story" id="otext" ${r?'style="opacity:0;transition:opacity .4s"':""}>${v.text?`<p>${esc(v.text)}</p>`:""}${d?`<div class="deltas">${d}</div>`:""}</div>
   <div class="btnrow"><button class="btn" id="contBtn" ${r?'style="visibility:hidden"':""}>${v.end?"See how your life turned out":"Continue"}</button></div></section>`}
 
+const QUAD={
+ mobility:["Mobility","wanted + able","The person wanted to move and had the means to do it: money, documents, contacts, health, permission."],
+ involuntary:["Involuntary immobility","wanted + not able","The person wanted to move but could not: no money, no visa, no network, care duties, or a border in the way (Carling, 2002). Very poor groups facing environmental risk are sometimes called 'trapped populations' (Foresight, 2011)."],
+ voluntary:["Voluntary immobility","able + did not want","The person could have moved but chose to stay, because of family, attachment to place, work, faith or identity. Staying is also a decision with reasons (Schewel, 2020)."],
+ acquiescent:["Acquiescent immobility","neither","The person neither strongly wanted to move nor was able to. Staying was taken for granted, or other people decided (Schewel, 2020)."]};
+function qcell(k){return `<button class="qcell" data-q="${k}"><b>${QUAD[k][0]}</b><small>${QUAD[k][1]}</small></button>`}
 function endView(){const p=PROFILES[S.pid],e=p.endings[S.ending],tone=val(e.tone,S),stamp=val(e.stamp,S);
  const lastYear=Math.max(...S.log.map(l=>l.year),S.startYear);
  const name=p.name.toUpperCase();
@@ -1182,6 +1372,14 @@ function endView(){const p=PROFILES[S.pid],e=p.endings[S.ending],tone=val(e.tone
   <div style="display:flex;flex-direction:column;gap:8px"><span class="label">Your path · ● choice · ✓/✗ chance</span><ul class="timeline">${tl}</ul></div>
   <div class="pp"><span class="label">Before any choice: countries each passport enters visa-free (approx., Henley 2025)</span>${pp}</div>
   <aside class="fact"><span class="label">Discuss</span><span class="prompt">${esc(p.prompt)}</span></aside>
+  <div class="quadwrap"><span class="label">Mobility and immobility · aspiration and capability</span>
+   <p style="font-size:16px">At the end of this life, where would you place ${esc(p.name)}? Tap a box.</p>
+   <div class="quad">
+    <span></span><span class="ax">Able to move</span><span class="ax">Not able to move</span>
+    <span class="ax">Wanted to move</span>${qcell("mobility")}${qcell("involuntary")}
+    <span class="ax">Did not want to move</span>${qcell("voluntary")}${qcell("acquiescent")}
+   </div>
+   <div class="qout" id="qout" aria-live="polite"></div></div>
   <div class="btnrow"><button class="btn" id="againBtn">Draw another life</button><button class="btn ghost" id="homeBtn">Back to start</button></div></section>`}
 
 function render(){
@@ -1193,6 +1391,10 @@ function render(){
  on("homeBtn",()=>{S=null;view={screen:"home"};render();window.scrollTo({top:0})});
  on("againBtn",()=>{const cur=S.pid;let n=draw(),g=0;while(n===cur&&g++<20)n=draw();begin(n);window.scrollTo({top:0})});
  on("contBtn",cont);
+ app.querySelectorAll(".qcell").forEach(b=>b.onclick=()=>{const k=b.dataset.q,e=PROFILES[S.pid].endings[S.ending],m=e.mob;
+  app.querySelectorAll(".qcell").forEach(x=>x.classList.toggle("sel",x===b));
+  if(m)app.querySelectorAll(".qcell").forEach(x=>x.classList.toggle("reading",x.dataset.q===m.q));
+  document.getElementById("qout").innerHTML=`<p><b>${QUAD[k][0]}.</b> ${esc(QUAD[k][2])}</p>`+(m?`<p class="r"><span class="label">One reading of this ending · ${QUAD[m.q][0]}</span><br>${esc(m.note)}</p>`:`<p class="r">There is no single right answer here. Defend your choice to your partner: what did ${esc(PROFILES[S.pid].name)} want, and what made moving possible or impossible?</p>`)});
  app.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{begin(b.dataset.pick);window.scrollTo({top:0})});
  app.querySelectorAll(".choice").forEach(b=>b.onclick=()=>choose(+b.dataset.i));
  if(s==="outcome"&&view.roll){const m=document.getElementById("mark"),reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
